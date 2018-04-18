@@ -6,6 +6,8 @@
 package sorteo.model.entities;
 
 import java.io.Serializable;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,61 +27,64 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author jdiego
  */
 @Entity
-@Table(name = "sor_rolxusuario")
+@Access(AccessType.FIELD)
+@Table(name = "sor_rolxusuario", schema="sorteo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "SorRolxusuario.findAll", query = "SELECT s FROM SorRolxusuario s")
-    , @NamedQuery(name = "SorRolxusuario.findByRxuCodigo", query = "SELECT s FROM SorRolxusuario s WHERE s.rxuCodigo = :rxuCodigo")})
+    @NamedQuery(name = "RolXUsuario.findAll", query = "SELECT s FROM Rolxusuario s")
+    , @NamedQuery(name = "RolXUsuario.findByCodigo", query = "SELECT s FROM RolXUsuario s WHERE s.codigo = :codigo")})
 public class RolXUsuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "rxu_codigo")
-    private Integer rxuCodigo;
+    
+    private Integer codigo;
     @JoinColumn(name = "rxu_codusuario", referencedColumnName = "usu_codigo")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Usuario rxuCodusuario;
+    private Usuario usuario;
     @JoinColumn(name = "rxu_codrol", referencedColumnName = "rol_codigo")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Roles rxuCodrol;
+    private Roles listaRoles;
 
     public RolXUsuario() {
     }
 
     public RolXUsuario(Integer rxuCodigo) {
-        this.rxuCodigo = rxuCodigo;
+        this.codigo = rxuCodigo;
     }
 
-    public Integer getRxuCodigo() {
-        return rxuCodigo;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "rxu_codigo")
+    @Access(AccessType.PROPERTY)
+    public Integer getCodigo() {
+        return codigo;
     }
 
-    public void setRxuCodigo(Integer rxuCodigo) {
-        this.rxuCodigo = rxuCodigo;
+    public void setCodigo(Integer codigo) {
+        this.codigo = codigo;
     }
 
-    public Usuario getRxuCodusuario() {
-        return rxuCodusuario;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setRxuCodusuario(Usuario rxuCodusuario) {
-        this.rxuCodusuario = rxuCodusuario;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
-    public Roles getRxuCodrol() {
-        return rxuCodrol;
+    public Roles getListaRoles() {
+        return listaRoles;
     }
 
-    public void setRxuCodrol(Roles rxuCodrol) {
-        this.rxuCodrol = rxuCodrol;
+    public void setListaRoles(Roles listaRoles) {
+        this.listaRoles = listaRoles;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (rxuCodigo != null ? rxuCodigo.hashCode() : 0);
+        hash += (codigo != null ? codigo.hashCode() : 0);
         return hash;
     }
 
@@ -90,7 +95,7 @@ public class RolXUsuario implements Serializable {
             return false;
         }
         RolXUsuario other = (RolXUsuario) object;
-        if ((this.rxuCodigo == null && other.rxuCodigo != null) || (this.rxuCodigo != null && !this.rxuCodigo.equals(other.rxuCodigo))) {
+        if ((this.codigo == null && other.codigo != null) || (this.codigo != null && !this.codigo.equals(other.codigo))) {
             return false;
         }
         return true;
@@ -98,7 +103,7 @@ public class RolXUsuario implements Serializable {
 
     @Override
     public String toString() {
-        return "sorteo.model.entities.SorRolxusuario[ rxuCodigo=" + rxuCodigo + " ]";
+        return "RolXUsuario{" + "codigo=" + codigo + '}';
     }
     
 }

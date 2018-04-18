@@ -35,9 +35,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "sor_empresa", schema="sorteo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "SorEmpresa.findAll", query = "SELECT s FROM SorEmpresa s")
-    , @NamedQuery(name = "SorEmpresa.findByCodigo", query = "SELECT s FROM SorEmpresa s WHERE s.empCodigo = :empCodigo")
-    , @NamedQuery(name = "SorEmpresa.findByCedJuridica", query = "SELECT s FROM SorEmpresa s WHERE s.empCedjuridica = :empCedJuridica")})
+    @NamedQuery(name = "Empresa.findAll", query = "SELECT s FROM Empresa s")
+    , @NamedQuery(name = "Empresa.findByCodigo", query = "SELECT s FROM Empresa s WHERE s.codigo = :codigo")
+    , @NamedQuery(name = "Empresa.findByCedJuridica", query = "SELECT s FROM Empresa s WHERE s.cedJuridica = :cedJuridica")})
 public class Empresa implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,10 +50,8 @@ public class Empresa implements Serializable {
     private SimpleStringProperty nombre;   
     @Transient
     private SimpleStringProperty logo;
-    @Column(name = "emp_telefono")
     @Transient
     private SimpleStringProperty telefono;
-    @Column(name = "emp_email")
     @Transient
     private SimpleStringProperty email;
     @OneToMany(mappedBy = "sucCodempresa", fetch = FetchType.LAZY)
@@ -165,7 +163,6 @@ public class Empresa implements Serializable {
 
     @Override
     public String toString() {
-        return "sorteo.model.entities.SorEmpresa[ empCodigo=" + codigo + " ]";
+        return "Empresa{" + "codigo=" + codigo + '}';
     }
-    
 }

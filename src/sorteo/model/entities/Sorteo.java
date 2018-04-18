@@ -6,8 +6,13 @@
 package sorteo.model.entities;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import javafx.beans.property.SimpleObjectProperty;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +28,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -31,84 +37,103 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author jdiego
  */
 @Entity
-@Table(name = "sor_sorteo")
+@Access(AccessType.FIELD)
+@Table(name = "sor_sorteo", schema = "sorteo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "SorSorteo.findAll", query = "SELECT s FROM SorSorteo s")
-    , @NamedQuery(name = "SorSorteo.findBySorCodigo", query = "SELECT s FROM SorSorteo s WHERE s.sorCodigo = :sorCodigo")
-    , @NamedQuery(name = "SorSorteo.findBySorFecha", query = "SELECT s FROM SorSorteo s WHERE s.sorFecha = :sorFecha")})
+    @NamedQuery(name = "Sorteo.findAll", query = "SELECT s FROM Sorteo s")
+    , @NamedQuery(name = "Sorteo.findByCodigo", query = "SELECT s FROM Sorteo s WHERE s.codigo = :codigo")
+    , @NamedQuery(name = "Sorteo.findByFecha", query = "SELECT s FROM Sorteo s WHERE s.fecha = :fecha")})
 public class Sorteo implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "sor_codigo")
-    private Integer sorCodigo;
-    @Column(name = "sor_fecha")
-    @Temporal(TemporalType.DATE)
-    private Date sorFecha;
+
+    @Transient
+    private Integer codigo;
+    @Transient
+    SimpleObjectProperty<LocalDate> fecha;
     @OneToMany(mappedBy = "sorteo", fetch = FetchType.LAZY)
-    private List<Factura> sorFacturaList;
+    private List<Factura> listaFacturas;
     @JoinColumn(name = "sor_codsucursal", referencedColumnName = "suc_codigo")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Sucursal sorCodsucursal;
+    private Sucursal sucursal;
     @JoinColumn(name = "sor_tiposorteo", referencedColumnName = "tso_codigo")
     @ManyToOne(fetch = FetchType.LAZY)
-    private TipoSorteo sorTiposorteo;
+    private TipoSorteo tipoSorteo;
 
     public Sorteo() {
     }
 
     public Sorteo(Integer sorCodigo) {
-        this.sorCodigo = sorCodigo;
+        this.codigo = sorCodigo;
     }
 
-    public Integer getSorCodigo() {
-        return sorCodigo;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "sor_codigo")
+    @Access(AccessType.PROPERTY)
+    public Integer getCodigo() {
+        return codigo;
     }
 
-    public void setSorCodigo(Integer sorCodigo) {
-        this.sorCodigo = sorCodigo;
+    public void setCodigo(Integer codigo) {
+        this.codigo = codigo;
     }
 
-    public Date getSorFecha() {
-        return sorFecha;
+    @Column(name = "sor_fecha")
+    @Temporal(TemporalType.DATE)
+    @Access(AccessType.PROPERTY)
+    public Date getFecha() {
+        if (fecha != null && fecha.get() != null) {
+            return Date.from(fecha.get().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        } else {
+            return null;
+        }
     }
 
-    public void setSorFecha(Date sorFecha) {
-        this.sorFecha = sorFecha;
+    public SimpleObjectProperty<LocalDate> getFechaProperty() {
+        if (this.fecha == null) {
+            this.fecha = new SimpleObjectProperty();
+        }
+        return this.fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        if (fecha != null) {
+            this.fecha.set(fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        }
     }
 
     @XmlTransient
-    public List<Factura> getSorFacturaList() {
-        return sorFacturaList;
+    public List<Factura> getListaFacturas() {
+        return listaFacturas;
     }
 
-    public void setSorFacturaList(List<Factura> sorFacturaList) {
-        this.sorFacturaList = sorFacturaList;
+    public void setListaFacturas(List<Factura> listaFacturas) {
+        this.listaFacturas = listaFacturas;
     }
 
-    public Sucursal getSorCodsucursal() {
-        return sorCodsucursal;
+    public Sucursal getSucursal() {
+        return sucursal;
     }
 
-    public void setSorCodsucursal(Sucursal sorCodsucursal) {
-        this.sorCodsucursal = sorCodsucursal;
+    public void setSucursal(Sucursal sucursal) {
+        this.sucursal = sucursal;
     }
 
-    public TipoSorteo getSorTiposorteo() {
-        return sorTiposorteo;
+    public TipoSorteo getTipoSorteo() {
+        return tipoSorteo;
     }
 
-    public void setSorTiposorteo(TipoSorteo sorTiposorteo) {
-        this.sorTiposorteo = sorTiposorteo;
+    public void setTipoSorteo(TipoSorteo tipoSorteo) {
+        this.tipoSorteo = tipoSorteo;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (sorCodigo != null ? sorCodigo.hashCode() : 0);
+        hash += (codigo != null ? codigo.hashCode() : 0);
         return hash;
     }
 
@@ -119,7 +144,7 @@ public class Sorteo implements Serializable {
             return false;
         }
         Sorteo other = (Sorteo) object;
-        if ((this.sorCodigo == null && other.sorCodigo != null) || (this.sorCodigo != null && !this.sorCodigo.equals(other.sorCodigo))) {
+        if ((this.codigo == null && other.codigo != null) || (this.codigo != null && !this.codigo.equals(other.codigo))) {
             return false;
         }
         return true;
@@ -127,7 +152,7 @@ public class Sorteo implements Serializable {
 
     @Override
     public String toString() {
-        return "sorteo.model.entities.SorSorteo[ sorCodigo=" + sorCodigo + " ]";
+        return "Sorteo{" + "codigo=" + codigo + '}';
     }
     
 }

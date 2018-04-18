@@ -34,10 +34,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "sor_detfactura", schema = "sorteo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "SorDetfactura.findAll", query = "SELECT s FROM SorDetfactura s")
-    , @NamedQuery(name = "SorDetfactura.findByCodFactura", query = "SELECT s FROM SorDetfactura s WHERE s.dfaCodigo = :dfaCodigo")
-    , @NamedQuery(name = "SorDetfactura.findByDfaNumero", query = "SELECT s FROM SorDetfactura s WHERE s.dfaNumero = :dfaNumero")
-    , @NamedQuery(name = "SorDetfactura.findByDfaMonto", query = "SELECT s FROM SorDetfactura s WHERE s.dfaMonto = :dfaMonto")})
+    @NamedQuery(name = "DetalleFactura.findAll", query = "SELECT s FROM DetalleFactura s")
+    , @NamedQuery(name = "DetalleFactura.findByCodFactura", query = "SELECT s FROM DetalleFactura s WHERE s.cCodigo = :codigo")
+    , @NamedQuery(name = "DetalleFactura.findByDfaNumero", query = "SELECT s FROM DetalleFactura s WHERE s.numero = :numero")
+    , @NamedQuery(name = "DetalleFactura.findByDfaMonto", query = "SELECT s FROM DetalleFactura s WHERE s.monto = :monto")})
 public class DetalleFactura implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -149,7 +149,7 @@ public class DetalleFactura implements Serializable {
 
     @Override
     public String toString() {
-        return "sorteo.model.entities.SorDetfactura[ dfaCodigo=" + codigo + " ]";
-    }
+        return "DetalleFactura{" + "codigo=" + codigo + '}';
+    }   
 
 }

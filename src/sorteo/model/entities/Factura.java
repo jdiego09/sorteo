@@ -47,9 +47,9 @@ import sorteo.utils.GenValorCombo;
 @Table(name = "sor_factura", schema = "sorteo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "SorFactura.findAll", query = "SELECT s FROM SorFactura s")
-    , @NamedQuery(name = "SorFactura.findByCodigo", query = "SELECT s FROM SorFactura s WHERE s.facCodigo = :facCodigo")
-    , @NamedQuery(name = "SorFactura.findByFecha", query = "SELECT s FROM SorFactura s WHERE s.facFecha = :facFecha")})
+    @NamedQuery(name = "Factura.findAll", query = "SELECT s FROM Factura s")
+    , @NamedQuery(name = "Factura.findByCodigo", query = "SELECT s FROM Factura s WHERE s.codigo = :codigo")
+    , @NamedQuery(name = "Factura.findByFecha", query = "SELECT s FROM Factura s WHERE s.fecha = :fecha")})
 public class Factura implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -76,7 +76,7 @@ public class Factura implements Serializable {
         this.codigo = new SimpleIntegerProperty();
         this.fecha = new SimpleObjectProperty(LocalDate.now());
         this.total = new SimpleDoubleProperty(BigDecimal.ZERO.doubleValue());
-        this.estado = new SimpleObjectProperty(new GenValorCombo("A", "Activo"));
+        this.estado = new SimpleObjectProperty(new GenValorCombo("A", "Activa"));
     }
 
     public Factura(Integer facCodigo) {
@@ -183,9 +183,9 @@ public class Factura implements Serializable {
     public void setEstado(String estado) {
         GenValorCombo valor = null;
         if (estado.equalsIgnoreCase("a")) {
-            valor = new GenValorCombo(estado, "Activo");
+            valor = new GenValorCombo(estado, "Activa");
         } else {
-            valor = new GenValorCombo(estado, "Egresado");
+            valor = new GenValorCombo(estado, "Nula");
         }
         if (this.estado == null) {
             this.estado = new SimpleObjectProperty();
@@ -232,7 +232,6 @@ public class Factura implements Serializable {
 
     @Override
     public String toString() {
-        return "sorteo.model.entities.SorFactura[ facCodigo=" + codigo + " ]";
+        return "Factura{" + "codigo=" + codigo + '}';
     }
-
 }

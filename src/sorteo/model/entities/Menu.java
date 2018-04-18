@@ -39,10 +39,10 @@ import sorteo.utils.GenValorCombo;
 @Table(name = "sor_menu", schema = "sorteo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "SorMenu.findAll", query = "SELECT s FROM SorMenu s")
-    , @NamedQuery(name = "SorMenu.findByCodigo", query = "SELECT s FROM SorMenu s WHERE s.menCodigo = :menCodigo")
-    , @NamedQuery(name = "SorMenu.findByPantalla", query = "SELECT s FROM SorMenu s WHERE s.menPantalla = :menPantalla")
-    , @NamedQuery(name = "SorMenu.findByEtiqueta", query = "SELECT s FROM SorMenu s WHERE s.menEtiqueta = :menEtiqueta")})
+    @NamedQuery(name = "Menu.findAll", query = "SELECT s FROM Menu s")
+    , @NamedQuery(name = "Menu.findByCodigo", query = "SELECT s FROM Menu s WHERE s.codigo = :codigo")
+    , @NamedQuery(name = "Menu.findByPantalla", query = "SELECT s FROM Menu s WHERE s.pantalla = :pantalla")
+    , @NamedQuery(name = "Menu.findByEtiqueta", query = "SELECT s FROM Menu s WHERE s.etiqueta = :etiqueta")})
 public class Menu implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -53,13 +53,15 @@ public class Menu implements Serializable {
     private SimpleStringProperty pantalla;
     @Transient
     private SimpleStringProperty etiqueta;
-
     @Transient
     private ObjectProperty<GenValorCombo> estado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "mxrCodmenu", fetch = FetchType.LAZY)
     private List<MenuXRol> listaRoles;
 
     public Menu() {
+        this.pantalla = new SimpleStringProperty();
+        this.etiqueta = new SimpleStringProperty();
+        this.estado = new SimpleObjectProperty();
     }
 
     public Menu(Integer menCodigo) {
@@ -159,7 +161,6 @@ public class Menu implements Serializable {
 
     @Override
     public String toString() {
-        return "sorteo.model.entities.SorMenu[ menCodigo=" + codigo + " ]";
+        return "Menu{" + "codigo=" + codigo + '}';
     }
-
 }

@@ -6,6 +6,8 @@
 package sorteo.model.entities;
 
 import java.io.Serializable;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +20,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -25,61 +28,65 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author jdiego
  */
 @Entity
-@Table(name = "sor_menuxrol")
+@Access(AccessType.FIELD)
+@Table(name = "sor_menuxrol", schema = "sorteo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "SorMenuxrol.findAll", query = "SELECT s FROM SorMenuxrol s")
-    , @NamedQuery(name = "SorMenuxrol.findByMxrCodigo", query = "SELECT s FROM SorMenuxrol s WHERE s.mxrCodigo = :mxrCodigo")})
+    @NamedQuery(name = "MenuXRol.findAll", query = "SELECT s FROM MenuXRol s")
+    , @NamedQuery(name = "MenuXRol.findByCodigo", query = "SELECT s FROM MenuXRol s WHERE s.codigo = :codigo")})
 public class MenuXRol implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "mxr_codigo")
-    private Integer mxrCodigo;
+
+    @Transient
+    private Integer codigo;
     @JoinColumn(name = "mxr_codmenu", referencedColumnName = "men_codigo")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Menu mxrCodmenu;
+    private Menu listaOpciones;
     @JoinColumn(name = "mxr_codrol", referencedColumnName = "rol_codigo")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Roles mxrCodrol;
+    private Roles listaRoles;
 
     public MenuXRol() {
     }
 
     public MenuXRol(Integer mxrCodigo) {
-        this.mxrCodigo = mxrCodigo;
+        this.codigo = mxrCodigo;
     }
 
-    public Integer getMxrCodigo() {
-        return mxrCodigo;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "mxr_codigo")
+    @Access(AccessType.PROPERTY)
+    public Integer getCodigo() {
+        return codigo;
     }
 
-    public void setMxrCodigo(Integer mxrCodigo) {
-        this.mxrCodigo = mxrCodigo;
+    public void setCodigo(Integer codigo) {
+        this.codigo = codigo;
     }
 
-    public Menu getMxrCodmenu() {
-        return mxrCodmenu;
+    public Menu getListaOpciones() {
+        return listaOpciones;
     }
 
-    public void setMxrCodmenu(Menu mxrCodmenu) {
-        this.mxrCodmenu = mxrCodmenu;
+    public void setListaOpciones(Menu listaOpciones) {
+        this.listaOpciones = listaOpciones;
     }
 
-    public Roles getMxrCodrol() {
-        return mxrCodrol;
+    public Roles getListaRoles() {
+        return listaRoles;
     }
 
-    public void setMxrCodrol(Roles mxrCodrol) {
-        this.mxrCodrol = mxrCodrol;
+    public void setListaRoles(Roles listaRoles) {
+        this.listaRoles = listaRoles;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (mxrCodigo != null ? mxrCodigo.hashCode() : 0);
+        hash += (codigo != null ? codigo.hashCode() : 0);
         return hash;
     }
 
@@ -90,7 +97,7 @@ public class MenuXRol implements Serializable {
             return false;
         }
         MenuXRol other = (MenuXRol) object;
-        if ((this.mxrCodigo == null && other.mxrCodigo != null) || (this.mxrCodigo != null && !this.mxrCodigo.equals(other.mxrCodigo))) {
+        if ((this.codigo == null && other.codigo != null) || (this.codigo != null && !this.codigo.equals(other.codigo))) {
             return false;
         }
         return true;
@@ -98,7 +105,7 @@ public class MenuXRol implements Serializable {
 
     @Override
     public String toString() {
-        return "sorteo.model.entities.SorMenuxrol[ mxrCodigo=" + mxrCodigo + " ]";
+        return "MenuXRol{" + "codigo=" + codigo + '}';
     }
-    
+   
 }

@@ -39,15 +39,15 @@ import sorteo.utils.GenValorCombo;
 @Table(name = "sor_sucursal", schema = "sorteo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "SorSucursal.findAll", query = "SELECT s FROM SorSucursal s")
-    , @NamedQuery(name = "SorSucursal.findByCodigo", query = "SELECT s FROM SorSucursal s WHERE s.sucCodigo = :sucCodigo")
-    , @NamedQuery(name = "SorSucursal.findByNombre", query = "SELECT s FROM SorSucursal s WHERE s.sucNombre = :sucNombre")})
+    @NamedQuery(name = "Sucursal.findAll", query = "SELECT s FROM Sucursal s")
+    , @NamedQuery(name = "Sucursal.findByCodigo", query = "SELECT s FROM Sucursal s WHERE s.codigo = :codigo")
+    , @NamedQuery(name = "Sucursal.findByNombre", query = "SELECT s FROM Sucursal s WHERE s.nombre = :nombre")})
 public class Sucursal implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
     @Transient
     private Integer codigo;
-
     @Transient
     private SimpleStringProperty nombre;
     @Transient
@@ -115,6 +115,7 @@ public class Sucursal implements Serializable {
     }
 
     @Column(name = "suc_estado")
+    @Access(AccessType.PROPERTY)
     public String getEstado() {
         if (this.estado == null) {
             this.estado = new SimpleObjectProperty();
