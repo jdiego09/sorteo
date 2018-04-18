@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Access(AccessType.FIELD)
-@Table(name = "sor_empresa", schema="sorteo")
+@Table(name = "sor_empresa", schema = "sorteo")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Empresa.findAll", query = "SELECT s FROM Empresa s")
@@ -41,13 +41,13 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Empresa implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Transient
-    private Integer codigo;    
+    private Integer codigo;
     @Transient
-    private SimpleStringProperty cedJuridica;    
+    private SimpleStringProperty cedJuridica;
     @Transient
-    private SimpleStringProperty nombre;   
+    private SimpleStringProperty nombre;
     @Transient
     private SimpleStringProperty logo;
     @Transient
@@ -58,8 +58,13 @@ public class Empresa implements Serializable {
     private List<Sucursal> sucursales;
 
     public Empresa() {
+        this.cedJuridica = new SimpleStringProperty();
+        this.nombre = new SimpleStringProperty();
+        this.logo = new SimpleStringProperty();
+        this.telefono = new SimpleStringProperty();
+        this.email = new SimpleStringProperty();
     }
-    
+
     public Empresa(Integer empCodigo) {
         this.codigo = empCodigo;
     }
@@ -159,7 +164,7 @@ public class Empresa implements Serializable {
             return false;
         }
         return true;
-    }  
+    }
 
     @Override
     public String toString() {

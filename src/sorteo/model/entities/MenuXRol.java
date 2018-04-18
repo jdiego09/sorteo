@@ -50,8 +50,8 @@ public class MenuXRol implements Serializable {
     public MenuXRol() {
     }
 
-    public MenuXRol(Integer mxrCodigo) {
-        this.codigo = mxrCodigo;
+    public MenuXRol(Integer codigo) {
+        this.codigo = codigo;
     }
 
     @Id

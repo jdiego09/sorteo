@@ -49,7 +49,7 @@ public class Roles implements Serializable {
     private SimpleStringProperty descripcion;
     @Transient
     private ObjectProperty<GenValorCombo> estado;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "listaRoles", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "listaOpciones", fetch = FetchType.LAZY)
     private List<MenuXRol> listaMenus;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "listaRoles", fetch = FetchType.LAZY)
     private List<RolXUsuario> listaUsuariosRol;

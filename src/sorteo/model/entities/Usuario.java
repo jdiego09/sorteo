@@ -54,7 +54,7 @@ public class Usuario implements Serializable {
     private ObjectProperty<GenValorCombo> estado;
     @JoinColumn(name = "usu_codsucursal", referencedColumnName = "suc_codigo")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Sucursal sucursal;
+    private Sucursal sucursalUsuario;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.LAZY)
     private List<RolXUsuario> listaRoles;
 
@@ -126,12 +126,12 @@ public class Usuario implements Serializable {
         this.estado.set(valor);
     }
 
-    public Sucursal getSucursal() {
-        return sucursal;
+    public Sucursal getSucursalUsuario() {
+        return sucursalUsuario;
     }
 
-    public void setSucursal(Sucursal sucursal) {
-        this.sucursal = sucursal;
+    public void setSucursalUsuario(Sucursal sucursalUsuario) {
+        this.sucursalUsuario = sucursalUsuario;
     }
 
     @XmlTransient
