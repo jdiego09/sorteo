@@ -23,8 +23,8 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
-import jbiketso.controller.BusquedaController;
-import jbiketso.controller.Controller;
+import sorteo.controller.BusquedaController;
+import sorteo.controller.Controller;
 
 public class AppWindowController {
 
@@ -187,7 +187,7 @@ public class AppWindowController {
             stage.setOnHidden((WindowEvent event) -> {
                 controller.setStage(null);
             });
-            controller.busquedaPersonas();
+            //controller.busquedaPersonas();
             controller.setStage(stage);
             Scene scene = new Scene(roots.get(ventana));
             stage.setScene(scene);

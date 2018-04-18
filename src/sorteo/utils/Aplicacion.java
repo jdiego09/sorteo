@@ -29,7 +29,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
 import javax.xml.bind.annotation.XmlTransient;
 import sorteo.controller.PrincipalController;
-import sorteo.model.dao.EmpresaDao;
+//import sorteo.model.dao.EmpresaDao;
 import sorteo.model.entities.Empresa;
 import sorteo.model.entities.Sucursal;
 import net.sf.jasperreports.engine.JRException;
@@ -37,41 +37,42 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.view.JasperViewer;
+import sorteo.model.dao.EmpresaDao;
 
 /**
  *
  * @author jdiego
  */
 public class Aplicacion {
-    
+
     private static Aplicacion INSTANCE;
-    
+
     private static Usuario usuario;
     private static String rolesUsuario;
     private static ArrayList<MenuXRol> accesoRol;
     private static ArrayList<Menu> menu;
-    
+
     private static Sucursal sucursal;
     private static Empresa empresa;
-           
+
     private static Resultado<Object> resultadoBusqueda;
-    
+
     final String pathDir = System.getProperty("user.dir") + "/src/sorteo/reportes/";
 
     //parámetros
     private static Integer defaultEmpresa;
     private static Integer defaultSucursal;
-    
+
     private static String urlBD;
     private static String usuarioBD;
     private static String passwordBD;
-    
+
     private static MouseEvent eventoMenu;
     private static JFXHamburger hamburgerMenu;
-    
+
     private Aplicacion() {
     }
-    
+
     private static void createInstance() {
         if (INSTANCE == null) {
             // Sólo se accede a la zona sincronizada
@@ -85,18 +86,17 @@ public class Aplicacion {
             }
         }
     }
-    
+
     public static Aplicacion getInstance() {
         if (INSTANCE == null) {
             createInstance();
         }
         return INSTANCE;
     }
-    
-    
+
     public Sucursal getSucursalDefault() {
         if (sucursal == null) {
-            Resultado<Sucursal> defSucursal = EmpresaDao.getInstance().findSSucursalByCodigo(defaultSucursal);
+            Resultado<Sucursal> defSucursal = EmpresaDao.getInstance().findSucursalByCodigo(defaultSucursal);
             if (!defSucursal.getResultado().equals(TipoResultado.SUCCESS)) {
                 AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Traer sucursal por defecto", defSucursal.getMensaje());
                 return null;
@@ -105,10 +105,10 @@ public class Aplicacion {
         }
         return sucursal;
     }
-    
+
     public Empresa getEmpresaDefault() {
         if (empresa == null) {
-            Resultado<Empresa> defEmpresa = EmpresaDao.getInstance().findCentroByCodigo(defaultEmpresa);
+            Resultado<Empresa> defEmpresa = EmpresaDao.getInstance().findEmpresaByCodigo(defaultEmpresa);
             if (!defEmpresa.getResultado().equals(TipoResultado.SUCCESS)) {
                 AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Traer empresa por defecto", defEmpresa.getMensaje());
                 return null;
@@ -117,14 +117,13 @@ public class Aplicacion {
         }
         return empresa;
     }
-      
-    
+
     public void cargaProperties() {
         Properties prop = new Properties();
         InputStream input = null;
-        
+
         try {
-            
+
             String filename = "biketso.properties";
             input = Aplicacion.class.getClassLoader().getResourceAsStream(filename);
             if (input == null) {
@@ -167,43 +166,43 @@ public class Aplicacion {
     public Object clone() throws CloneNotSupportedException {
         throw new CloneNotSupportedException();
     }
-    
+
     public Usuario getUsuario() {
         return usuario;
     }
-    
+
     public void setUsuario(Usuario usuario) {
         Aplicacion.usuario = usuario;
     }
-    
+
     public String getRolesUsuario() {
         return rolesUsuario;
     }
-    
+
     public void setRolesUsuario(String rolesUsuario) {
         Aplicacion.rolesUsuario = rolesUsuario;
     }
-        
+
     public Resultado<Object> getResultadoBusqueda() {
         return resultadoBusqueda;
     }
-    
+
     public void setResultadoBusqueda(Resultado<Object> resultadoBusqueda) {
         Aplicacion.resultadoBusqueda = resultadoBusqueda;
     }
-    
+
     public MouseEvent getEventoMenu() {
         return eventoMenu;
     }
-    
+
     public void setEventoMenu(MouseEvent evento) {
         Aplicacion.eventoMenu = evento;
     }
-    
+
     public JFXHamburger getHamburgerMenu() {
         return hamburgerMenu;
     }
-    
+
     public void setHamburgerMenu(JFXHamburger hamburgerMenu) {
         Aplicacion.hamburgerMenu = hamburgerMenu;
     }
@@ -238,7 +237,7 @@ public class Aplicacion {
             Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void generarReporte(String reporte, HashMap<String, Object> parametros) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
