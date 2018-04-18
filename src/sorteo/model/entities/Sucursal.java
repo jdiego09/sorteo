@@ -56,9 +56,9 @@ public class Sucursal implements Serializable {
     private SimpleStringProperty email;
     @Transient
     private ObjectProperty<GenValorCombo> estado;
-    @OneToMany(mappedBy = "usuCodsucursal", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "sucursal", fetch = FetchType.LAZY)
     private List<Usuario> listaUsuarios;
-    @OneToMany(mappedBy = "sorCodsucursal", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "sucursal", fetch = FetchType.LAZY)
     private List<Sorteo> listaSorteos;
     @JoinColumn(name = "suc_codempresa", referencedColumnName = "emp_codigo")
     @ManyToOne(fetch = FetchType.LAZY)

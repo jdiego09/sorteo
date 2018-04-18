@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "sor_rolxusuario", schema="sorteo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "RolXUsuario.findAll", query = "SELECT s FROM Rolxusuario s")
+    @NamedQuery(name = "RolXUsuario.findAll", query = "SELECT s FROM RolXUsuario s")
     , @NamedQuery(name = "RolXUsuario.findByCodigo", query = "SELECT s FROM RolXUsuario s WHERE s.codigo = :codigo")})
 public class RolXUsuario implements Serializable {
 

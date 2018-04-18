@@ -55,18 +55,16 @@ public class Factura implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Transient
-    private SimpleIntegerProperty codigo;
+    private SimpleIntegerProperty codigo;    
     @Transient
-    private SimpleObjectProperty<LocalDate> fecha;
+    private SimpleObjectProperty<LocalDate> fecha;    
     @Transient
     private SimpleStringProperty cliente;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "fac_total")
     @Transient
     private SimpleDoubleProperty total;
     @Transient
     private ObjectProperty<GenValorCombo> estado;
-    @OneToMany(mappedBy = "dfaCodfac", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "factura", fetch = FetchType.LAZY)
     private List<DetalleFactura> detalleFactura;
     @JoinColumn(name = "fac_codsorteo", referencedColumnName = "sor_codigo")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -143,6 +141,9 @@ public class Factura implements Serializable {
         this.cliente.set(cliente);
     }
 
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "fac_total")
+    @Access(AccessType.PROPERTY)
     public Double getTotal() {
         if (this.total == null) {
             this.total = new SimpleDoubleProperty();

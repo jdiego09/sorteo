@@ -54,7 +54,7 @@ public class Empresa implements Serializable {
     private SimpleStringProperty telefono;
     @Transient
     private SimpleStringProperty email;
-    @OneToMany(mappedBy = "sucCodempresa", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "empresa", fetch = FetchType.LAZY)
     private List<Sucursal> sucursales;
 
     public Empresa() {

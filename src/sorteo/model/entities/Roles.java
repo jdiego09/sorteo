@@ -37,8 +37,8 @@ import sorteo.utils.GenValorCombo;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Roles.findAll", query = "SELECT s FROM Roles s")
-    , @NamedQuery(name = "Roles.findByCodigo", query = "SELECT s FROM Roles s WHERE s.rolCodigo = :codigo")
-    , @NamedQuery(name = "Roles.findByDescripcion", query = "SELECT s FROM Roles s WHERE s.rolDescripcion = :descripcion")})
+    , @NamedQuery(name = "Roles.findByCodigo", query = "SELECT s FROM Roles s WHERE s.codigo = :codigo")
+    , @NamedQuery(name = "Roles.findByDescripcion", query = "SELECT s FROM Roles s WHERE s.descripcion = :descripcion")})
 public class Roles implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -55,7 +55,7 @@ public class Menu implements Serializable {
     private SimpleStringProperty etiqueta;
     @Transient
     private ObjectProperty<GenValorCombo> estado;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "mxrCodmenu", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "listaOpciones", fetch = FetchType.LAZY)
     private List<MenuXRol> listaRoles;
 
     public Menu() {
