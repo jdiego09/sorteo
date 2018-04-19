@@ -7,6 +7,11 @@ package sorteo.model.entities;
 
 import java.io.Serializable;
 import java.util.List;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,14 +24,17 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import sorteo.utils.GenValorCombo;
 
 /**
  *
  * @author jdiego
  */
 @Entity
+@Access(AccessType.FIELD)
 @Table(name = "sor_usuario")
 @XmlRootElement
 @NamedQueries({
@@ -38,16 +46,15 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @Column(name = "usu_codigo")
-    private String usuCodigo;
-    @Column(name = "usu_descripcion")
-    private String usuDescripcion;
-    @Column(name = "usu_contrasena")
-    private String usuContrasena;
-    @Column(name = "usu_estado")
-    private String usuEstado;
+
+    @Transient
+    private SimpleStringProperty usuCodigo;
+    @Transient
+    private SimpleStringProperty usuDescripcion;
+    @Transient
+    private SimpleStringProperty usuContrasena;
+    @Transient
+    private ObjectProperty<GenValorCombo> usuEstado;
     @JoinColumn(name = "usu_codsucursal", referencedColumnName = "suc_codigo")
     @ManyToOne(fetch = FetchType.LAZY)
     private Sucursal usuCodsucursal;
@@ -58,39 +65,59 @@ public class Usuario implements Serializable {
     }
 
     public Usuario(String usuCodigo) {
-        this.usuCodigo = usuCodigo;
+        this.usuCodigo.set(usuCodigo);
     }
 
+    @Id
+    @Basic(optional = false)
+    @Column(name = "usu_codigo")
+    @Access(AccessType.PROPERTY)
     public String getUsuCodigo() {
-        return usuCodigo;
+        return usuCodigo.get();
     }
 
     public void setUsuCodigo(String usuCodigo) {
-        this.usuCodigo = usuCodigo;
+        this.usuCodigo.set(usuCodigo);
     }
 
+    @Column(name = "usu_descripcion")
+    @Access(AccessType.PROPERTY)
+
     public String getUsuDescripcion() {
-        return usuDescripcion;
+        return usuDescripcion.get();
     }
 
     public void setUsuDescripcion(String usuDescripcion) {
-        this.usuDescripcion = usuDescripcion;
+        this.usuDescripcion.set(usuDescripcion);
     }
 
+    @Column(name = "usu_contrasena")
+    @Access(AccessType.PROPERTY)
     public String getUsuContrasena() {
-        return usuContrasena;
+        return usuContrasena.get();
     }
 
     public void setUsuContrasena(String usuContrasena) {
-        this.usuContrasena = usuContrasena;
+        this.usuContrasena.set(usuContrasena);
     }
 
+    @Column(name = "usu_estado")
+    @Access(AccessType.PROPERTY)
     public String getUsuEstado() {
-        return usuEstado;
+        return usuEstado.get().getCodigo();
     }
 
     public void setUsuEstado(String usuEstado) {
-        this.usuEstado = usuEstado;
+        GenValorCombo valorEstado = null;
+        if (this.usuEstado == null) {
+            this.usuEstado = new SimpleObjectProperty();
+        }
+        if (usuEstado.equalsIgnoreCase("a")) {
+            valorEstado = new GenValorCombo("A", "Activo");
+        } else {
+            valorEstado = new GenValorCombo("I", "Inactivo");
+        }
+        this.usuEstado.set(valorEstado);
     }
 
     public Sucursal getUsuCodsucursal() {
@@ -134,5 +161,5 @@ public class Usuario implements Serializable {
     public String toString() {
         return "sorteo.model.entities.Usuario[ usuCodigo=" + usuCodigo + " ]";
     }
-    
+
 }

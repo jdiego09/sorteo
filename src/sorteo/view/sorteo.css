@@ -1,0 +1,281 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.dark{
+    -fx-background-color: #004c40;
+}
+.actionbar{
+    -fx-background-color: #00796b;	
+}
+.actionbar:extreme-small-device{
+    -fx-pref-width: 100%;
+    -fx-pref-height: 10%;
+}
+
+.jfx-hamburger StackPane{
+    -fx-background-color: #ffffff;
+
+}
+
+.main{
+    -fx-background-image: url("../view/images/logo.png");
+    -fx-background-size: 1024 768;
+    -fx-background-position: center;
+}
+
+.apptitle{
+    -fx-width: 100%;
+    -fx-height: 100%;
+    -fx-position-shape: center;
+    -fx-width: 100%;
+}
+.form{
+    -fx-background-color: #ffffff;
+}
+.button{
+    -fx-background-color: #c62828;
+    -fx-fill-color: #ffffff;
+    -jfx-rippler-fill-color: #eb3434;
+    -fx-font: 18 System;
+}
+
+.actionbuttonguardar{
+    -fx-background-color: white;
+    -fx-text-fill: transparent;
+    -fx-background-image: url("../view/images/save.png");
+    -fx-background-size: 32px; 
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;    
+}
+
+.actionbuttonborrar{
+    -fx-background-color: white;
+    -fx-text-fill: transparent;
+    -fx-background-image: url("../view/images/delete.png");
+    -fx-background-size: 32px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+.actionbuttonlimpiar{
+    -fx-background-color: white;
+    -fx-text-fill: transparent;
+    -fx-fill: transparent;
+    -fx-background-image: url("../view/images/clear.png");
+    -fx-background-size: 32px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:  center;
+}
+
+.actionbuttonlimpiar{
+    -fx-background-color: white;
+    -fx-text-fill: transparent;
+    -fx-fill: transparent;
+    -fx-background-image: url("../view/images/clear.png");
+    -fx-background-size: 32px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:  center;
+}
+
+.actionbuttonimprimir{
+    -fx-background-color: white;
+    -fx-text-fill: transparent;
+    -fx-fill: transparent;
+    -fx-background-image: url("../view/images/print.png");
+    -fx-background-size: 32px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:  center;
+}
+
+
+.actionbuttonsalir{
+    -fx-background-color: transparent;
+    -fx-text-fill: transparent;
+    -fx-fill: transparent;
+    -fx-background-image: url("../view/images/exit.png");
+    -fx-background-size: 32px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:  center;
+}
+
+.actionbuttonagregar{
+    -fx-background-color: transparent;
+    -fx-text-fill: transparent;
+    -fx-fill: transparent;
+    -fx-background-image: url("../view/images/add.png");
+    -fx-background-size: 32px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:  center;
+}
+
+.actionbuttoneliminar{
+    -fx-background-color: transparent;
+    -fx-text-fill: transparent;
+    -fx-fill: transparent;
+    -fx-background-image: url("../view/images/remove.png");
+    -fx-background-size: 32px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:  center;
+}
+
+.actionbuttonanterior{
+    -fx-background-color: transparent;
+    -fx-text-fill: transparent;
+    -fx-fill: transparent;
+    -fx-background-image: url("../view/images/anterior.png");
+    -fx-background-size: 32px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:  center;
+}
+
+.actionbuttonsiguiente{
+    -fx-background-color: transparent;
+    -fx-text-fill: transparent;
+    -fx-fill: transparent;
+    -fx-background-image: url("../view/images/siguiente.png");
+    -fx-background-size: 32px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:  center;
+}
+
+.actionbuttonaceptar{
+    -fx-background-color: #00796b;
+    -fx-text-fill: whitesmoke;
+    -fx-fill: transparent;
+}
+
+.buttonbuscar{
+    -fx-background-color: transparent;
+    -fx-text-fill: transparent;
+    -fx-fill: transparent;
+    -fx-background-image: url("../view/images/search.png");
+    -fx-background-size: 32px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:  center;
+}
+
+.edittext{
+    -jfx-focus-color: #00796b;
+    -jfx-unfocus-color: #000000;
+    -jfx-label-float: true;
+    -fx-width: 100%;
+    -fx-height: 40;
+    -fx-font: 18 System;   
+}
+
+.tableview .row .cell{
+    -fx-font: 18 System;
+}
+
+.buttonmenuext{    
+    -fx-background-image:url("../view/images/ext.png");
+    -fx-background-repeat: no-repeat;
+}
+
+.buttonmenuext :hover{    
+    -fx-background-image:url("../view/images/ext.png");    
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 35px;
+    -fx-alignment: center-right;
+}
+
+.buttonmenuusu{    
+    -fx-background-image:url("../view/images/usu.png");
+    -fx-background-repeat: no-repeat;
+}
+
+.buttonmenuusu :hover{    
+    -fx-background-image:url("../view/images/usu.png");    
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 35px;
+    -fx-alignment: center-right;
+}
+
+.buttonmenucnf{    
+    -fx-background-image:url("../view/images/cnf.png");
+    -fx-background-repeat: no-repeat;
+}
+
+.buttonmenucnf :hover{    
+    -fx-background-image:url("../view/images/cnf.png");    
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 35px;
+    -fx-alignment: center-right;
+}
+
+.buttonmenuseg{    
+    -fx-background-image:url("../view/images/seg.png");
+    -fx-background-repeat: no-repeat;
+}
+
+.buttonmenuseg :hover{    
+    -fx-background-image:url("../view/images/seg.png");    
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 35px;
+    -fx-alignment: center-right;
+}
+
+.buttonmenuage{    
+    -fx-background-image:url("../view/images/age.png");
+    -fx-background-repeat: no-repeat;
+}
+
+.buttonmenuage :hover{    
+    -fx-background-image:url("../view/images/age.png");    
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 35px;
+    -fx-alignment: center-right;
+}
+
+.buttonmenuper{
+    -fx-background-image:url("../view/images/per.png");
+    -fx-background-repeat: no-repeat;
+}
+
+.buttonmenuper :hover{    
+    -fx-background-image:url("../view/images/per.png");    
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 35px;
+    -fx-alignment: center-right;
+}
+
+.buttonmenurch{
+    -fx-background-image:url("../view/images/rch.png");
+    -fx-background-repeat: no-repeat;
+}
+
+.buttonmenurch :hover{    
+    -fx-background-image:url("../view/images/rch.png");    
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 35px;
+    -fx-alignment: center-right;
+}
+
+.buttonmenubia{
+    -fx-background-image:url("../view/images/bia.png");
+    -fx-background-repeat: no-repeat;
+}
+
+.buttonmenubia :hover{    
+    -fx-background-image:url("../view/images/bia.png");    
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 35px;
+    -fx-alignment: center-right;
+}
+
+.buttonDrawer{
+    -fx-background-color: transparent;    
+    -fx-text-fill: black;
+    -fx-fill: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 35px;
+    -fx-padding: 5px;
+    -fx-background-position:left;    
+    -fx-font-size: 18;
+    -fx-text-alignment: right;
+    -fx-alignment: center-right;    
+}
+.buttonDrawer:hover{
+    -fx-background-color: lightgrey;
+}
