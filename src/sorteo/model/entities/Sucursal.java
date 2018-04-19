@@ -44,6 +44,9 @@ import sorteo.utils.GenValorCombo;
     , @NamedQuery(name = "Sucursal.findByNombre", query = "SELECT s FROM Sucursal s WHERE s.nombre = :nombre")})
 public class Sucursal implements Serializable {
 
+    @OneToMany(mappedBy = "usuCodsucursal", fetch = FetchType.LAZY)
+    private List<Usuario> usuarioList;
+
     private static final long serialVersionUID = 1L;
     
     @Transient
@@ -57,8 +60,6 @@ public class Sucursal implements Serializable {
     @Transient
     private ObjectProperty<GenValorCombo> estado;
     
-    @OneToMany(mappedBy = "sucursalUsuario", fetch = FetchType.LAZY)
-    private List<Usuario> listaUsuarios;
     @OneToMany(mappedBy = "sucursal", fetch = FetchType.LAZY)
     private List<Sorteo> listaSorteos;
     @JoinColumn(name = "suc_codempresa", referencedColumnName = "emp_codigo")
@@ -146,15 +147,6 @@ public class Sucursal implements Serializable {
     }
     
     @XmlTransient
-    public List<Usuario> getListaUsuarios() {
-        return listaUsuarios;
-    }
-
-    public void setListaUsuarios(List<Usuario> listaUsuarios) {
-        this.listaUsuarios = listaUsuarios;
-    }
-
-    @XmlTransient
     public List<Sorteo> getListaSorteos() {
         return listaSorteos;
     }
@@ -194,6 +186,15 @@ public class Sucursal implements Serializable {
     @Override
     public String toString() {
         return "sorteo.model.entities.SorSucursal[ sucCodigo=" + codigo + " ]";
+    }
+
+    @XmlTransient
+    public List<Usuario> getUsuarioList() {
+        return usuarioList;
+    }
+
+    public void setUsuarioList(List<Usuario> usuarioList) {
+        this.usuarioList = usuarioList;
     }
 
 }

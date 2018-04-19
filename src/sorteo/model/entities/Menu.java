@@ -7,12 +7,6 @@ package sorteo.model.entities;
 
 import java.io.Serializable;
 import java.util.List;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -25,124 +19,91 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import sorteo.utils.GenValorCombo;
 
 /**
  *
  * @author jdiego
  */
 @Entity
-@Access(AccessType.FIELD)
-@Table(name = "sor_menu", schema = "sorteo")
+@Table(name = "sor_menu")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Menu.findAll", query = "SELECT s FROM Menu s")
-    , @NamedQuery(name = "Menu.findByCodigo", query = "SELECT s FROM Menu s WHERE s.codigo = :codigo")
-    , @NamedQuery(name = "Menu.findByPantalla", query = "SELECT s FROM Menu s WHERE s.pantalla = :pantalla")
-    , @NamedQuery(name = "Menu.findByEtiqueta", query = "SELECT s FROM Menu s WHERE s.etiqueta = :etiqueta")})
+    @NamedQuery(name = "Menu.findAll", query = "SELECT m FROM Menu m")
+    , @NamedQuery(name = "Menu.findByMenCodigo", query = "SELECT m FROM Menu m WHERE m.menCodigo = :menCodigo")
+    , @NamedQuery(name = "Menu.findByMenPantalla", query = "SELECT m FROM Menu m WHERE m.menPantalla = :menPantalla")
+    , @NamedQuery(name = "Menu.findByMenEtiqueta", query = "SELECT m FROM Menu m WHERE m.menEtiqueta = :menEtiqueta")
+    , @NamedQuery(name = "Menu.findByMenEstado", query = "SELECT m FROM Menu m WHERE m.menEstado = :menEstado")})
 public class Menu implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    @Transient
-    private Integer codigo;
-    @Transient
-    private SimpleStringProperty pantalla;
-    @Transient
-    private SimpleStringProperty etiqueta;
-    @Transient
-    private ObjectProperty<GenValorCombo> estado;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "listaOpciones", fetch = FetchType.LAZY)
-    private List<MenuXRol> listaRoles;
-
-    public Menu() {
-        this.pantalla = new SimpleStringProperty();
-        this.etiqueta = new SimpleStringProperty();
-        this.estado = new SimpleObjectProperty();
-    }
-
-    public Menu(Integer menCodigo) {
-        this.codigo = menCodigo;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "men_codigo")
-    @Access(AccessType.PROPERTY)
-    public Integer getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(Integer codigo) {
-        this.codigo = codigo;
-    }
-
-    @Access(AccessType.PROPERTY)
+    private Integer menCodigo;
     @Column(name = "men_pantalla")
-    public String getPantalla() {
-        return pantalla.get();
-    }
-
-    public void setPantalla(String pantalla) {
-        this.pantalla.set(pantalla);
-    }
-
-    @Access(AccessType.PROPERTY)
+    private String menPantalla;
     @Column(name = "men_etiqueta")
-    public String getEtiqueta() {
-        return etiqueta.get();
-    }
-
-    public void setEtiqueta(String etiqueta) {
-        this.etiqueta.set(etiqueta);
-    }
-
-    @Access(AccessType.PROPERTY)
+    private String menEtiqueta;
     @Column(name = "men_estado")
-    public String getEstado() {
-        if (this.estado == null) {
-            this.estado = new SimpleObjectProperty();
-        }
-        return estado.get().getCodigo();
+    private String menEstado;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "mxrCodmenu", fetch = FetchType.LAZY)
+    private List<MenuXRoll> menuXRollList;
+
+    public Menu() {
     }
 
-    public ObjectProperty getEstadoProperty() {
-        if (this.estado == null) {
-            this.estado = new SimpleObjectProperty();
-        }
-        return this.estado;
+    public Menu(Integer menCodigo) {
+        this.menCodigo = menCodigo;
     }
 
-    public void setEstado(String estado) {
-        GenValorCombo valor = null;
-        if (estado.equalsIgnoreCase("a")) {
-            valor = new GenValorCombo(estado, "Activo");
-        } else {
-            valor = new GenValorCombo(estado, "Egresado");
-        }
-        if (this.estado == null) {
-            this.estado = new SimpleObjectProperty();
-        }
-        this.estado.set(valor);
+    public Integer getMenCodigo() {
+        return menCodigo;
+    }
+
+    public void setMenCodigo(Integer menCodigo) {
+        this.menCodigo = menCodigo;
+    }
+
+    public String getMenPantalla() {
+        return menPantalla;
+    }
+
+    public void setMenPantalla(String menPantalla) {
+        this.menPantalla = menPantalla;
+    }
+
+    public String getMenEtiqueta() {
+        return menEtiqueta;
+    }
+
+    public void setMenEtiqueta(String menEtiqueta) {
+        this.menEtiqueta = menEtiqueta;
+    }
+
+    public String getMenEstado() {
+        return menEstado;
+    }
+
+    public void setMenEstado(String menEstado) {
+        this.menEstado = menEstado;
     }
 
     @XmlTransient
-    public List<MenuXRol> getListaRoles() {
-        return listaRoles;
+    public List<MenuXRoll> getMenuXRollList() {
+        return menuXRollList;
     }
 
-    public void setListaRoles(List<MenuXRol> listaRoles) {
-        this.listaRoles = listaRoles;
+    public void setMenuXRollList(List<MenuXRoll> menuXRollList) {
+        this.menuXRollList = menuXRollList;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (codigo != null ? codigo.hashCode() : 0);
+        hash += (menCodigo != null ? menCodigo.hashCode() : 0);
         return hash;
     }
 
@@ -153,7 +114,7 @@ public class Menu implements Serializable {
             return false;
         }
         Menu other = (Menu) object;
-        if ((this.codigo == null && other.codigo != null) || (this.codigo != null && !this.codigo.equals(other.codigo))) {
+        if ((this.menCodigo == null && other.menCodigo != null) || (this.menCodigo != null && !this.menCodigo.equals(other.menCodigo))) {
             return false;
         }
         return true;
@@ -161,6 +122,7 @@ public class Menu implements Serializable {
 
     @Override
     public String toString() {
-        return "Menu{" + "codigo=" + codigo + '}';
+        return "sorteo.model.entities.Menu[ menCodigo=" + menCodigo + " ]";
     }
+    
 }

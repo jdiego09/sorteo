@@ -5,13 +5,13 @@
     <class>sorteo.model.entities.DetalleFactura</class>
     <class>sorteo.model.entities.Empresa</class>
     <class>sorteo.model.entities.Factura</class>
-    <class>sorteo.model.entities.Menu</class>
-    <class>sorteo.model.entities.MenuXRol</class>
-    <class>sorteo.model.entities.Roles</class>
-    <class>sorteo.model.entities.RolXUsuario</class>
     <class>sorteo.model.entities.Sorteo</class>
     <class>sorteo.model.entities.Sucursal</class>
     <class>sorteo.model.entities.TipoSorteo</class>
+    <class>sorteo.model.entities.MenuXRoll</class>
+    <class>sorteo.model.entities.Menu</class>
+    <class>sorteo.model.entities.RolXUsuario</class>
+    <class>sorteo.model.entities.Roles</class>
     <class>sorteo.model.entities.Usuario</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/sorteo?zeroDateTimeBehavior=convertToNull"/>

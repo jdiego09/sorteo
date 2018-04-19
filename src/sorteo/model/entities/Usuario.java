@@ -7,11 +7,6 @@ package sorteo.model.entities;
 
 import java.io.Serializable;
 import java.util.List;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,129 +19,101 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import sorteo.utils.GenValorCombo;
 
 /**
  *
  * @author jdiego
  */
 @Entity
-@Access(AccessType.FIELD)
-@Table(name = "sor_usuario", schema = "sorteo")
+@Table(name = "sor_usuario")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Usuario.findAll", query = "SELECT s FROM Usuario s")
-    , @NamedQuery(name = "Usuario.findByCodigo", query = "SELECT s FROM Usuario s WHERE s.codigo = :codigo")})
+    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
+    , @NamedQuery(name = "Usuario.findByUsuCodigo", query = "SELECT u FROM Usuario u WHERE u.usuCodigo = :usuCodigo")
+    , @NamedQuery(name = "Usuario.findByUsuDescripcion", query = "SELECT u FROM Usuario u WHERE u.usuDescripcion = :usuDescripcion")
+    , @NamedQuery(name = "Usuario.findByUsuContrasena", query = "SELECT u FROM Usuario u WHERE u.usuContrasena = :usuContrasena")
+    , @NamedQuery(name = "Usuario.findByUsuEstado", query = "SELECT u FROM Usuario u WHERE u.usuEstado = :usuEstado")})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    @Transient
-    private String codigo;
-    @Transient
-    private SimpleStringProperty descripcion;
-    @Transient
-    private SimpleStringProperty contrasena;
-    @Transient
-    private ObjectProperty<GenValorCombo> estado;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "usu_codigo")
+    private String usuCodigo;
+    @Column(name = "usu_descripcion")
+    private String usuDescripcion;
+    @Column(name = "usu_contrasena")
+    private String usuContrasena;
+    @Column(name = "usu_estado")
+    private String usuEstado;
     @JoinColumn(name = "usu_codsucursal", referencedColumnName = "suc_codigo")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Sucursal sucursalUsuario;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.LAZY)
-    private List<RolXUsuario> listaRoles;
+    private Sucursal usuCodsucursal;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rxuCodusuario", fetch = FetchType.LAZY)
+    private List<RolXUsuario> rolXUsuarioList;
 
     public Usuario() {
     }
 
     public Usuario(String usuCodigo) {
-        this.codigo = usuCodigo;
+        this.usuCodigo = usuCodigo;
     }
 
-    @Id
-    @Basic(optional = false)
-    @Column(name = "usu_codigo")
-    @Access(AccessType.PROPERTY)
-    public String getCodigo() {
-        return codigo;
+    public String getUsuCodigo() {
+        return usuCodigo;
     }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
+    public void setUsuCodigo(String usuCodigo) {
+        this.usuCodigo = usuCodigo;
     }
 
-    @Column(name = "usu_descripcion")
-    @Access(AccessType.PROPERTY)
-    public String getDescripcion() {
-        return descripcion.get();
+    public String getUsuDescripcion() {
+        return usuDescripcion;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion.set(descripcion);
+    public void setUsuDescripcion(String usuDescripcion) {
+        this.usuDescripcion = usuDescripcion;
     }
 
-    @Column(name = "usu_contrasena")
-    @Access(AccessType.PROPERTY)
-    public String getContrasena() {
-        return contrasena.get();
+    public String getUsuContrasena() {
+        return usuContrasena;
     }
 
-    public void setContrasena(String contrasena) {
-        this.contrasena.set(contrasena);
+    public void setUsuContrasena(String usuContrasena) {
+        this.usuContrasena = usuContrasena;
     }
 
-    @Column(name = "usu_estado")
-    @Access(AccessType.PROPERTY)
-    public String getEstado() {
-        if (this.estado == null) {
-            this.estado = new SimpleObjectProperty();
-        }
-        return estado.get().getCodigo();
+    public String getUsuEstado() {
+        return usuEstado;
     }
 
-    public ObjectProperty getEstadoProperty() {
-        if (this.estado == null) {
-            this.estado = new SimpleObjectProperty();
-        }
-        return this.estado;
+    public void setUsuEstado(String usuEstado) {
+        this.usuEstado = usuEstado;
     }
 
-    public void setEstado(String estado) {
-        GenValorCombo valor = null;
-        if (estado.equalsIgnoreCase("a")) {
-            valor = new GenValorCombo(estado, "Activo");
-        } else {
-            valor = new GenValorCombo(estado, "Inactivo");
-        }
-        if (this.estado == null) {
-            this.estado = new SimpleObjectProperty();
-        }
-        this.estado.set(valor);
+    public Sucursal getUsuCodsucursal() {
+        return usuCodsucursal;
     }
 
-    public Sucursal getSucursalUsuario() {
-        return sucursalUsuario;
-    }
-
-    public void setSucursalUsuario(Sucursal sucursalUsuario) {
-        this.sucursalUsuario = sucursalUsuario;
+    public void setUsuCodsucursal(Sucursal usuCodsucursal) {
+        this.usuCodsucursal = usuCodsucursal;
     }
 
     @XmlTransient
-    public List<RolXUsuario> getListaRoles() {
-        return listaRoles;
+    public List<RolXUsuario> getRolXUsuarioList() {
+        return rolXUsuarioList;
     }
 
-    public void setListaRoles(List<RolXUsuario> listaRoles) {
-        this.listaRoles = listaRoles;
+    public void setRolXUsuarioList(List<RolXUsuario> rolXUsuarioList) {
+        this.rolXUsuarioList = rolXUsuarioList;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (codigo != null ? codigo.hashCode() : 0);
+        hash += (usuCodigo != null ? usuCodigo.hashCode() : 0);
         return hash;
     }
 
@@ -157,7 +124,7 @@ public class Usuario implements Serializable {
             return false;
         }
         Usuario other = (Usuario) object;
-        if ((this.codigo == null && other.codigo != null) || (this.codigo != null && !this.codigo.equals(other.codigo))) {
+        if ((this.usuCodigo == null && other.usuCodigo != null) || (this.usuCodigo != null && !this.usuCodigo.equals(other.usuCodigo))) {
             return false;
         }
         return true;
@@ -165,7 +132,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "Usuario{" + "codigo=" + codigo + '}';
+        return "sorteo.model.entities.Usuario[ usuCodigo=" + usuCodigo + " ]";
     }
-
+    
 }

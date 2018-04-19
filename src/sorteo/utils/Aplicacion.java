@@ -7,10 +7,10 @@ package sorteo.utils;
 
 import com.jfoenix.controls.JFXHamburger;
 import java.sql.Connection;
-import java.util.ArrayList;
+import java.util.ArrayList;/*
 import sorteo.model.entities.Menu;
 import sorteo.model.entities.MenuXRol;
-import sorteo.model.entities.Usuario;
+import sorteo.model.entities.Usuario;*/
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,10 +47,10 @@ public class Aplicacion {
 
     private static Aplicacion INSTANCE;
 
-    private static Usuario usuario;
-    private static String rolesUsuario;
+    //private static Usuario usuario;
+    private static String rolesUsuario;/*
     private static ArrayList<MenuXRol> accesoRol;
-    private static ArrayList<Menu> menu;
+    private static ArrayList<Menu> menu;*/
 
     private static Sucursal sucursal;
     private static Empresa empresa;
@@ -166,7 +166,7 @@ public class Aplicacion {
     public Object clone() throws CloneNotSupportedException {
         throw new CloneNotSupportedException();
     }
-
+/*
     public Usuario getUsuario() {
         return usuario;
     }
@@ -174,7 +174,7 @@ public class Aplicacion {
     public void setUsuario(Usuario usuario) {
         Aplicacion.usuario = usuario;
     }
-
+*/
     public String getRolesUsuario() {
         return rolesUsuario;
     }
