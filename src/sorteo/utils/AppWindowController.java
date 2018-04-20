@@ -170,7 +170,7 @@ public class AppWindowController {
             mainStage.setScene(scene);
             mainStage.setTitle(titulo);
             mainStage.setResizable(resize);
-            mainStage.getIcons().add(new Image(getClass().getResourceAsStream("/biketso.png")));
+            mainStage.getIcons().add(new Image(getClass().getResourceAsStream("/sorteo.png")));
             mainStage.show();
         }
     }

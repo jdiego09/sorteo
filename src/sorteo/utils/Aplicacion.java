@@ -124,7 +124,7 @@ public class Aplicacion {
 
         try {
 
-            String filename = "biketso.properties";
+            String filename = "sorteo.properties";
             input = Aplicacion.class.getClassLoader().getResourceAsStream(filename);
             if (input == null) {
                 System.out.println("Error al cargar archivo de configuración" + filename);
@@ -133,10 +133,10 @@ public class Aplicacion {
 
             //load a properties file from class path, inside static method
             prop.load(input);
-            if (prop.containsKey("default.centro")) {
+            if (prop.containsKey("default.empresa")) {
                 defaultEmpresa = Integer.valueOf(prop.getProperty("default.empresa"));
             }
-            if (prop.containsKey("default.sede")) {
+            if (prop.containsKey("default.sucursal")) {
                 defaultSucursal = Integer.valueOf(prop.getProperty("default.sucursal"));
             }
             if (prop.containsKey("conexion.url")) {

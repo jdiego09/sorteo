@@ -6,6 +6,7 @@
 package sorteo.model.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -25,6 +26,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -62,10 +65,32 @@ public class TipoSorteo implements Serializable {
     private SimpleStringProperty diasHabiles;
     @Transient
     private ObjectProperty<GenValorCombo> estado;
+    
+    @Column(name = "tso_horacierre")
+    @Temporal(TemporalType.TIME)
+    private Date tsoHoracierre;
+    @Column(name = "tso_usrcrea")
+    private String tsoUsrcrea;
+    @Column(name = "tso_feccrea")
+    @Temporal(TemporalType.DATE)
+    private Date tsoFeccrea;
+    @Column(name = "tso_fecmod")
+    @Temporal(TemporalType.DATE)
+    private Date tsoFecmod;
+    @Column(name = "tso_usrmod")
+    private String tsoUsrmod;
+    
     @OneToMany(mappedBy = "tipoSorteo", fetch = FetchType.LAZY)
     private List<Sorteo> listaSorteos;
 
     public TipoSorteo() {
+        this.descripcion = new SimpleStringProperty();
+        this.numeroMinimo = new SimpleIntegerProperty(0);
+        this.numeroMaximo = new SimpleIntegerProperty(0);
+        this.montoMaximo = new SimpleDoubleProperty(0);
+        this.cantNumVenta = new SimpleIntegerProperty(0);
+        this.diasHabiles = new SimpleStringProperty();
+        this.estado = new SimpleObjectProperty();  
     }
 
     public TipoSorteo(Integer tsoCodigo) {
@@ -259,6 +284,46 @@ public class TipoSorteo implements Serializable {
     @Override
     public String toString() {
         return "TipoSorteo{" + "codigo=" + codigo + '}';
+    }
+
+    public Date getTsoHoracierre() {
+        return tsoHoracierre;
+    }
+
+    public void setTsoHoracierre(Date tsoHoracierre) {
+        this.tsoHoracierre = tsoHoracierre;
+    }
+
+    public String getTsoUsrcrea() {
+        return tsoUsrcrea;
+    }
+
+    public void setTsoUsrcrea(String tsoUsrcrea) {
+        this.tsoUsrcrea = tsoUsrcrea;
+    }
+
+    public Date getTsoFeccrea() {
+        return tsoFeccrea;
+    }
+
+    public void setTsoFeccrea(Date tsoFeccrea) {
+        this.tsoFeccrea = tsoFeccrea;
+    }
+
+    public Date getTsoFecmod() {
+        return tsoFecmod;
+    }
+
+    public void setTsoFecmod(Date tsoFecmod) {
+        this.tsoFecmod = tsoFecmod;
+    }
+
+    public String getTsoUsrmod() {
+        return tsoUsrmod;
+    }
+
+    public void setTsoUsrmod(String tsoUsrmod) {
+        this.tsoUsrmod = tsoUsrmod;
     }
 
 }

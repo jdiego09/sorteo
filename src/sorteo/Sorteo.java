@@ -10,6 +10,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sorteo.utils.Aplicacion;
+import sorteo.utils.AppWindowController;
+import sorteo.utils.Parametros;
 
 /**
  *
@@ -19,12 +22,9 @@ public class Sorteo extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-        
-        Scene scene = new Scene(root);
-        
-        stage.setScene(scene);
-        stage.show();
+        Aplicacion.getInstance().cargaProperties();
+        Parametros.getInstance().setParametro("pathViews", "/sorteo/view/");
+        AppWindowController.getInstance().abrirVentana("sor_venta", "Gestión de sorteos - Venta", false);
     }
 
     /**

@@ -33,29 +33,28 @@
 .form{
     -fx-background-color: #ffffff;
 }
-.button{
-    -fx-background-color: #c62828;
-    -fx-fill-color: #ffffff;
-    -jfx-rippler-fill-color: #eb3434;
-    -fx-font: 18 System;
-}
 
-.actionbuttonguardar{
-    -fx-background-color: white;
-    -fx-text-fill: transparent;
-    -fx-background-image: url("../view/images/save.png");
-    -fx-background-size: 32px; 
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;    
-}
-
-.actionbuttonborrar{
-    -fx-background-color: white;
-    -fx-text-fill: transparent;
-    -fx-background-image: url("../view/images/delete.png");
-    -fx-background-size: 32px;
-    -fx-background-repeat: no-repeat;
+.buttonsorteo{
+    -fx-background-color: red;
+    -fx-text-fill: black;
+    -fx-text-alignment: center;
+    -fx-border-radius: 25px;
+    -fx-font: 18px System;
     -fx-background-position: center;
+    -fx-padding: 5px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+}
+
+.buttonsorteo:selected{
+    -fx-background-color: darkred;
+    -fx-text-fill: black;
+    -fx-text-alignment: center;
+    -fx-border-radius: 25px;
+    -fx-background-position: center;
+    -fx-padding: 5px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
 }
 
 .actionbuttonlimpiar{
@@ -90,10 +89,10 @@
 
 
 .actionbuttonsalir{
-    -fx-background-color: transparent;
+    -fx-background-color: white;
     -fx-text-fill: transparent;
     -fx-fill: transparent;
-    -fx-background-image: url("../view/images/exit.png");
+    -fx-background-image: url("../view/images/ext.png");
     -fx-background-size: 32px;
     -fx-background-repeat: no-repeat;
     -fx-background-position:  center;
@@ -161,11 +160,11 @@
     -jfx-label-float: true;
     -fx-width: 100%;
     -fx-height: 40;
-    -fx-font: 18 System;   
+    -fx-font: 16px System;   
 }
 
 .tableview .row .cell{
-    -fx-font: 18 System;
+    -fx-font: 16px System;
 }
 
 .buttonmenuext{    
