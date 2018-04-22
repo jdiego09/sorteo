@@ -6,6 +6,13 @@
 package sorteo.model.entities;
 
 import java.io.Serializable;
+import java.sql.Time;
+import java.text.ParseException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import javafx.beans.property.ObjectProperty;
@@ -31,6 +38,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import sorteo.utils.Formater;
 import sorteo.utils.GenValorCombo;
 
 /**
@@ -44,7 +52,7 @@ import sorteo.utils.GenValorCombo;
 @NamedQueries({
     @NamedQuery(name = "TipoSorteo.findAll", query = "SELECT s FROM TipoSorteo s")
     , @NamedQuery(name = "TipoSorteo.findByCodigo", query = "SELECT s FROM TipoSorteo s WHERE s.codigo = :codigo")
-    , @NamedQuery(name = "TipoSorteo.findByDescripcion", query = "SELECT s FROM TipoSorteo s WHERE s.descripcion = :descripcion")})
+    , @NamedQuery(name = "TipoSorteo.findAllActivos", query = "SELECT s FROM TipoSorteo s WHERE s.estado = 'A'")})
 public class TipoSorteo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -65,10 +73,8 @@ public class TipoSorteo implements Serializable {
     private SimpleStringProperty diasHabiles;
     @Transient
     private ObjectProperty<GenValorCombo> estado;
-    
-    @Column(name = "tso_horacierre")
-    @Temporal(TemporalType.TIME)
-    private Date tsoHoracierre;
+    @Transient
+    private SimpleObjectProperty<LocalTime> horaCorte;
     @Column(name = "tso_usrcrea")
     private String tsoUsrcrea;
     @Column(name = "tso_feccrea")
@@ -79,7 +85,7 @@ public class TipoSorteo implements Serializable {
     private Date tsoFecmod;
     @Column(name = "tso_usrmod")
     private String tsoUsrmod;
-    
+
     @OneToMany(mappedBy = "tipoSorteo", fetch = FetchType.LAZY)
     private List<Sorteo> listaSorteos;
 
@@ -90,7 +96,8 @@ public class TipoSorteo implements Serializable {
         this.montoMaximo = new SimpleDoubleProperty(0);
         this.cantNumVenta = new SimpleIntegerProperty(0);
         this.diasHabiles = new SimpleStringProperty();
-        this.estado = new SimpleObjectProperty();  
+        this.estado = new SimpleObjectProperty();
+        this.horaCorte = new SimpleObjectProperty(LocalTime.now());
     }
 
     public TipoSorteo(Integer tsoCodigo) {
@@ -286,12 +293,22 @@ public class TipoSorteo implements Serializable {
         return "TipoSorteo{" + "codigo=" + codigo + '}';
     }
 
-    public Date getTsoHoracierre() {
-        return tsoHoracierre;
+    @Column(name = "tso_horacorte")
+    @Temporal(TemporalType.TIME)
+    @Access(AccessType.PROPERTY)
+    public Date getHoraCorte() throws ParseException {
+        if (horaCorte != null && horaCorte.get() != null) {
+            Instant instant = horaCorte.get().atDate(LocalDate.of(2017, 1, 1)).atZone(ZoneId.systemDefault()).toInstant();
+            return Date.from(instant);
+        } else {
+            return null;
+        }
     }
 
-    public void setTsoHoracierre(Date tsoHoracierre) {
-        this.tsoHoracierre = tsoHoracierre;
+    public void setHoraCorte(Date horaCorte) {
+        if (horaCorte != null) {
+            this.horaCorte.set(LocalDateTime.ofInstant(Instant.ofEpochMilli(horaCorte.getTime()), ZoneId.systemDefault()).toLocalTime());
+        }
     }
 
     public String getTsoUsrcrea() {

@@ -48,7 +48,7 @@
                            </VBox.margin></CalendarPicker>
                      </children>
                   </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  <VBox fx:id="vbxSorteos" prefHeight="200.0" prefWidth="100.0">
                      <children>
                         <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="300.0" text="Sorteo">
                            <font>
@@ -58,7 +58,7 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <ToggleButton mnemonicParsing="false" prefHeight="103.0" prefWidth="196.0" styleClass="buttonsorteo" text="ToggleButton" />
+                        <ToggleButton mnemonicParsing="false" prefHeight="80.0" prefWidth="196.0" styleClass="buttonsorteo" text="ToggleButton" />
                      </children>
                   </VBox>
                </children>
@@ -193,7 +193,7 @@
                            <tooltip>
                               <Tooltip text="Limpiar" />
                            </tooltip></Button>
-                        <Button fx:id="btnLimpiar1" layoutX="66.0" layoutY="3.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonsalir" text="Button">
+                        <Button fx:id="btnSalir" layoutX="66.0" layoutY="3.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonsalir" text="Button">
                            <tooltip>
                               <Tooltip text="Salir" />
                            </tooltip>

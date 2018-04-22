@@ -84,12 +84,12 @@ public class TipoSorteoDao  extends BaseDao<Integer, TipoSorteo> {
         }
     }
 
-    public Resultado<ArrayList<TipoSorteo>> findAll() {
+    public Resultado<ArrayList<TipoSorteo>> findAllActivos() {
         Resultado<ArrayList<TipoSorteo>> resultado = new Resultado<>();
         ArrayList<TipoSorteo> listaTiposSorteo = new ArrayList<>();
         List<TipoSorteo> tiposSorteo;
         try {
-            Query query = getEntityManager().createNamedQuery("BikPersona.findAll");
+            Query query = getEntityManager().createNamedQuery("TipoSorteo.findAllActivos");
             tiposSorteo = query.getResultList();
             tiposSorteo.stream().forEach(listaTiposSorteo::add);
             resultado.setResultado(TipoResultado.SUCCESS);
