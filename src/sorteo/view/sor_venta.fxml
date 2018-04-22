@@ -7,7 +7,6 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -48,7 +47,7 @@
                            </VBox.margin></CalendarPicker>
                      </children>
                   </VBox>
-                  <VBox fx:id="vbxSorteos" prefHeight="200.0" prefWidth="100.0">
+                  <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
                         <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="300.0" text="Sorteo">
                            <font>
@@ -58,7 +57,7 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <ToggleButton mnemonicParsing="false" prefHeight="80.0" prefWidth="196.0" styleClass="buttonsorteo" text="ToggleButton" />
+                        <VBox fx:id="vbxSorteos" prefHeight="633.0" prefWidth="196.0" />
                      </children>
                   </VBox>
                </children>

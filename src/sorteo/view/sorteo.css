@@ -77,6 +77,19 @@
     -fx-background-position:  center;
 }
 
+.buttonnumero{
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-text-alignment: center;
+    -fx-border-radius: 25px;
+    -fx-font: 18px System;
+    -fx-padding: 5px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+    -fx-width: 45px;
+    -fx-height: 45px;
+}
+
 .actionbuttonimprimir{
     -fx-background-color: white;
     -fx-text-fill: transparent;
