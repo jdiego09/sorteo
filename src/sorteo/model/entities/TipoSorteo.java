@@ -278,21 +278,12 @@ public class TipoSorteo implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
+        if (!(obj instanceof TipoSorteo)) {
             return false;
         }
         final TipoSorteo other = (TipoSorteo) obj;
-        if (!Objects.equals(this.codigo, other.codigo)) {
-            return false;
-        }
-        return true;
-    }    
+        return other.getCodigo().equals(this.getCodigo());
+    }
 
     @Override
     public String toString() {

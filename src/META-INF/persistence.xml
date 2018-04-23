@@ -13,6 +13,7 @@
     <class>sorteo.model.entities.RolXUsuario</class>
     <class>sorteo.model.entities.Roles</class>
     <class>sorteo.model.entities.Usuario</class>
+    <class>sorteo.model.entities.Montos</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/sorteo?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

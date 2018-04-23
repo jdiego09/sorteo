@@ -152,11 +152,25 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <ScrollPane hbarPolicy="NEVER" prefHeight="262.0" prefWidth="510.0">
-                           <content>
-                              <FlowPane fx:id="flpNumeros" prefHeight="258.0" prefWidth="521.0" />
-                           </content>
-                        </ScrollPane>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <ScrollPane hbarPolicy="NEVER" prefHeight="262.0" prefWidth="510.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <content>
+                                    <FlowPane fx:id="flpNumeros" prefHeight="0.0" prefWidth="532.0" />
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </AnchorPane>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="20.0" prefHeight="27.0" prefWidth="537.0" text="Monto a apostar">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <AnchorPane prefHeight="50.0" prefWidth="524.0">
+                           <children>
+                              <FlowPane fx:id="flpMontos" layoutY="-76.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
                      </children>
                   </VBox>
 					</children>

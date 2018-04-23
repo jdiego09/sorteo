@@ -38,9 +38,11 @@ import javax.xml.bind.annotation.XmlTransient;
 import jfxtras.internal.scene.control.skin.CalendarPickerControlSkin;
 import jfxtras.internal.scene.control.skin.CalendarPickerControlSkin.ShowWeeknumbers;
 import jfxtras.scene.control.CalendarPicker;
+import sorteo.model.dao.MontosDao;
 import sorteo.model.dao.TipoSorteoDao;
 import sorteo.model.entities.DetalleFactura;
 import sorteo.model.entities.Factura;
+import sorteo.model.entities.Montos;
 import sorteo.model.entities.Sorteo;
 import sorteo.model.entities.TipoSorteo;
 import sorteo.utils.AppWindowController;
@@ -93,7 +95,7 @@ public class VentaController extends Controller implements Initializable {
     private JFXTextField txtCliente;
 
     @FXML
-    private FlowPane flpNumeros;
+    private FlowPane flpNumeros, flpMontos;
 
     @FXML
     private Label lblUsuario;
@@ -113,22 +115,28 @@ public class VentaController extends Controller implements Initializable {
 
     @Override
     public void initialize() {
-        sorteo = new Sorteo();
-        factura = new Factura();
-        startCalendar();
-        cargarSorteos();
+        init();
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    private void init() {
         lblFecha.setText("Fecha: " + Formater.getInstance().formatFechaHora.format(new Date()));
         Timeline timeline = new Timeline(new KeyFrame(
                 Duration.millis(1000),
                 ae -> lblFecha.setText("Fecha: " + Formater.getInstance().formatFechaHora.format(new Date()))));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
+        sorteo = new Sorteo();
+        factura = new Factura();
         startCalendar();
         cargarSorteos();
+        cargarMontos();
+        //flpNumeros.prefWidthProperty().bind(this.getStage().widthProperty());
+        //flpNumeros.prefHeightProperty().bind(this.getStage().heightProperty());
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        init();        
     }
 
     private void startCalendar() {
@@ -143,6 +151,22 @@ public class VentaController extends Controller implements Initializable {
         });
     }
 
+    private void cargarMontos() {
+        flpMontos.getChildren().clear();
+        Resultado<ArrayList<Montos>> montosResult = MontosDao.getInstance().findAll();
+        if (montosResult.getResultado() == TipoResultado.SUCCESS) {
+            montosResult.get().stream().forEach(s -> {
+                ToggleButton btn = new ToggleButton();
+                btn.setText(Formater.getInstance().integerFormat.format(s.getMonto()));
+                btn.setId(String.valueOf(s.getCodigo()));
+                btn.getStyleClass().add("buttonmonto");
+                btn.setPrefSize(75, 40);                
+                //btn.setOnAction(tipoSorteoHandler);
+                flpMontos.getChildren().add(btn);
+            });
+        }
+    }
+    
     private void cargarSorteos() {
         vbxSorteos.getChildren().clear();
         Resultado<ArrayList<TipoSorteo>> sorteosResult = TipoSorteoDao.getInstance().findAllActivos();
@@ -163,13 +187,15 @@ public class VentaController extends Controller implements Initializable {
 
     final EventHandler<ActionEvent> tipoSorteoHandler = (final ActionEvent event) -> {
         Object source = event.getSource();
-        Sorteo buscado = new Sorteo();
         if (source instanceof ToggleButton) {
-            buscado.setCodigo(Integer.valueOf(((ToggleButton) source).getId()));
-            int posicion = this.sorteos.indexOf(buscado);
-            if (posicion > -1) {
-                this.sorteo.setTipoSorteo(this.sorteos.get(posicion));
-                setNumeros(this.sorteo);
+            ToggleButton boton = (ToggleButton) source;
+            if (boton.isSelected()) {
+                TipoSorteo buscado = new TipoSorteo(Integer.parseInt(boton.getId()));
+                int posicion = this.sorteos.indexOf(buscado);
+                if (posicion > -1) {
+                    this.sorteo.setTipoSorteo(this.sorteos.get(posicion));
+                    setNumeros(this.sorteo);
+                }
             }
         }
         event.consume();
@@ -192,11 +218,13 @@ public class VentaController extends Controller implements Initializable {
 
     private void setNumeros(Sorteo sorteo) {
         flpNumeros.getChildren().clear();
+
         for (int i = sorteo.getTipoSorteo().getNumeroMinimo(); i < sorteo.getTipoSorteo().getNumeroMaximo() + 1; i++) {
             Button numero = new Button();
             numero.setText(i < 10 ? "0" + i : Integer.toString(i));
             numero.setId(Integer.toString(i));
-            numero.getStyleClass().add("botonnumero");
+            numero.getStyleClass().add("buttonnumero");
+            numero.setPrefSize(50, 50);
             flpNumeros.getChildren().add(numero);
         }
     }

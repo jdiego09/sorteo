@@ -164,7 +164,7 @@ public class AppWindowController {
                 mainStage = new Stage();
             }
 
-            mainStage.initStyle(StageStyle.UNIFIED);
+            mainStage.initStyle(StageStyle.DECORATED);
             mainStage.setScene(scene);
             mainStage.centerOnScreen();
             mainStage.setScene(scene);

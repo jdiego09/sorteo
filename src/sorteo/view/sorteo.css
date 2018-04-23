@@ -77,8 +77,34 @@
     -fx-background-position:  center;
 }
 
+.buttonmonto {
+    -fx-background-color: 
+        #c3c4c4,
+        linear-gradient(#d6d6d6 50%, white 100%),
+        radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230,230,230,0) 50%);
+    -fx-background-radius: 15;
+    -fx-padding: 5px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+    -fx-text-fill: black;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
+}
+
+.buttonnumero {
+    -fx-background-color: 
+        #c3c4c4,
+        linear-gradient(#d6d6d6 50%, white 100%),
+        radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230,230,230,0) 50%);
+    -fx-background-radius: 30;
+    -fx-padding: 5px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+    -fx-text-fill: black;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
+}
+/*
 .buttonnumero{
-    -fx-background-color: white;
+    -fx-background-color: dimgray;
     -fx-text-fill: black;
     -fx-text-alignment: center;
     -fx-border-radius: 25px;
@@ -86,9 +112,15 @@
     -fx-padding: 5px;
     -fx-border-insets: 5px;
     -fx-background-insets: 5px;
-    -fx-width: 45px;
-    -fx-height: 45px;
+}*/
+
+.buttonnumero:hover{
+    -fx-background-color: darkgrey;
 }
+.buttonnumero:pressed{
+    -fx-background-color: darkslategrey;
+}
+
 
 .actionbuttonimprimir{
     -fx-background-color: white;
