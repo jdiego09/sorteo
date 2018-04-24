@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptVoucher" pageWidth="226" pageHeight="340" whenNoDataType="AllSectionsNoDetail" columnWidth="198" leftMargin="14" rightMargin="14" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="9d12d48e-d537-4a76-9256-306fdf34bafc">
+	<property name="com.jaspersoft.studio.unit." value="cm"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="TALARI"/>
+	<parameter name="pTipo" class="java.lang.String"/>
+	<parameter name="pLogo" class="java.lang.String"/>
+	<parameter name="pTitulo" class="java.lang.String"/>
+	<parameter name="pFecha" class="java.util.Date">
+		<parameterDescription><![CDATA[Fecha del voucher]]></parameterDescription>
+	</parameter>
+	<parameter name="pHora" class="java.util.Date"/>
+	<parameter name="pCodEst" class="java.lang.String"/>
+	<parameter name="pCajero" class="java.lang.String"/>
+	<parameter name="pTerminal" class="java.lang.String"/>
+	<parameter name="pTarjeta" class="java.lang.String"/>
+	<parameter name="pNumAut" class="java.lang.String"/>
+	<parameter name="pMonto" class="java.math.BigDecimal"/>
+	<parameter name="pResumen" class="java.lang.String"/>
+	<parameter name="pReimpresion" class="java.lang.Boolean"/>
+	<parameter name="pNumRef" class="java.lang.String"/>
+	<parameter name="pNumFac" class="java.lang.String"/>
+	<parameter name="pReversion" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[SELECT SYSDATE FROM DUAL]]>
+	</queryString>
+	<variable name="DateFormatter" class="java.text.DateFormat" calculation="System">
+		<initialValueExpression><![CDATA[new java.text.SimpleDateFormat("MMM dd, yy HH:mm")]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="80" splitType="Stretch">
+			<image scaleImage="FillFrame">
+				<reportElement x="1" y="0" width="196" height="80" uuid="af8008dc-0612-446d-a0d3-ccf53a3f0702"/>
+				<graphicElement fill="Solid"/>
+				<imageExpression><![CDATA[$P{pLogo}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="28" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="7" width="197" height="20" uuid="6c5dd316-2e74-49a2-8890-53e3ccea14a9"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{pTitulo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="16">
+			<printWhenExpression><![CDATA[true]]></printWhenExpression>
+			<textField>
+				<reportElement x="1" y="0" width="197" height="14" uuid="612c786c-1b21-4ef2-93c5-20312dd5fddd">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+					<printWhenExpression><![CDATA[$P{pReimpresion}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["*** REIMPRESIÓN ***"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="78">
+			<printWhenExpression><![CDATA[$P{pTipo}.equals("S")]]></printWhenExpression>
+			<staticText>
+				<reportElement x="1" y="0" width="33" height="13" uuid="5c12e93c-7dc4-4e26-a4e1-4a0e570ef763">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+				</reportElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yy">
+				<reportElement x="34" y="0" width="57" height="13" uuid="ec6682c1-45e6-4c68-88b6-775ace92b406">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{pFecha}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="122" y="0" width="25" height="13" uuid="adc39805-4b76-4bec-af27-87ff8f335f65">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="local_mesure_unitwidth" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.width" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+				</reportElement>
+				<text><![CDATA[Hora:]]></text>
+			</staticText>
+			<textField pattern="hh:mm a">
+				<reportElement x="147" y="0" width="51" height="13" uuid="49023e49-8c9a-456a-895c-1559ea0a054e">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+					<property name="local_mesure_unitwidth" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.width" value="cm"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{pHora}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="13" width="72" height="13" uuid="8f866c8c-1994-4935-8e6e-a57a620cb1c8">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="local_mesure_unitwidth" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.width" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+				</reportElement>
+				<text><![CDATA[Unidad servicio:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="73" y="13" width="125" height="13" uuid="4257b36e-df5b-4308-b803-54b2c78362f2">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{pCodEst}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="34" y="26" width="164" height="13" uuid="81f28f2d-c0e7-447a-a8e8-cfa511dc40f4">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{pCajero}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="26" width="33" height="13" uuid="99d50989-0fa2-4905-8259-059fb9deefae">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="local_mesure_unitwidth" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.width" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+				</reportElement>
+				<text><![CDATA[Cajero:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="39" width="43" height="13" uuid="ba963c33-8c03-4693-a768-7e1234566c5f">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="local_mesure_unitwidth" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.width" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+				</reportElement>
+				<text><![CDATA[Terminal:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="44" y="39" width="154" height="13" uuid="bd737905-aa0f-4757-abe8-425e72578c15">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{pTerminal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="36" y="52" width="162" height="13" uuid="8abd053c-3caf-4d16-b968-d7a82e5d8462">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+					<property name="local_mesure_unitx" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.x" value="cm"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{pTarjeta}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="52" width="35" height="13" uuid="7f05e3dc-02e8-49d0-87e4-acc79677df51">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="local_mesure_unitwidth" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+					<property name="local_mesure_unitx" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.x" value="cm"/>
+				</reportElement>
+				<text><![CDATA[Tarjeta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="65" width="60" height="13" uuid="18c57883-1154-435f-8bd3-3b180a62d320">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="local_mesure_unitwidth" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.width" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+					<property name="local_mesure_unitx" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.x" value="cm"/>
+				</reportElement>
+				<text><![CDATA[Autorización:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="61" y="65" width="137" height="13" uuid="9aefa1c5-7fee-4c0e-a5bd-89355fb5eea0">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+					<property name="local_mesure_unitx" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.x" value="cm"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{pNumAut}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="66">
+			<printWhenExpression><![CDATA[$P{pTipo}.equals("C")]]></printWhenExpression>
+			<staticText>
+				<reportElement x="1" y="0" width="69" height="13" uuid="126d46aa-7f6b-4f1a-b410-fe9318ade07f">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="local_mesure_unitwidth" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.width" value="cm"/>
+				</reportElement>
+				<text><![CDATA[TERMINAL ID:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="70" y="0" width="128" height="13" uuid="79a0ade1-58a9-421b-b5c5-797d4c3ddc78">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{pTerminal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="13" width="93" height="13" uuid="4e7cd33f-1392-417b-a4ad-9e2942810ca1">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="local_mesure_unitwidth" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+				</reportElement>
+				<text><![CDATA[UNIDAD SERVICIO:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="94" y="13" width="26" height="13" uuid="7aca582a-0083-44e3-be3a-1c056d2e6217">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{pCodEst}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="122" y="13" width="45" height="13" uuid="e9d73785-b9c6-44d8-94c7-975826b38310">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="local_mesure_unitwidth" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+				</reportElement>
+				<text><![CDATA[CAJERO:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="167" y="13" width="31" height="13" uuid="bfd2d3e5-73cf-4858-a1bc-95bdd61c51a2">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{pCajero}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="26" width="49" height="13" uuid="32aaa18c-b2a5-4950-8666-1b4900307ff5">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="local_mesure_unitwidth" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+					<property name="local_mesure_unitx" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.x" value="cm"/>
+				</reportElement>
+				<text><![CDATA[TARJETA:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="50" y="26" width="148" height="13" uuid="f9883b78-4abf-47f4-a9bd-50cac551d023">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+					<property name="local_mesure_unitx" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.x" value="cm"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{pTarjeta}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="39" width="25" height="13" uuid="710edb40-ec5e-45af-bc6d-70238d8297f7">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="local_mesure_unitwidth" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+					<property name="local_mesure_unitx" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.x" value="cm"/>
+				</reportElement>
+				<text><![CDATA[REF:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="26" y="39" width="94" height="13" uuid="bd490fa0-24b6-449c-bb98-1002b4df1722">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+					<property name="local_mesure_unitx" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.x" value="cm"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{pNumRef}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="135" y="39" width="25" height="13" uuid="14f9603b-91a7-4dbd-9914-a6d7454d26a9">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="local_mesure_unitwidth" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+				</reportElement>
+				<text><![CDATA[FAC:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="160" y="39" width="38" height="13" uuid="b7d720d0-c24e-47eb-9ceb-092653eae7ae">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{pNumFac}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="52" width="25" height="13" uuid="061308ae-47f0-49ab-8daf-f08d877920ed">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="local_mesure_unitwidth" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+				</reportElement>
+				<text><![CDATA[AUT:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="26" y="52" width="68" height="13" uuid="c4f08e47-c1f6-4ab9-b989-3ca19151f3a3">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+					<property name="local_mesure_unitx" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.x" value="cm"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{pNumAut}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MMM dd, yy HH:mm">
+				<reportElement x="94" y="52" width="104" height="13" uuid="9926993c-d420-45f9-916c-ea07aa349072">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[($V{DateFormatter}.format($P{pFecha}).toUpperCase())]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="24" splitType="Stretch">
+			<textField pattern="#,###,###,##0.00">
+				<reportElement x="61" y="11" width="136" height="13" uuid="c8435731-8842-4dcc-bd8b-7628d706a2f0">
+					<property name="local_mesure_unitheight" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{pMonto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="11" width="60" height="13" uuid="3a9a84d3-91ff-446a-af63-bcd4d9ef21c1"/>
+				<textFieldExpression><![CDATA[($P{pReversion}.compareTo( "S" ) == 0 ? "REVERSION:" : "VENTA:")]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="59" splitType="Stretch">
+			<textField>
+				<reportElement x="1" y="0" width="196" height="58" uuid="0e64e25c-4858-4346-82b6-a366a32e31f7"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$P{pResumen}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
