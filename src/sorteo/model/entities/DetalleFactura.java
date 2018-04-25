@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "DetalleFactura.findByDfaNumero", query = "SELECT s FROM DetalleFactura s WHERE s.numero = :numero")
     , @NamedQuery(name = "DetalleFactura.findByDfaMonto", query = "SELECT s FROM DetalleFactura s WHERE s.monto = :monto")})
 public class DetalleFactura implements Serializable {
-
+    
     private static final long serialVersionUID = 1L;
     @Transient
     private Integer codigo;    
@@ -51,14 +51,19 @@ public class DetalleFactura implements Serializable {
     @JoinColumn(name = "dfa_codfac", referencedColumnName = "fac_codigo")
     @ManyToOne(fetch = FetchType.LAZY)
     private Factura factura;
-
+    
     public DetalleFactura() {
     }
-
+    
     public DetalleFactura(Integer dfaCodigo) {
         this.codigo = dfaCodigo;
     }
-
+    
+    public DetalleFactura(Integer numero, Double monto) {
+        this.numero.set(numero);
+        this.monto.set(monto);
+    }
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -67,11 +72,11 @@ public class DetalleFactura implements Serializable {
     public Integer getCodigo() {
         return codigo;
     }
-
+    
     public void setCodigo(Integer codigo) {
         this.codigo = codigo;
     }
-
+    
     @Column(name = "dfa_numero")
     @Access(AccessType.PROPERTY)
     public Integer getNumero() {
@@ -80,14 +85,13 @@ public class DetalleFactura implements Serializable {
         }
         return numero.get();
     }
-
+    
     public SimpleIntegerProperty getNumeroProperty() {
         if (this.numero == null) {
             this.numero = new SimpleIntegerProperty();
         }
         return this.numero;
     }
-
     
     public void setNumero(Integer numero) {
         if (this.numero == null) {
@@ -95,7 +99,7 @@ public class DetalleFactura implements Serializable {
         }
         this.numero.set(numero);
     }
-
+    
     @Column(name = "dfa_monto")
     @Access(AccessType.PROPERTY)
     public Double getMonto() {
@@ -104,36 +108,36 @@ public class DetalleFactura implements Serializable {
         }
         return this.monto.get();
     }
-
+    
     public SimpleDoubleProperty getMontoProperty() {
         if (this.monto == null) {
             this.monto = new SimpleDoubleProperty();
         }
         return this.monto;
     }
-
+    
     public void setMonto(Double monto) {
         if (this.monto == null) {
             this.monto = new SimpleDoubleProperty();
         }
         this.monto.set(monto);
     }
-
+    
     public Factura getFactura() {
         return factura;
     }
-
+    
     public void setFactura(Factura factura) {
         this.factura = factura;
     }
-
+    
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (codigo != null ? codigo.hashCode() : 0);
         return hash;
     }
-
+    
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -146,10 +150,10 @@ public class DetalleFactura implements Serializable {
         }
         return true;
     }
-
+    
     @Override
     public String toString() {
         return "DetalleFactura{" + "codigo=" + codigo + '}';
-    }   
-
+    }    
+    
 }

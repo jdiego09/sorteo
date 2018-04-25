@@ -1,5 +1,6 @@
 package sorteo.controller;
 
+import java.math.BigDecimal;
 import java.net.URL;
 import java.text.ParseException;
 import java.time.Instant;
@@ -179,9 +180,7 @@ public class VentaController extends Controller implements Initializable {
     }
 
     final EventHandler<ActionEvent> callKeyPad = (final ActionEvent event) -> {
-        Button source = (Button) event.getSource();
-        TecladoController tecladoController = (TecladoController) AppWindowController.getInstance().getController("sor_teclado");
-        AppWindowController.getInstance().goViewInWindowModal("sor_teclado", getStage());
+        llamarTeclado();
         event.consume();
     };
 
@@ -245,6 +244,25 @@ public class VentaController extends Controller implements Initializable {
             numero.setPrefSize(50, 50);
             flpNumeros.getChildren().add(numero);
         }
+    }
+
+    final EventHandler<ActionEvent> numeroHandler = (final ActionEvent event) -> {
+        Object source = event.getSource();
+        Button boton = (Button) source;
+        DetalleFactura nuevo = new DetalleFactura(Integer.valueOf(boton.getText()), BigDecimal.ZERO.doubleValue());
+        
+ 
+            
+        event.consume();
+    };
+
+    private Boolean crearDetalle() {
+        llamarTeclado();
+    }
+
+    private void llamarTeclado() {
+        TecladoController tecladoController = (TecladoController) AppWindowController.getInstance().getController("sor_teclado");
+        AppWindowController.getInstance().goViewInWindowModal("sor_teclado", getStage());
     }
 
 }
