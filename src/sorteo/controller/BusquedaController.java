@@ -629,7 +629,7 @@ public class BusquedaController extends Controller implements Initializable {
     void aceptarBusqueda(ActionEvent event) {
         Resultado<Object> resultado = new Resultado<>();
         resultado.set(tbvResultados.getSelectionModel().getSelectedItem());
-        Aplicacion.getInstance().setResultadoBusqueda(resultado);
+        Aplicacion.getInstance().setNumeroIndicado(resultado);
         closeWindow();
     }
 

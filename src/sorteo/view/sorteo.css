@@ -3,19 +3,16 @@
  */
 
 .dark{
-    -fx-background-color: #004c40;
+    -fx-background-color: #5f4339;
 }
+
 .actionbar{
-    -fx-background-color: #00796b;	
+    -fx-background-color: #8d6e63;	
 }
+
 .actionbar:extreme-small-device{
     -fx-pref-width: 100%;
     -fx-pref-height: 10%;
-}
-
-.jfx-hamburger StackPane{
-    -fx-background-color: #ffffff;
-
 }
 
 .main{
@@ -30,13 +27,14 @@
     -fx-position-shape: center;
     -fx-width: 100%;
 }
+
 .form{
     -fx-background-color: #ffffff;
 }
 
 .buttonsorteo{
-    -fx-background-color: red;
-    -fx-text-fill: black;
+    -fx-background-color: #be9c91;
+    -fx-text-fill: #ffffff;
     -fx-text-alignment: center;
     -fx-border-radius: 25px;
     -fx-font: 18px System;
@@ -47,14 +45,7 @@
 }
 
 .buttonsorteo:selected{
-    -fx-background-color: darkred;
-    -fx-text-fill: black;
-    -fx-text-alignment: center;
-    -fx-border-radius: 25px;
-    -fx-background-position: center;
-    -fx-padding: 5px;
-    -fx-border-insets: 5px;
-    -fx-background-insets: 5px;
+    -fx-background-color: #8d6e63;
 }
 
 .actionbuttonlimpiar{
@@ -102,17 +93,6 @@
     -fx-text-fill: black;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
 }
-/*
-.buttonnumero{
-    -fx-background-color: dimgray;
-    -fx-text-fill: black;
-    -fx-text-alignment: center;
-    -fx-border-radius: 25px;
-    -fx-font: 18px System;
-    -fx-padding: 5px;
-    -fx-border-insets: 5px;
-    -fx-background-insets: 5px;
-}*/
 
 .buttonnumero:hover{
     -fx-background-color: darkgrey;
@@ -120,18 +100,6 @@
 .buttonnumero:pressed{
     -fx-background-color: darkslategrey;
 }
-
-
-.actionbuttonimprimir{
-    -fx-background-color: white;
-    -fx-text-fill: transparent;
-    -fx-fill: transparent;
-    -fx-background-image: url("../view/images/print.png");
-    -fx-background-size: 32px;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position:  center;
-}
-
 
 .actionbuttonsalir{
     -fx-background-color: white;
@@ -143,50 +111,51 @@
     -fx-background-position:  center;
 }
 
-.actionbuttonagregar{
-    -fx-background-color: transparent;
+.actionbuttondelete{
+    -fx-background-color: 
+        rgba(0,0,0,0.08),
+        linear-gradient(#9a9a9a, #909090),
+        linear-gradient(white 0%, #f3f3f3 50%, #ececec 51%, #f2f2f2 100%);
+    -fx-background-insets: 0 0 -1 0,0,1;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-padding: 3 30 3 30;
     -fx-text-fill: transparent;
     -fx-fill: transparent;
-    -fx-background-image: url("../view/images/add.png");
-    -fx-background-size: 32px;
+    -fx-background-image: url("../view/images/backspace.png");
+    -fx-background-size: 48px;
     -fx-background-repeat: no-repeat;
     -fx-background-position:  center;
 }
 
-.actionbuttoneliminar{
-    -fx-background-color: transparent;
+.actionbuttonenter{
+    -fx-background-color: 
+        rgba(0,0,0,0.08),
+        linear-gradient(#9a9a9a, #909090),
+        linear-gradient(white 0%, #f3f3f3 50%, #ececec 51%, #f2f2f2 100%);
+    -fx-background-insets: 0 0 -1 0,0,1;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-padding: 3 30 3 30;
     -fx-text-fill: transparent;
     -fx-fill: transparent;
-    -fx-background-image: url("../view/images/remove.png");
-    -fx-background-size: 32px;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position:  center;
-}
-
-.actionbuttonanterior{
-    -fx-background-color: transparent;
-    -fx-text-fill: transparent;
-    -fx-fill: transparent;
-    -fx-background-image: url("../view/images/anterior.png");
-    -fx-background-size: 32px;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position:  center;
-}
-
-.actionbuttonsiguiente{
-    -fx-background-color: transparent;
-    -fx-text-fill: transparent;
-    -fx-fill: transparent;
-    -fx-background-image: url("../view/images/siguiente.png");
-    -fx-background-size: 32px;
+    -fx-background-image: url("../view/images/enter.png");
+    -fx-background-size: 72 128;
     -fx-background-repeat: no-repeat;
     -fx-background-position:  center;
 }
 
 .actionbuttonaceptar{
-    -fx-background-color: #00796b;
+    -fx-background-color: #8d6e63;
     -fx-text-fill: whitesmoke;
     -fx-fill: transparent;
+}
+.actionbuttonaceptar:hover{
+    -fx-background-color: #be9c91;
+}
+
+.actionbuttonaceptar:pressed{
+    -fx-background-color: #5f4339;
 }
 
 .buttonbuscar{
@@ -208,104 +177,21 @@
     -fx-font: 16px System;   
 }
 
+.buttonTeclado {
+    -fx-background-color: 
+        rgba(0,0,0,0.08),
+        linear-gradient(#9a9a9a, #909090),
+        linear-gradient(white 0%, #f3f3f3 50%, #ececec 51%, #f2f2f2 100%);
+    -fx-background-insets: 0 0 -1 0,0,1;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-padding: 3 30 3 30;
+    -fx-text-fill: #242d35;
+    -fx-font-size: 18px;
+}
+
 .tableview .row .cell{
     -fx-font: 16px System;
-}
-
-.buttonmenuext{    
-    -fx-background-image:url("../view/images/ext.png");
-    -fx-background-repeat: no-repeat;
-}
-
-.buttonmenuext :hover{    
-    -fx-background-image:url("../view/images/ext.png");    
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: 35px;
-    -fx-alignment: center-right;
-}
-
-.buttonmenuusu{    
-    -fx-background-image:url("../view/images/usu.png");
-    -fx-background-repeat: no-repeat;
-}
-
-.buttonmenuusu :hover{    
-    -fx-background-image:url("../view/images/usu.png");    
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: 35px;
-    -fx-alignment: center-right;
-}
-
-.buttonmenucnf{    
-    -fx-background-image:url("../view/images/cnf.png");
-    -fx-background-repeat: no-repeat;
-}
-
-.buttonmenucnf :hover{    
-    -fx-background-image:url("../view/images/cnf.png");    
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: 35px;
-    -fx-alignment: center-right;
-}
-
-.buttonmenuseg{    
-    -fx-background-image:url("../view/images/seg.png");
-    -fx-background-repeat: no-repeat;
-}
-
-.buttonmenuseg :hover{    
-    -fx-background-image:url("../view/images/seg.png");    
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: 35px;
-    -fx-alignment: center-right;
-}
-
-.buttonmenuage{    
-    -fx-background-image:url("../view/images/age.png");
-    -fx-background-repeat: no-repeat;
-}
-
-.buttonmenuage :hover{    
-    -fx-background-image:url("../view/images/age.png");    
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: 35px;
-    -fx-alignment: center-right;
-}
-
-.buttonmenuper{
-    -fx-background-image:url("../view/images/per.png");
-    -fx-background-repeat: no-repeat;
-}
-
-.buttonmenuper :hover{    
-    -fx-background-image:url("../view/images/per.png");    
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: 35px;
-    -fx-alignment: center-right;
-}
-
-.buttonmenurch{
-    -fx-background-image:url("../view/images/rch.png");
-    -fx-background-repeat: no-repeat;
-}
-
-.buttonmenurch :hover{    
-    -fx-background-image:url("../view/images/rch.png");    
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: 35px;
-    -fx-alignment: center-right;
-}
-
-.buttonmenubia{
-    -fx-background-image:url("../view/images/bia.png");
-    -fx-background-repeat: no-repeat;
-}
-
-.buttonmenubia :hover{    
-    -fx-background-image:url("../view/images/bia.png");    
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: 35px;
-    -fx-alignment: center-right;
 }
 
 .buttonDrawer{
@@ -320,6 +206,7 @@
     -fx-text-alignment: right;
     -fx-alignment: center-right;    
 }
+
 .buttonDrawer:hover{
     -fx-background-color: lightgrey;
 }

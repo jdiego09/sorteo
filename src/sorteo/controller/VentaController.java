@@ -1,6 +1,5 @@
 package sorteo.controller;
 
-import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.text.ParseException;
 import java.time.Instant;
@@ -27,6 +26,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -92,7 +92,7 @@ public class VentaController extends Controller implements Initializable {
     private Pane pneTeclado;
 
     @FXML
-    private JFXTextField txtCliente;
+    private TextField txtCliente;
 
     @FXML
     private FlowPane flpNumeros, flpMontos;
@@ -111,6 +111,10 @@ public class VentaController extends Controller implements Initializable {
 
     @XmlTransient
     public ObservableList<TipoSorteo> sorteos = FXCollections
+            .observableArrayList();
+
+    @XmlTransient
+    public ObservableList<DetalleFactura> detalleFactura = FXCollections
             .observableArrayList();
 
     @Override
@@ -136,7 +140,7 @@ public class VentaController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        init();        
+        init();
     }
 
     private void startCalendar() {
@@ -156,17 +160,31 @@ public class VentaController extends Controller implements Initializable {
         Resultado<ArrayList<Montos>> montosResult = MontosDao.getInstance().findAll();
         if (montosResult.getResultado() == TipoResultado.SUCCESS) {
             montosResult.get().stream().forEach(s -> {
-                ToggleButton btn = new ToggleButton();
+                Button btn = new Button();
                 btn.setText(Formater.getInstance().integerFormat.format(s.getMonto()));
                 btn.setId(String.valueOf(s.getCodigo()));
                 btn.getStyleClass().add("buttonmonto");
-                btn.setPrefSize(75, 40);                
+                btn.setPrefSize(75, 40);
                 //btn.setOnAction(tipoSorteoHandler);
                 flpMontos.getChildren().add(btn);
             });
         }
+        Button btn = new Button();
+        btn.setText("Otro");
+        btn.setId("*");
+        btn.getStyleClass().add("buttonmonto");
+        btn.setPrefSize(75, 40);
+        btn.setOnAction(callKeyPad);
+        flpMontos.getChildren().add(btn);
     }
-    
+
+    final EventHandler<ActionEvent> callKeyPad = (final ActionEvent event) -> {
+        Button source = (Button) event.getSource();
+        TecladoController tecladoController = (TecladoController) AppWindowController.getInstance().getController("sor_teclado");
+        AppWindowController.getInstance().goViewInWindowModal("sor_teclado", getStage());
+        event.consume();
+    };
+
     private void cargarSorteos() {
         vbxSorteos.getChildren().clear();
         Resultado<ArrayList<TipoSorteo>> sorteosResult = TipoSorteoDao.getInstance().findAllActivos();

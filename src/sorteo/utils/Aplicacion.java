@@ -55,7 +55,7 @@ public class Aplicacion {
     private static Sucursal sucursal;
     private static Empresa empresa;
 
-    private static Resultado<Object> resultadoBusqueda;
+    private static Resultado<Object> numeroIndicado;
 
     final String pathDir = System.getProperty("user.dir") + "/src/sorteo/reportes/";
 
@@ -183,12 +183,12 @@ public class Aplicacion {
         Aplicacion.rolesUsuario = rolesUsuario;
     }
 
-    public Resultado<Object> getResultadoBusqueda() {
-        return resultadoBusqueda;
+    public Resultado<Object> getNumeroIndicado() {
+        return numeroIndicado;
     }
 
-    public void setResultadoBusqueda(Resultado<Object> resultadoBusqueda) {
-        Aplicacion.resultadoBusqueda = resultadoBusqueda;
+    public void setNumeroIndicado(Resultado<Object> numeroIndicado) {
+        Aplicacion.numeroIndicado = numeroIndicado;
     }
 
     public MouseEvent getEventoMenu() {
