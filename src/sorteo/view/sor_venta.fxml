@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.*?>
+<?import java.net.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import jfxtras.scene.control.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -19,7 +28,7 @@
 <?import javafx.scene.text.Font?>
 <?import jfxtras.scene.control.CalendarPicker?>
 
-<AnchorPane id="panel-principal" fx:id="acpRoot" maxHeight="743.0" maxWidth="1115.0" minHeight="743.0" minWidth="1024.0" prefHeight="743.0" prefWidth="1024.0" styleClass="form" stylesheets="@sorteo.css" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sorteo.controller.VentaController">
+<AnchorPane id="panel-principal" fx:id="acpRoot" maxHeight="743.0" maxWidth="1115.0" minHeight="743.0" minWidth="1024.0" prefHeight="743.0" prefWidth="1024.0" styleClass="form" stylesheets="@sorteo.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sorteo.controller.VentaController">
 	<children>
 		<BorderPane fx:id="brpSecciones" layoutX="96.0" layoutY="178.0" prefHeight="743.0" prefWidth="1024.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -65,7 +74,7 @@
          <left>
             <AnchorPane prefHeight="673.0" prefWidth="463.0" BorderPane.alignment="CENTER">
                <children>
-                  <GridPane prefHeight="673.0" prefWidth="446.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <GridPane prefHeight="673.0" prefWidth="446.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="0.0">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="217.0" minWidth="10.0" prefWidth="176.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="280.0" minWidth="10.0" prefWidth="270.0" />
@@ -86,7 +95,10 @@
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <VBox fx:id="vbxSorteos" prefHeight="633.0" prefWidth="196.0" />
+                                    <VBox fx:id="vbxSorteos" prefHeight="633.0" prefWidth="196.0">
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin></VBox>
                                  </children>
                               </VBox>
                            </children>
@@ -108,9 +120,129 @@
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </VBox.margin>
                                     </CalendarPicker>
+                                    <AnchorPane id="AnchorPane" fx:id="acpRoot1" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="398.0" prefWidth="300.0">
+                                       <children>
+                                          <VBox layoutX="67.0" layoutY="6.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="325.0" prefWidth="300.0" spacing="5.0" AnchorPane.bottomAnchor="73.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <children>
+                                                <VBox maxWidth="-Infinity" prefHeight="325.0" prefWidth="300.0">
+                                                   <children>
+                                                      <JFXTextField fx:id="txtNumero" alignment="CENTER_RIGHT" onKeyPressed="#numKeyPressed" prefHeight="44.0" prefWidth="200.0" styleClass="edittext" text="0" />
+                                                      <GridPane fx:id="grdNumPad" prefHeight="277.0" prefWidth="377.0">
+                                                         <children>
+                                                            <Button fx:id="num0" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#setNumero" prefHeight="50.0" prefWidth="139.0" styleClass="buttonTeclado" text="0" GridPane.rowIndex="3">
+                                                               <GridPane.margin>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                               </GridPane.margin>
+                                                               <padding>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                               </padding>
+                                                            </Button>
+                                                            <Button fx:id="num1" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="85.0" layoutY="180.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#setNumero" prefHeight="50.0" prefWidth="70.0" styleClass="buttonTeclado" text="1" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                                               <GridPane.margin>
+                                                                  <Insets />
+                                                               </GridPane.margin>
+                                                            </Button>
+                                                            <Button fx:id="num2" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="160.0" layoutY="180.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#setNumero" prefHeight="50.0" prefWidth="70.0" styleClass="buttonTeclado" text="2" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                                               <GridPane.margin>
+                                                                  <Insets />
+                                                               </GridPane.margin>
+                                                            </Button>
+                                                            <Button fx:id="num3" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="160.0" layoutY="13.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#setNumero" prefHeight="50.0" prefWidth="70.0" styleClass="buttonTeclado" text="3" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                                               <GridPane.margin>
+                                                                  <Insets />
+                                                               </GridPane.margin>
+                                                            </Button>
+                                                            <Button fx:id="num4" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="85.0" layoutY="13.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#setNumero" prefHeight="50.0" prefWidth="70.0" styleClass="buttonTeclado" text="4" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                                               <GridPane.margin>
+                                                                  <Insets />
+                                                               </GridPane.margin>
+                                                            </Button>
+                                                            <Button fx:id="num5" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="10.0" layoutY="235.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#setNumero" prefHeight="50.0" prefWidth="70.0" styleClass="buttonTeclado" text="5" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                                               <GridPane.margin>
+                                                                  <Insets />
+                                                               </GridPane.margin>
+                                                            </Button>
+                                                            <Button fx:id="num6" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="10.0" layoutY="13.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#setNumero" prefHeight="50.0" prefWidth="70.0" styleClass="buttonTeclado" text="6" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                                               <GridPane.margin>
+                                                                  <Insets />
+                                                               </GridPane.margin>
+                                                            </Button>
+                                                            <Button fx:id="num7" alignment="CENTER" focusTraversable="false" layoutX="235.0" layoutY="13.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#setNumero" prefHeight="50.0" prefWidth="70.0" styleClass="buttonTeclado" text="7" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                                               <GridPane.margin>
+                                                                  <Insets />
+                                                               </GridPane.margin>
+                                                            </Button>
+                                                            <Button fx:id="num8" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="10.0" layoutY="69.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#setNumero" prefHeight="50.0" prefWidth="70.0" styleClass="buttonTeclado" text="8" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                                               <GridPane.margin>
+                                                                  <Insets />
+                                                               </GridPane.margin>
+                                                            </Button>
+                                                            <Button fx:id="num9" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="10.0" layoutY="13.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#setNumero" prefHeight="50.0" prefWidth="70.0" styleClass="buttonTeclado" text="9" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                                               <GridPane.margin>
+                                                                  <Insets />
+                                                               </GridPane.margin>
+                                                            </Button>
+                                                            <Button fx:id="btnBack" focusTraversable="false" layoutX="10.0" layoutY="13.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#btnBack" prefHeight="50.0" prefWidth="50.0" styleClass="actionbuttondelete" text="Button" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+                                                               <GridPane.margin>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                               </GridPane.margin>
+                                                               <padding>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                               </padding>
+                                                            </Button>
+                                                            <Button fx:id="btnEnter" focusTraversable="false" layoutX="160.0" layoutY="13.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#btnEnter" prefHeight="190.0" prefWidth="73.0" styleClass="actionbuttonenter" text="OK" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                                                               <tooltip>
+                                                                  <Tooltip text="Aceptar monto y regresar" />
+                                                               </tooltip>
+                                                               <GridPane.margin>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                               </GridPane.margin>
+                                                               <padding>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                               </padding>
+                                                            </Button>
+                                                            <Button fx:id="btnClear" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="160.0" layoutY="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#btnClear" prefHeight="50.0" prefWidth="70.0" styleClass="buttonTeclado" text="c" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                                               <GridPane.margin>
+                                                                  <Insets />
+                                                               </GridPane.margin>
+                                                            </Button>
+                                                         </children>
+                                                         <columnConstraints>
+                                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                         </columnConstraints>
+                                                         <rowConstraints>
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                         </rowConstraints>
+                                                      </GridPane>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets />
+                                                   </VBox.margin>
+                                                </VBox>
+                                             </children>
+                                             <padding>
+                                                <Insets right="5.0" />
+                                             </padding>
+                                          </VBox>
+                                          <Button fx:id="btnAplicar" alignment="CENTER" layoutX="7.0" layoutY="337.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="284.0" styleClass="actionbuttonaceptar" text="APLICAR" textAlignment="CENTER">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Button>
+                                       </children>
+                                    </AnchorPane>
                                  </children>
                               </VBox>
                            </children>
+                           <GridPane.margin>
+                              <Insets />
+                           </GridPane.margin>
                         </AnchorPane>
                      </children>
                   </GridPane>
@@ -123,7 +255,7 @@
          <center>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <GridPane layoutX="167.0" layoutY="169.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <GridPane layoutX="167.0" layoutY="169.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="0.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
@@ -229,7 +361,6 @@
                                   <TableColumn fx:id="tbcLinea" prefWidth="75.0" text="Línea" />
                                   <TableColumn fx:id="tbcNumero" prefWidth="75.0" text="Número" />
                                     <TableColumn fx:id="tbcMonto" prefWidth="109.0" text="Monto" />
-                                    <TableColumn fx:id="tbcBtnEliLinea" prefWidth="75.0" text="Eliminar" />
                                 </columns>
                               </TableView>
                            </children>
@@ -275,11 +406,6 @@
                                     </AnchorPane>
                                  </children>
                               </GridPane>
-                              <Button fx:id="btnAplicar" alignment="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="actionbuttonaceptar" text="APLICAR" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Button>
                            </children>
                         </GridPane>
                      </children>
