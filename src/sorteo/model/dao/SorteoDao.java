@@ -48,7 +48,7 @@ public class SorteoDao extends BaseDao<Integer, Sorteo> {
         return INSTANCE;
     }
 
-    public void setEmpresa(Sorteo sorteo) {
+    public void setSorteo(Sorteo sorteo) {
         this.sorteo = sorteo;
     }
 
@@ -86,7 +86,7 @@ public class SorteoDao extends BaseDao<Integer, Sorteo> {
         Sorteo existe;
         Resultado<Sorteo> resultado = new Resultado<>();
         try {
-            Query query = getEntityManager().createNamedQuery("Sucursal.findByFecha");
+            Query query = getEntityManager().createNamedQuery("Sorteo.findByFecha");
             query.setParameter("fechaSorteo", fechaSorteo);
             query.setParameter("tipoSorteo", tipoSorteo.getCodigo());
             existe = (Sorteo) query.getSingleResult();

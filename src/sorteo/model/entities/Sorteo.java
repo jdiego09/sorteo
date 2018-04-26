@@ -70,6 +70,13 @@ public class Sorteo implements Serializable {
         this.codigo = sorCodigo;
     }
 
+    public Sorteo(Date fecha, TipoSorteo tipoSorteo, Sucursal sucursal) {
+        this.fecha = new SimpleObjectProperty<>();
+        this.setFecha(fecha);
+        this.sucursal = sucursal;
+        this.tipoSorteo = tipoSorteo;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -103,6 +110,9 @@ public class Sorteo implements Serializable {
 
     public void setFecha(Date fecha) {
         if (fecha != null) {
+            if (this.fecha == null) {
+                this.fecha = new SimpleObjectProperty();
+            }
             this.fecha.set(fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         }
     }

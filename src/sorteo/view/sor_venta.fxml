@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import java.net.*?>
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import jfxtras.scene.control.*?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -28,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import jfxtras.scene.control.CalendarPicker?>
 
-<AnchorPane id="panel-principal" fx:id="acpRoot" maxHeight="743.0" maxWidth="1115.0" minHeight="743.0" minWidth="1024.0" prefHeight="743.0" prefWidth="1024.0" styleClass="form" stylesheets="@sorteo.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sorteo.controller.VentaController">
+<AnchorPane id="panel-principal" fx:id="acpRoot" maxHeight="743.0" maxWidth="1115.0" minHeight="743.0" minWidth="1024.0" prefHeight="743.0" prefWidth="1024.0" styleClass="form" stylesheets="@sorteo.css" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sorteo.controller.VentaController">
 	<children>
 		<BorderPane fx:id="brpSecciones" layoutX="96.0" layoutY="178.0" prefHeight="743.0" prefWidth="1024.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -190,7 +182,7 @@
                                                                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                                                </padding>
                                                             </Button>
-                                                            <Button fx:id="btnEnter" focusTraversable="false" layoutX="160.0" layoutY="13.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#btnEnter" prefHeight="190.0" prefWidth="73.0" styleClass="actionbuttonenter" text="OK" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                                                            <Button fx:id="btnEnter" focusTraversable="false" layoutX="160.0" layoutY="13.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#btnEnter" prefHeight="190.0" prefWidth="73.0" styleClass="actionbuttonenter" text="ACE PTAR" wrapText="true" GridPane.columnIndex="3" GridPane.rowIndex="2">
                                                                <tooltip>
                                                                   <Tooltip text="Aceptar monto y regresar" />
                                                                </tooltip>
@@ -230,7 +222,7 @@
                                                 <Insets right="5.0" />
                                              </padding>
                                           </VBox>
-                                          <Button fx:id="btnAplicar" alignment="CENTER" layoutX="7.0" layoutY="337.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="284.0" styleClass="actionbuttonaceptar" text="APLICAR" textAlignment="CENTER">
+                                          <Button fx:id="btnAplicar" alignment="CENTER" layoutX="7.0" layoutY="337.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="284.0" styleClass="actionbuttonaceptar" text="APLICAR" textAlignment="CENTER" AnchorPane.bottomAnchor="35.0">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
