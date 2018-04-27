@@ -10,8 +10,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import sorteo.model.entities.Factura;
 import sorteo.model.entities.Sorteo;
 import sorteo.model.entities.TipoSorteo;
+import sorteo.utils.Formater;
 import sorteo.utils.Resultado;
 import sorteo.utils.TipoResultado;
 
@@ -32,7 +34,7 @@ public class SorteoDao extends BaseDao<Integer, Sorteo> {
             // Sólo se accede a la zona sincronizada
             // cuando la instancia no está creada
             synchronized (SorteoDao.class) {
-                // En la zona sincronizada sería necesario volver
+                // oDEn la zona sincronizada sería necesario volver
                 // a comprobar que no se ha creado la instancia
                 if (INSTANCE == null) {
                     INSTANCE = new SorteoDao();
@@ -107,6 +109,35 @@ public class SorteoDao extends BaseDao<Integer, Sorteo> {
         }
     }
 
+    public Resultado<Double> getTotalApostadoNumero(Sorteo sorteo, int numero) {
+        Resultado<Double> result = new Resultado<>();
+        Query query = getEntityManager().createNativeQuery("select sum(d.monto)\n"
+        + "  from DetalleFactura d \n"
+        + "  join d.factura f\n"
+        + "  join f.sorteo s\n"
+        + "  join s.tipoSorteo t\n"
+        + " where t.codigo = :codTSorteo\n"
+        + "   and s.codigo = :codSorteo\n"
+        + "   and s.fecha = :fecSorteo\n"
+        + "   and d.numero = :numero");
+
+        query.setParameter("codTSorteo", sorteo.getTipoSorteo().getCodigo());
+        query.setParameter("codSorteo", sorteo.getCodigo());
+        query.setParameter("fecSorteo", Formater.getInstance().formatFechaDB.format(sorteo.getFecha()));
+        query.setParameter("numero", numero);
+        try {
+            Number resultado = (Number) query.getSingleResult();
+            result.setResultado(TipoResultado.SUCCESS);
+            result.set(resultado.doubleValue());
+            return result;
+        } catch (Exception ex) {
+            Logger.getLogger(SorteoDao.class.getName()).log(Level.SEVERE, null, ex);
+            result.setResultado(TipoResultado.ERROR);
+            result.setMensaje("Error consultar monto apostado por número para el sorteo.");
+            return result;
+        }
+    }
+
     public Resultado<Sorteo> save() {
         Resultado<Sorteo> result = new Resultado<>();
         try {
@@ -135,5 +166,4 @@ public class SorteoDao extends BaseDao<Integer, Sorteo> {
             return result;
         }
     }
-
 }

@@ -5,6 +5,9 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.text.ParseException;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -41,6 +44,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import jfxtras.internal.scene.control.skin.CalendarPickerControlSkin;
 import jfxtras.internal.scene.control.skin.CalendarPickerControlSkin.ShowWeeknumbers;
 import jfxtras.scene.control.CalendarPicker;
+import sorteo.model.dao.FacturaDao;
 import sorteo.model.dao.MontosDao;
 import sorteo.model.dao.SorteoDao;
 import sorteo.model.dao.TipoSorteoDao;
@@ -60,7 +64,7 @@ public class VentaController extends Controller implements Initializable {
     private Double totalFactura;
     private SimpleDoubleProperty totalFacturaProperty;
     private final int CIEN = 100;
-    private int posTipoSorteo;
+    private int posTipoSorteo = -1;
 
     private int detalleSeleccionado;
     private Sorteo sorteo;
@@ -164,11 +168,11 @@ public class VentaController extends Controller implements Initializable {
 
     @XmlTransient
     public ObservableList<TipoSorteo> sorteos = FXCollections
-            .observableArrayList();
+    .observableArrayList();
 
     @XmlTransient
     public ObservableList<DetalleFactura> detalleFactura = FXCollections
-            .observableArrayList();
+    .observableArrayList();
 
     @Override
     public void initialize() {
@@ -176,18 +180,20 @@ public class VentaController extends Controller implements Initializable {
     }
 
     private void init() {
+        posTipoSorteo = -1;
         totalFactura = Double.valueOf("0.0");
         totalFacturaProperty = new SimpleDoubleProperty(Double.valueOf("0.0"));
 
         lblSubTotGen.textProperty().bindBidirectional(totalFacturaProperty, Formater.getInstance().decimalFormat);
         lblFecha.setText("Fecha: " + Formater.getInstance().formatFechaHora.format(new Date()));
         Timeline timeline = new Timeline(new KeyFrame(
-                Duration.millis(1000),
-                ae -> lblFecha.setText("Fecha: " + Formater.getInstance().formatFechaHora.format(new Date()))));
+        Duration.millis(1000),
+        ae -> lblFecha.setText("Fecha: " + Formater.getInstance().formatFechaHora.format(new Date()))));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
         sorteo = new Sorteo();
         factura = new Factura();
+        factura.setDetalleFactura(detalleFactura);
         startCalendar();
         cargarSorteos();
         cargarMontos();
@@ -254,16 +260,21 @@ public class VentaController extends Controller implements Initializable {
 
     private void startCalendar() {
         CalendarPickerControlSkin calendarPickerControlSkin = new CalendarPickerControlSkin(
-                calFechaSorteo);
+        calFechaSorteo);
         calendarPickerControlSkin.setShowWeeknumbers(ShowWeeknumbers.NO);
         calFechaSorteo.setSkin(calendarPickerControlSkin);
 
         calFechaSorteo.calendarProperty().addListener((observable, oldValue, newValue) -> {
-            if (!isFechaSorteoValida(sorteo, newValue.getTime())) {
-                flpNumeros.getChildren().clear();
+            flpNumeros.getChildren().clear();
+            if (posTipoSorteo >= 0) {
+                if (isFechaSorteoValida(this.sorteos.get(posTipoSorteo), newValue.getTime())) {
+                    obtenerSorteo();
+                }
             } else {
-                obtenerSorteo();
+                AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Sorteo no indicado", "Debe indicar el sorteo antes.");
+                return;
             }
+
         });
     }
 
@@ -320,26 +331,30 @@ public class VentaController extends Controller implements Initializable {
             if (boton.isSelected()) {
                 TipoSorteo buscado = new TipoSorteo(Integer.parseInt(boton.getId()));
                 posTipoSorteo = this.sorteos.indexOf(buscado);
-                if (posTipoSorteo > -1) {
-                    obtenerSorteo();
-                }
             }
         }
         event.consume();
     };
 
-    private boolean isFechaSorteoValida(Sorteo sorteo, Date fecha) {
+    private boolean isFechaSorteoValida(TipoSorteo sorteo, Date fecha) {
         try {
+            String fechaElegida = Formater.getInstance().formatFechaCorta.format(fecha);
             if (fecha.before(Formater.getInstance().formatFechaCorta.parse(HOY))) {
                 AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Seleccionar fecha", "La fecha del sorteo no puede ser menor que hoy (" + Formater.getInstance().formatFechaCorta.format(new Date()) + ").");
                 return false;
             }
-        } catch (ParseException pe) {
-            ;
-        }
-        /*if (LocalTime.now(ZoneId.systemDefault()).isBefore(LocalDateTime.ofInstant(Instant.ofEpochMilli(s.getHoraCorte().getTime()), ZoneId.systemDefault()).toLocalTime()) || LocalTime.now(ZoneId.systemDefault()).equals(LocalDateTime.ofInstant(Instant.ofEpochMilli(s.getHoraCorte().getTime()), ZoneId.systemDefault()).toLocalTime())) {
+            if (Formater.getInstance().formatFechaCorta.parse(fechaElegida).equals(Formater.getInstance().formatFechaCorta.parse(HOY))
+            && LocalTime.now(ZoneId.systemDefault()).isAfter(LocalDateTime.ofInstant(Instant.ofEpochMilli(sorteo.getHoraCorte().getTime()), ZoneId.systemDefault()).toLocalTime())) {
+                AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Hora del sorteo", "No se puede vender números para el sorteo: " + sorteo.getDescripcion() + ", ya pasó la hora de cierre para la venta de números: "
+                + Formater.getInstance().formatoHora.format(sorteo.getHoraCorte()) + ").");
+                return false;
+            }
 
-        }*/
+        } catch (ParseException pe) {
+            System.out.println(pe.getMessage());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         return true;
     }
 
@@ -361,8 +376,12 @@ public class VentaController extends Controller implements Initializable {
         Object source = event.getSource();
         Button boton = (Button) source;
         DetalleFactura nuevo = new DetalleFactura(Integer.valueOf(boton.getText()), BigDecimal.ZERO.doubleValue());
-
+        nuevo.setFactura(factura);
         if (!detalleFactura.stream().filter(d -> d.getNumero().equals(nuevo.getNumero())).findFirst().isPresent()) {
+            if (factura.getDetalleFactura().size() > sorteos.get(posTipoSorteo).getCantNumVenta()) {
+                AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "", "No puede ingresar más números, ya ha alcanzado la cantidad máxima de números para la venta.");
+                return;
+            }
             detalleFactura.add(nuevo);
         }
         tbvDetFactura.getSelectionModel().selectLast();
@@ -377,22 +396,49 @@ public class VentaController extends Controller implements Initializable {
     }
 
     private void returnMonto() {
-        if (tbvDetFactura.getSelectionModel().getSelectedIndex() < 0) {
+        if (detalleSeleccionado < 0) {
             AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "", "Debe seleccionar un detalle de la venta para modificar el monto de la apuesta.");
             txtNumero.requestFocus();
         }
-        if (txtNumero.getText() != null || !txtNumero.getText().isEmpty() && txtNumero.getText().length() > 0) {
-            int numero = Integer.valueOf(txtNumero.getText());
-            int residuo = numero % CIEN;
-            if (residuo != 0) {
-                AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto incorrecto", "El monto ingresado debe ser múltiplo de: " + String.valueOf(CIEN));
+        try {
+            if (txtNumero.getText() != null && !txtNumero.getText().isEmpty() && txtNumero.getText().length() > 0) {
+                int numero = Integer.valueOf(txtNumero.getText());
+                int residuo = numero % CIEN;
+                if (residuo != 0) {
+                    AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto incorrecto", "El monto ingresado debe ser múltiplo de: " + String.valueOf(CIEN));
+                    txtNumero.requestFocus();
+                }
+                Resultado<Double> montoApostado = SorteoDao.getInstance().getTotalApostadoNumero(this.factura.getSorteo(), detalleFactura.get(detalleSeleccionado).getNumero());
+                if (montoApostado.getResultado().equals(TipoResultado.SUCCESS)) {
+                    if (montoApostado.get().compareTo(this.factura.getSorteo().getTipoSorteo().getMontoMaximo()) > 0) {
+                        //el monto apostado ya superó el máximo
+                        AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto apuesta", "El monto máximo de la apuesta para el número: "
+                        + String.valueOf(detalleFactura.get(detalleSeleccionado).getNumero())
+                        + ",  ha sido alcanzado para el sorteo. No se puede aceptar la nueva apuesta.");
+                        return;
+                    }
+                    AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "", "No puede ingresar más números, ya ha alcanzado la cantidad máxima de números para la venta.");
+                    return;
+                }
+                Double diferencia = (montoApostado.get() + Double.valueOf(String.valueOf(numero))) - this.factura.getSorteo().getTipoSorteo().getMontoMaximo();
+                if (diferencia > 0) {
+                    //el monto apostado + la nueva apuesta exceden el máximo permitido
+                    AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto apuesta", "El monto de la apuesta para el número: "
+                    + String.valueOf(detalleFactura.get(detalleSeleccionado).getNumero())
+                    + ",  excede por: " + Formater.getInstance().decimalFormat.format(diferencia)
+                    + " el monto máximo permitido apostar por número. No se puede aceptar la nueva apuesta.");
+                    return;
+                }
+
+                detalleFactura.get(detalleSeleccionado).setMonto(Double.valueOf(txtNumero.getText()));
+                tbvDetFactura.refresh();
+                txtNumero.clear();
+            } else {
+                AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto no indicado", "Debe indicar un monto a apostar");
                 txtNumero.requestFocus();
             }
-            detalleFactura.get(tbvDetFactura.getSelectionModel().getSelectedIndex()).setMonto(Double.valueOf(txtNumero.getText()));
-            txtNumero.clear();
-        } else {
-            AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto no indicado", "Debe indicar un monto a apostar");
-            txtNumero.requestFocus();
+        } catch (NumberFormatException ex) {
+            System.out.println(ex.getMessage());
         }
     }
 
@@ -475,6 +521,18 @@ public class VentaController extends Controller implements Initializable {
                 }
             }
             setNumeros(this.factura.getSorteo());
+        }
+    }
+
+    @FXML
+    void btnAplicar(ActionEvent event) {
+        FacturaDao.getInstance().setFactura(this.factura);
+        Resultado<Factura> facturaSave = FacturaDao.getInstance().save();
+        if (facturaSave.getResultado().equals(TipoResultado.SUCCESS)) {
+            this.factura = facturaSave.get();
+            AppWindowController.getInstance().mensaje(Alert.AlertType.INFORMATION, "Venta aplicada", "Venta aplicada exitosamente.");
+        } else {
+            AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Error al aplicar venta", facturaSave.getMensaje());
         }
     }
 

@@ -118,7 +118,7 @@
                                              <children>
                                                 <VBox maxWidth="-Infinity" prefHeight="325.0" prefWidth="300.0">
                                                    <children>
-                                                      <JFXTextField fx:id="txtNumero" alignment="CENTER_RIGHT" onKeyPressed="#numKeyPressed" prefHeight="44.0" prefWidth="200.0" styleClass="edittext" text="0" />
+                                                      <JFXTextField fx:id="txtNumero" alignment="CENTER_RIGHT" focusTraversable="false" onKeyPressed="#numKeyPressed" prefHeight="44.0" prefWidth="200.0" styleClass="edittext" text="0" />
                                                       <GridPane fx:id="grdNumPad" prefHeight="277.0" prefWidth="377.0">
                                                          <children>
                                                             <Button fx:id="num0" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#setNumero" prefHeight="50.0" prefWidth="139.0" styleClass="buttonTeclado" text="0" GridPane.rowIndex="3">
@@ -222,7 +222,7 @@
                                                 <Insets right="5.0" />
                                              </padding>
                                           </VBox>
-                                          <Button fx:id="btnAplicar" alignment="CENTER" layoutX="7.0" layoutY="337.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="284.0" styleClass="actionbuttonaceptar" text="APLICAR" textAlignment="CENTER" AnchorPane.bottomAnchor="35.0">
+                                          <Button fx:id="btnAplicar" alignment="CENTER" layoutX="7.0" layoutY="337.0" mnemonicParsing="false" onAction="#btnAplicar" prefHeight="40.0" prefWidth="284.0" styleClass="actionbuttonaceptar" text="APLICAR" textAlignment="CENTER" AnchorPane.bottomAnchor="35.0">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>

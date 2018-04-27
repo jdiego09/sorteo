@@ -19,6 +19,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -55,16 +56,16 @@ public class Factura implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Transient
-    private SimpleIntegerProperty codigo;    
+    private SimpleIntegerProperty codigo;
     @Transient
-    private SimpleObjectProperty<LocalDate> fecha;    
+    private SimpleObjectProperty<LocalDate> fecha;
     @Transient
     private SimpleStringProperty cliente;
     @Transient
     private SimpleDoubleProperty total;
     @Transient
     private ObjectProperty<GenValorCombo> estado;
-    @OneToMany(mappedBy = "factura", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.LAZY)
     private List<DetalleFactura> detalleFactura;
     @JoinColumn(name = "fac_codsorteo", referencedColumnName = "sor_codigo")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -75,6 +76,7 @@ public class Factura implements Serializable {
         this.fecha = new SimpleObjectProperty(LocalDate.now());
         this.total = new SimpleDoubleProperty(BigDecimal.ZERO.doubleValue());
         this.estado = new SimpleObjectProperty(new GenValorCombo("A", "Activa"));
+        this.cliente = new SimpleStringProperty();
     }
 
     public Factura(Integer facCodigo) {
