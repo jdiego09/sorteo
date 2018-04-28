@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.effect.Glow?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -348,13 +349,22 @@
                         </AnchorPane>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
                            <children>
-                              <TableView fx:id="tbvDetFactura" layoutX="72.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <TableView fx:id="tbvDetFactura" layoutX="72.0" layoutY="40.0" prefHeight="218.0" prefWidth="531.0" styleClass="tableview" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
                                 <columns>
                                   <TableColumn fx:id="tbcLinea" prefWidth="75.0" text="Línea" />
                                   <TableColumn fx:id="tbcNumero" prefWidth="75.0" text="Número" />
                                     <TableColumn fx:id="tbcMonto" prefWidth="109.0" text="Monto" />
                                 </columns>
                               </TableView>
+                              <ToolBar layoutX="43.0" layoutY="-6.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <items>
+                                  <Button fx:id="btnBorrar" mnemonicParsing="false" onAction="#eliminarDetalle" prefHeight="30.0" prefWidth="30.0" styleClass="actionbuttonborrar" text="Button">
+                                       <tooltip>
+                                          <Tooltip text="Eliminar detalle" />
+                                       </tooltip>
+                                    </Button>
+                                </items>
+                              </ToolBar>
                            </children>
                            <GridPane.margin>
                               <Insets bottom="5.0" top="5.0" />

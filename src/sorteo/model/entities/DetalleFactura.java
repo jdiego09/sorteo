@@ -157,5 +157,7 @@ public class DetalleFactura implements Serializable {
     public String toString() {
         return "DetalleFactura{" + "codigo=" + codigo + '}';
     }
+    
+    
 
 }

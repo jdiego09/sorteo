@@ -68,6 +68,15 @@
    -fx-background-position:  center;
 }
 
+.actionbuttonborrar{
+    -fx-background-color: white;
+    -fx-text-fill: transparent;
+    -fx-background-image: url("../view/images/delete.png");
+    -fx-background-size: 32px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
 .buttonmonto {
    -fx-background-color: 
       #c3c4c4,

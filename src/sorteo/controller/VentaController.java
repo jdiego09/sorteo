@@ -120,6 +120,9 @@ public class VentaController extends Controller implements Initializable {
     private Button btnLimpiar;
 
     @FXML
+    private Button btnBorrar;
+
+    @FXML
     private Button btnSalir;
 
     @FXML
@@ -180,6 +183,14 @@ public class VentaController extends Controller implements Initializable {
         init();
     }
 
+    private void bindFactura() {
+        txtCliente.textProperty().bindBidirectional(factura.getClienteProperty());
+    }
+
+    private void unbindFactura() {
+        txtCliente.textProperty().unbindBidirectional(factura.getClienteProperty());
+    }
+
     private void init() {
         posTipoSorteo = -1;
         totalFactura = Double.valueOf("0.0");
@@ -194,6 +205,7 @@ public class VentaController extends Controller implements Initializable {
         timeline.play();
         sorteo = new Sorteo();
         factura = new Factura();
+        bindFactura();
         factura.setDetalleFactura(detalleFactura);
         startCalendar();
         cargarSorteos();
@@ -202,23 +214,6 @@ public class VentaController extends Controller implements Initializable {
         txtNumero.addEventFilter(KeyEvent.KEY_PRESSED, this::restrictNumbersOnly);
         bindDetalleFactura();
         addListenerDetalleFactura();
-
-        detalleFactura.addListener((ListChangeListener.Change<? extends DetalleFactura> c) -> {
-            while (c.next()) {
-                if (c.wasAdded()) {
-                    tbvDetFactura.refresh();
-                }
-                if (c.wasPermutated()) {
-                    tbvDetFactura.refresh();
-                } else if (c.wasUpdated()) {
-                    tbvDetFactura.refresh();
-                } else {
-                    tbvDetFactura.refresh();
-                }
-            }
-            totalFacturaProperty.set(0.0);
-            detalleFactura.stream().forEach(d -> totalFacturaProperty.set(totalFacturaProperty.get() + d.getMonto()));
-        });
 
     }
 
@@ -236,16 +231,40 @@ public class VentaController extends Controller implements Initializable {
         tbvDetFactura.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 detalleSeleccionado = tbvDetFactura.getSelectionModel().getSelectedIndex();
+                tbvDetFactura.getSelectionModel().focus(detalleSeleccionado);
+            }
+        });
+        detalleFactura.addListener((ListChangeListener.Change<? extends DetalleFactura> c) -> {
+            while (c.next()) {
+                if (c.wasAdded()) {
+                    calcularTotal();
+                }
+                if (c.wasPermutated()) {
+                    calcularTotal();
+                } else if (c.wasUpdated()) {
+                    calcularTotal();
+                } else {
+                    calcularTotal();
+                }
             }
         });
     }
 
+    private void calcularTotal() {
+        totalFacturaProperty.set(detalleFactura.stream().mapToDouble(d -> d.getMonto()).sum());
+        tbvDetFactura.refresh();
+    }
+
     private void reiniciar() {
+        unbindFactura();
         sorteos.clear();
         cargarSorteos();
-        calFechaSorteo.getCalendar().clear();
+        if (calFechaSorteo.getCalendar() != null) {
+            calFechaSorteo.getCalendar().clear();
+        }
         sorteo = new Sorteo();
         factura = new Factura();
+        bindFactura();
         factura.setDetalleFactura(detalleFactura);
         flpNumeros.getChildren().clear();
 
@@ -317,9 +336,9 @@ public class VentaController extends Controller implements Initializable {
         Object source = event.getSource();
         //valida el monto apostado
         if (apuestaValida(Integer.valueOf(((Button) source).getId()))) {
-            detalleFactura.get(detalleSeleccionado).setMonto(Double.parseDouble(((Button) source).getId()));
-            tbvDetFactura.refresh();
+            detalleFactura.get(tbvDetFactura.getSelectionModel().getSelectedIndex()).setMonto(Double.parseDouble(((Button) source).getId()));
         }
+        calcularTotal();
         event.consume();
     };
 
@@ -419,6 +438,7 @@ public class VentaController extends Controller implements Initializable {
     }
 
     private void returnMonto() {
+        detalleSeleccionado = tbvDetFactura.getSelectionModel().getSelectedIndex();
         if (detalleSeleccionado < 0) {
             AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "", "Debe seleccionar un detalle de la venta para modificar el monto de la apuesta.");
             txtNumero.requestFocus();
@@ -531,6 +551,7 @@ public class VentaController extends Controller implements Initializable {
 
     @FXML
     void btnAplicar(ActionEvent event) {
+        this.factura.setTotal(totalFacturaProperty.get());
         FacturaDao.getInstance().setFactura(this.factura);
         Resultado<Factura> facturaSave = FacturaDao.getInstance().save();
         if (facturaSave.getResultado().equals(TipoResultado.SUCCESS)) {
@@ -574,6 +595,14 @@ public class VentaController extends Controller implements Initializable {
     void salir(ActionEvent event) {
         if (AppWindowController.getInstance().mensajeConfimacion("Salir", "¿Desea salir del sistema?")) {
             AppWindowController.getInstance().cerrarAplicacion();
+        }
+    }
+
+    @FXML
+    void eliminarDetalle(ActionEvent event) {
+        detalleSeleccionado = tbvDetFactura.getSelectionModel().getSelectedIndex();
+        if (detalleSeleccionado >= 0) {
+            this.factura.getDetalleFactura().remove(detalleSeleccionado);
         }
     }
 }

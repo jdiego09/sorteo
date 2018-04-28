@@ -139,6 +139,13 @@ public class Factura implements Serializable {
         return cliente.get();
     }
 
+    public SimpleStringProperty getClienteProperty() {
+        if (cliente == null) {
+            cliente = new SimpleStringProperty();
+        }
+        return cliente;
+    }
+
     public void setCliente(String cliente) {
         this.cliente.set(cliente);
     }
