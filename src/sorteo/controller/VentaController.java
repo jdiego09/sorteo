@@ -274,6 +274,7 @@ public class VentaController extends Controller implements Initializable {
 
         detalleFactura.clear();
         cargarMontos();
+        calcularTotal();
     }
 
     void restrictNumbersOnly(KeyEvent keyEvent) {
@@ -442,6 +443,7 @@ public class VentaController extends Controller implements Initializable {
         if (detalleSeleccionado < 0) {
             AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "", "Debe seleccionar un detalle de la venta para modificar el monto de la apuesta.");
             txtNumero.requestFocus();
+            return;
         }
         try {
             if (txtNumero.getText() != null && !txtNumero.getText().isEmpty() && txtNumero.getText().length() > 0) {
@@ -451,11 +453,12 @@ public class VentaController extends Controller implements Initializable {
                 if (residuo != 0) {
                     AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto incorrecto", "El monto ingresado debe ser múltiplo de: " + String.valueOf(CIEN));
                     txtNumero.requestFocus();
+                    return;
                 }
                 //valida el monto apostado
                 if (apuestaValida(numero)) {
                     detalleFactura.get(detalleSeleccionado).setMonto(Double.valueOf(txtNumero.getText()));
-                    tbvDetFactura.refresh();
+                    calcularTotal();
                     txtNumero.clear();
                 }
             } else {

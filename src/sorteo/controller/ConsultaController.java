@@ -15,7 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javax.xml.bind.annotation.XmlTransient;
@@ -47,6 +46,8 @@ public class ConsultaController extends Controller implements Initializable {
     @XmlTransient
     ObservableList<GenValorCombo> numeros = FXCollections
     .observableArrayList();
+
+    ArrayList<TipoSorteo> tiposSorteo;
 
     @FXML
     private Button btnConsultar;
@@ -90,12 +91,12 @@ public class ConsultaController extends Controller implements Initializable {
 
     @Override
     public void initialize() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        init();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        init();
     }
 
     private void cargarSorteos() {
@@ -105,6 +106,7 @@ public class ConsultaController extends Controller implements Initializable {
             sorteosResult.get().stream().forEach(s -> sorteos.add(new GenValorCombo(String.valueOf(s.getCodigo()), s.getDescripcion())));
         }
         this.cmbSorteo.setItems(sorteos);
+        cmbSorteo.getSelectionModel().selectFirst();
     }
 
     private void cargarNumeros(TipoSorteo sorteo) {
@@ -115,8 +117,16 @@ public class ConsultaController extends Controller implements Initializable {
         }
         this.cmbNumero.setItems(numeros);
     }
-    
-    private void consultarVenta(){
-        
+
+    private void init() {
+        tiposSorteo = new ArrayList<>();
+        cargarSorteos();
+        //GenValorCombo valor = cmbSorteo.getSelectionModel().getSelectedItem();
+        //TipoSorteo tsorteo = new TipoSorteo(Integer.valueOf(valor.getCodigo()));
+        //cargarNumeros(tiposSorteo.get(tiposSorteo.indexOf(tsorteo)));
+    }
+
+    private void consultarVenta() {
+
     }
 }
