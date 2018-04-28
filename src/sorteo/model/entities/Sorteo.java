@@ -44,8 +44,18 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Sorteo.findAll", query = "SELECT s FROM Sorteo s")
     , @NamedQuery(name = "Sorteo.findByCodigo", query = "SELECT s FROM Sorteo s WHERE s.codigo = :codigo")
     , @NamedQuery(name = "Sorteo.findByFecha", query = "select e from Sorteo e join e.tipoSorteo t\n"
-            + "where e.fecha = :fechaSorteo\n"
-            + "and t.codigo = :tipoSorteo")})
+    + "where e.fecha = :fechaSorteo\n"
+    + "and t.codigo = :tipoSorteo")
+    ,
+@NamedQuery(name = "Sorteo.getApuestaNumero", query = "select coalesce(sum(d.monto),0)\n"
+    + "  from DetalleFactura d \n"
+    + "  join d.factura f\n"
+    + "  join f.sorteo s\n"
+    + "  join s.tipoSorteo t\n"
+    + " where t.codigo = :codTSorteo\n"
+    + "   and s.codigo = :codSorteo\n"
+    + "   and s.fecha = :fecSorteo\n"
+    + "   and d.numero = :numero")})
 public class Sorteo implements Serializable {
 
     private static final long serialVersionUID = 1L;

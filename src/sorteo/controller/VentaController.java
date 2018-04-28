@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
@@ -239,6 +240,23 @@ public class VentaController extends Controller implements Initializable {
         });
     }
 
+    private void reiniciar() {
+        sorteos.clear();
+        cargarSorteos();
+        calFechaSorteo.getCalendar().clear();
+        sorteo = new Sorteo();
+        factura = new Factura();
+        factura.setDetalleFactura(detalleFactura);
+        flpNumeros.getChildren().clear();
+
+        posTipoSorteo = -1;
+        totalFactura = Double.valueOf("0.0");
+        totalFacturaProperty = new SimpleDoubleProperty(Double.valueOf("0.0"));
+
+        detalleFactura.clear();
+        cargarMontos();
+    }
+
     void restrictNumbersOnly(KeyEvent keyEvent) {
         switch (keyEvent.getCode()) {
             case TAB:
@@ -288,6 +306,7 @@ public class VentaController extends Controller implements Initializable {
                 btn.setId(String.valueOf(s.getMonto()));
                 btn.getStyleClass().add("buttonmonto");
                 btn.setPrefSize(75, 40);
+                btn.setFocusTraversable(false);
                 btn.setOnAction(apostarPredefinido);
                 flpMontos.getChildren().add(btn);
             });
@@ -296,8 +315,11 @@ public class VentaController extends Controller implements Initializable {
 
     private final EventHandler<ActionEvent> apostarPredefinido = (final ActionEvent event) -> {
         Object source = event.getSource();
-        detalleFactura.get(tbvDetFactura.getSelectionModel().getSelectedIndex()).setMonto(Double.parseDouble(((Button) source).getId()));
-        tbvDetFactura.refresh();
+        //valida el monto apostado
+        if (apuestaValida(Integer.valueOf(((Button) source).getId()))) {
+            detalleFactura.get(detalleSeleccionado).setMonto(Double.parseDouble(((Button) source).getId()));
+            tbvDetFactura.refresh();
+        }
         event.consume();
     };
 
@@ -378,7 +400,8 @@ public class VentaController extends Controller implements Initializable {
         DetalleFactura nuevo = new DetalleFactura(Integer.valueOf(boton.getText()), BigDecimal.ZERO.doubleValue());
         nuevo.setFactura(factura);
         if (!detalleFactura.stream().filter(d -> d.getNumero().equals(nuevo.getNumero())).findFirst().isPresent()) {
-            if (factura.getDetalleFactura().size() > sorteos.get(posTipoSorteo).getCantNumVenta()) {
+            //valida la cantidad de numeros por venta para el sorteo
+            if (factura.getDetalleFactura().size() >= sorteos.get(posTipoSorteo).getCantNumVenta()) {
                 AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "", "No puede ingresar más números, ya ha alcanzado la cantidad máxima de números para la venta.");
                 return;
             }
@@ -404,35 +427,17 @@ public class VentaController extends Controller implements Initializable {
             if (txtNumero.getText() != null && !txtNumero.getText().isEmpty() && txtNumero.getText().length() > 0) {
                 int numero = Integer.valueOf(txtNumero.getText());
                 int residuo = numero % CIEN;
+                //valida que el monto ingresado sea multiplo de 100.
                 if (residuo != 0) {
                     AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto incorrecto", "El monto ingresado debe ser múltiplo de: " + String.valueOf(CIEN));
                     txtNumero.requestFocus();
                 }
-                Resultado<Double> montoApostado = SorteoDao.getInstance().getTotalApostadoNumero(this.factura.getSorteo(), detalleFactura.get(detalleSeleccionado).getNumero());
-                if (montoApostado.getResultado().equals(TipoResultado.SUCCESS)) {
-                    if (montoApostado.get().compareTo(this.factura.getSorteo().getTipoSorteo().getMontoMaximo()) > 0) {
-                        //el monto apostado ya superó el máximo
-                        AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto apuesta", "El monto máximo de la apuesta para el número: "
-                        + String.valueOf(detalleFactura.get(detalleSeleccionado).getNumero())
-                        + ",  ha sido alcanzado para el sorteo. No se puede aceptar la nueva apuesta.");
-                        return;
-                    }
-                    AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "", "No puede ingresar más números, ya ha alcanzado la cantidad máxima de números para la venta.");
-                    return;
+                //valida el monto apostado
+                if (apuestaValida(numero)) {
+                    detalleFactura.get(detalleSeleccionado).setMonto(Double.valueOf(txtNumero.getText()));
+                    tbvDetFactura.refresh();
+                    txtNumero.clear();
                 }
-                Double diferencia = (montoApostado.get() + Double.valueOf(String.valueOf(numero))) - this.factura.getSorteo().getTipoSorteo().getMontoMaximo();
-                if (diferencia > 0) {
-                    //el monto apostado + la nueva apuesta exceden el máximo permitido
-                    AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto apuesta", "El monto de la apuesta para el número: "
-                    + String.valueOf(detalleFactura.get(detalleSeleccionado).getNumero())
-                    + ",  excede por: " + Formater.getInstance().decimalFormat.format(diferencia)
-                    + " el monto máximo permitido apostar por número. No se puede aceptar la nueva apuesta.");
-                    return;
-                }
-
-                detalleFactura.get(detalleSeleccionado).setMonto(Double.valueOf(txtNumero.getText()));
-                tbvDetFactura.refresh();
-                txtNumero.clear();
             } else {
                 AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto no indicado", "Debe indicar un monto a apostar");
                 txtNumero.requestFocus();
@@ -530,10 +535,45 @@ public class VentaController extends Controller implements Initializable {
         Resultado<Factura> facturaSave = FacturaDao.getInstance().save();
         if (facturaSave.getResultado().equals(TipoResultado.SUCCESS)) {
             this.factura = facturaSave.get();
+            reiniciar();
             AppWindowController.getInstance().mensaje(Alert.AlertType.INFORMATION, "Venta aplicada", "Venta aplicada exitosamente.");
         } else {
             AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Error al aplicar venta", facturaSave.getMensaje());
         }
     }
 
+    private boolean apuestaValida(int numero) {
+        Resultado<Double> montoApostado = SorteoDao.getInstance().getTotalApostadoNumero(this.factura.getSorteo(), detalleFactura.get(detalleSeleccionado).getNumero());
+        if (montoApostado.getResultado().equals(TipoResultado.SUCCESS)) {
+            if (montoApostado.get().compareTo(this.factura.getSorteo().getTipoSorteo().getMontoMaximo()) > 0) {
+                //el monto apostado ya superó el máximo
+                AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto apuesta", "El monto máximo de la apuesta para el número: "
+                + String.valueOf(detalleFactura.get(detalleSeleccionado).getNumero())
+                + ",  ha sido alcanzado para el sorteo. No se puede aceptar la nueva apuesta.");
+                return false;
+            }
+        }
+        Double diferencia = (montoApostado.get() + Double.valueOf(String.valueOf(numero))) - this.factura.getSorteo().getTipoSorteo().getMontoMaximo();
+        if (diferencia > 0) {
+            //el monto apostado + la nueva apuesta exceden el máximo permitido
+            AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto apuesta", "El monto de la apuesta para el número: "
+            + String.valueOf(detalleFactura.get(detalleSeleccionado).getNumero())
+            + ",  excede por: " + Formater.getInstance().decimalFormat.format(diferencia)
+            + " el monto máximo permitido apostar por número. No se puede aceptar la nueva apuesta.");
+            return false;
+        }
+        return true;
+    }
+
+    @FXML
+    void limpiarVenta(ActionEvent event) {
+        reiniciar();
+    }
+
+    @FXML
+    void salir(ActionEvent event) {
+        if (AppWindowController.getInstance().mensajeConfimacion("Salir", "¿Desea salir del sistema?")) {
+            AppWindowController.getInstance().cerrarAplicacion();
+        }
+    }
 }

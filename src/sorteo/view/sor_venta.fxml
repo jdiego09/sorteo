@@ -49,11 +49,11 @@
                   </AnchorPane>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="actionbar" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
                      <children>
-                        <Button fx:id="btnLimpiar" layoutX="14.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonlimpiar" text="Button" AnchorPane.bottomAnchor="3.0" AnchorPane.topAnchor="3.0">
+                        <Button fx:id="btnLimpiar" layoutX="14.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#limpiarVenta" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonlimpiar" text="Button" AnchorPane.bottomAnchor="3.0" AnchorPane.topAnchor="3.0">
                            <tooltip>
                               <Tooltip text="Limpiar" />
                            </tooltip></Button>
-                        <Button fx:id="btnSalir" layoutX="66.0" layoutY="3.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonsalir" text="Button">
+                        <Button fx:id="btnSalir" layoutX="66.0" layoutY="3.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#salir" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonsalir" text="Button">
                            <tooltip>
                               <Tooltip text="Salir" />
                            </tooltip>

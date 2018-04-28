@@ -111,19 +111,11 @@ public class SorteoDao extends BaseDao<Integer, Sorteo> {
 
     public Resultado<Double> getTotalApostadoNumero(Sorteo sorteo, int numero) {
         Resultado<Double> result = new Resultado<>();
-        Query query = getEntityManager().createNativeQuery("select sum(d.monto)\n"
-        + "  from DetalleFactura d \n"
-        + "  join d.factura f\n"
-        + "  join f.sorteo s\n"
-        + "  join s.tipoSorteo t\n"
-        + " where t.codigo = :codTSorteo\n"
-        + "   and s.codigo = :codSorteo\n"
-        + "   and s.fecha = :fecSorteo\n"
-        + "   and d.numero = :numero");
+        Query query = getEntityManager().createNamedQuery("Sorteo.getApuestaNumero");
 
         query.setParameter("codTSorteo", sorteo.getTipoSorteo().getCodigo());
         query.setParameter("codSorteo", sorteo.getCodigo());
-        query.setParameter("fecSorteo", Formater.getInstance().formatFechaDB.format(sorteo.getFecha()));
+        query.setParameter("fecSorteo", sorteo.getFecha());
         query.setParameter("numero", numero);
         try {
             Number resultado = (Number) query.getSingleResult();
