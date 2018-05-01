@@ -8,12 +8,12 @@
     <class>sorteo.model.entities.Sorteo</class>
     <class>sorteo.model.entities.Sucursal</class>
     <class>sorteo.model.entities.TipoSorteo</class>
-    <class>sorteo.model.entities.MenuXRoll</class>
     <class>sorteo.model.entities.Menu</class>
     <class>sorteo.model.entities.RolXUsuario</class>
     <class>sorteo.model.entities.Roles</class>
     <class>sorteo.model.entities.Usuario</class>
     <class>sorteo.model.entities.Montos</class>
+    <class>sorteo.model.entities.MenuXRol</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/sorteo?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

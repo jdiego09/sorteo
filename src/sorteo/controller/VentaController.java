@@ -57,6 +57,7 @@ import sorteo.model.entities.TipoSorteo;
 import sorteo.utils.Aplicacion;
 import sorteo.utils.AppWindowController;
 import sorteo.utils.Formater;
+import sorteo.utils.Parametros;
 import sorteo.utils.Resultado;
 import sorteo.utils.TipoResultado;
 
@@ -554,6 +555,7 @@ public class VentaController extends Controller implements Initializable {
 
     @FXML
     void btnAplicar(ActionEvent event) {
+        this.factura.setHechaPor(Parametros.getInstance().getParametro("usuario"));
         this.factura.setTotal(totalFacturaProperty.get());
         FacturaDao.getInstance().setFactura(this.factura);
         Resultado<Factura> facturaSave = FacturaDao.getInstance().save();
@@ -596,7 +598,9 @@ public class VentaController extends Controller implements Initializable {
 
     @FXML
     void salir(ActionEvent event) {
-        if (AppWindowController.getInstance().mensajeConfimacion("Salir", "¿Desea salir del sistema?")) {
+        if (Aplicacion.getInstance().getRolesUsuario().equalsIgnoreCase("ven")) {
+            AppWindowController.getInstance().cerrarVentana();
+        } else {
             AppWindowController.getInstance().cerrarAplicacion();
         }
     }

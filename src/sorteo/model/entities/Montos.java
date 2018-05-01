@@ -38,6 +38,8 @@ public class Montos implements Serializable {
     private Integer codigo;
     @Column(name = "mon_monto")
     private Integer monto;
+    @Column(name = "mon_usuario")
+    private String usuario;
 
     public Montos() {
     }
@@ -85,6 +87,14 @@ public class Montos implements Serializable {
     @Override
     public String toString() {
         return "sorteo.model.entities.Montos[ monCodigo=" + codigo + " ]";
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
     
 }

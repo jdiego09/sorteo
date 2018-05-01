@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author jdiego
  */
 @Entity
-@Table(name = "sor_rolxusuario")
+@Table(name = "sor_rolxusuario", schema = "sorteo")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "RolXUsuario.findAll", query = "SELECT r FROM RolXUsuario r")
@@ -100,5 +100,5 @@ public class RolXUsuario implements Serializable {
     public String toString() {
         return "sorteo.model.entities.RolXUsuario[ rxuCodigo=" + rxuCodigo + " ]";
     }
-    
+
 }

@@ -44,7 +44,7 @@ public class Roles implements Serializable {
     @Column(name = "rol_estado")
     private String rolEstado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "mxrCodrol", fetch = FetchType.LAZY)
-    private List<MenuXRoll> menuXRollList;
+    private List<MenuXRol> menuXRollList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rxuCodrol", fetch = FetchType.LAZY)
     private List<RolXUsuario> rolXUsuarioList;
 
@@ -80,11 +80,11 @@ public class Roles implements Serializable {
     }
 
     @XmlTransient
-    public List<MenuXRoll> getMenuXRollList() {
+    public List<MenuXRol> getMenuXRollList() {
         return menuXRollList;
     }
 
-    public void setMenuXRollList(List<MenuXRoll> menuXRollList) {
+    public void setMenuXRollList(List<MenuXRol> menuXRollList) {
         this.menuXRollList = menuXRollList;
     }
 

@@ -24,7 +24,7 @@ public class Sorteo extends Application {
     public void start(Stage stage) throws Exception {
         Aplicacion.getInstance().cargaProperties();
         Parametros.getInstance().setParametro("pathViews", "/sorteo/view/");
-        AppWindowController.getInstance().abrirVentana("sor_venta", "Gestión de sorteos - Venta", true);
+        AppWindowController.getInstance().abrirVentana("sor_login", "Sorteos - Inicio de sesión", false);
     }
 
     /**

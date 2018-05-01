@@ -25,12 +25,12 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author jdiego
  */
 @Entity
-@Table(name = "sor_menuxrol")
+@Table(name = "sor_menuxrol", schema = "sorteo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "MenuXRoll.findAll", query = "SELECT m FROM MenuXRoll m")
-    , @NamedQuery(name = "MenuXRoll.findByMxrCodigo", query = "SELECT m FROM MenuXRoll m WHERE m.mxrCodigo = :mxrCodigo")})
-public class MenuXRoll implements Serializable {
+    @NamedQuery(name = "MenuXRol.findAll", query = "SELECT m FROM MenuXRol m")
+    , @NamedQuery(name = "MenuXRol.findByCodRol", query = "select distinct m from MenuXRol p join p.mxrCodmenu m join p.mxrCodrol r where r.rolCodigo = :codRol")})
+public class MenuXRol implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -45,10 +45,10 @@ public class MenuXRoll implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Roles mxrCodrol;
 
-    public MenuXRoll() {
+    public MenuXRol() {
     }
 
-    public MenuXRoll(Integer mxrCodigo) {
+    public MenuXRol(Integer mxrCodigo) {
         this.mxrCodigo = mxrCodigo;
     }
 
@@ -86,10 +86,10 @@ public class MenuXRoll implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof MenuXRoll)) {
+        if (!(object instanceof MenuXRol)) {
             return false;
         }
-        MenuXRoll other = (MenuXRoll) object;
+        MenuXRol other = (MenuXRol) object;
         if ((this.mxrCodigo == null && other.mxrCodigo != null) || (this.mxrCodigo != null && !this.mxrCodigo.equals(other.mxrCodigo))) {
             return false;
         }
@@ -100,5 +100,5 @@ public class MenuXRoll implements Serializable {
     public String toString() {
         return "sorteo.model.entities.MenuXRoll[ mxrCodigo=" + mxrCodigo + " ]";
     }
-    
+
 }

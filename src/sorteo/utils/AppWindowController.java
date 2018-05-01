@@ -24,11 +24,12 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import sorteo.controller.BusquedaController;
+import sorteo.controller.ConsultaController;
 import sorteo.controller.Controller;
 
 public class AppWindowController {
 
-    private static final String APP_FORMINI = "bik_principal";
+    private static final String APP_FORMINI = "sor_main";
 
     private static HashMap<String, FXMLLoader> loaders = new HashMap<>();
     private static HashMap<String, Pane> roots = new HashMap<>();
@@ -117,8 +118,7 @@ public class AppWindowController {
         } catch (IOException ex) {
             Logger.getLogger(AppWindowController.class.getName()).log(Level.SEVERE, null, ex);
             return false;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Logger.getLogger(AppWindowController.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
@@ -151,27 +151,32 @@ public class AppWindowController {
             mainStage.setResizable(true);
             mainStage.centerOnScreen();
             mainStage.setScene(scene);
-            mainStage.getIcons().add(new Image(getClass().getResourceAsStream("/biketso.png")));
-            mainStage.setTitle("Bikétsö");
+            mainStage.getIcons().add(new Image(getClass().getResourceAsStream("/sorteo.png")));
+            mainStage.setTitle("Sorteos");
             mainStage.show();
         }
     }
 
     public void abrirVentana(String ventana, String titulo, boolean resize) {
         if (cargarView(ventana)) {
-            Scene scene = new Scene(roots.get(ventana));
-            if (mainStage == null) {
-                mainStage = new Stage();
-            }
+            try {
+                Scene scene = new Scene(roots.get(ventana));
 
-            mainStage.initStyle(StageStyle.DECORATED);
-            mainStage.setScene(scene);
-            mainStage.centerOnScreen();
-            mainStage.setScene(scene);
-            mainStage.setTitle(titulo);
-            mainStage.setResizable(resize);
-            mainStage.getIcons().add(new Image(getClass().getResourceAsStream("/sorteo.png")));
-            mainStage.show();
+                if (mainStage == null) {
+                    mainStage = new Stage();
+                }
+
+                mainStage.initStyle(StageStyle.DECORATED);
+                mainStage.setScene(scene);
+                mainStage.centerOnScreen();
+                mainStage.setScene(scene);
+                mainStage.setTitle(titulo);
+                mainStage.setResizable(resize);
+                mainStage.getIcons().add(new Image(getClass().getResourceAsStream("/sorteo.png")));
+                mainStage.show();
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
         }
     }
 
@@ -201,7 +206,7 @@ public class AppWindowController {
     public void abrirVentanaEnPrincipal(String ventana, String location, String funcion) {
         if (cargarView(ventana)) {
             Controller controller = loaders.get(ventana).getController();
-            if (funcion != null && !funcion.isEmpty()){
+            if (funcion != null && !funcion.isEmpty()) {
                 controller.setAccion(funcion);
             }
             controller.initialize();
@@ -228,11 +233,33 @@ public class AppWindowController {
             }
         }
     }
-    
+
+    public void abrirVentanaModal(String ventana, String titulo) {
+        if (cargarView(ventana)) {
+            FXMLLoader loader = getLoader(ventana);
+            Controller controller = loader.getController();
+            controller.initialize();
+            Stage stage = new Stage();
+            stage.getIcons().addAll(mainStage.getIcons());
+            stage.setTitle(mainStage.getTitle());
+            stage.setResizable(false);
+            stage.setOnHidden((WindowEvent event) -> {
+                controller.setStage(null);
+            });
+            controller.setStage(stage);
+            Scene scene = new Scene(roots.get(ventana));
+            stage.setScene(scene);
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(mainStage);
+            stage.centerOnScreen();
+            stage.showAndWait();
+        }
+    }
+
     public void abrirVentanaEnPrincipal(String ventana, String location) {
         if (cargarView(ventana)) {
             Controller controller = loaders.get(ventana).getController();
-            
+
             controller.initialize();
             switch (location) {
                 case "Center":
@@ -289,7 +316,9 @@ public class AppWindowController {
     }
 
     public void cerrarAplicacion() {
-        Platform.exit();
+        if (getInstance().mensajeConfimacion("Salir del sistema", "¿Cerrar la aplicación de sorteos?")) {
+            Platform.exit();
+        }
     }
 
     public void goViewInWindowModal(String viewName, Stage parentStage) {

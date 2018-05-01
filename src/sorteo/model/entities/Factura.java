@@ -65,6 +65,9 @@ public class Factura implements Serializable {
     private SimpleDoubleProperty total;
     @Transient
     private ObjectProperty<GenValorCombo> estado;
+
+    @Column(name = "fac_hechapor")
+    private String hechaPor;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.LAZY)
     private List<DetalleFactura> detalleFactura;
     @JoinColumn(name = "fac_codsorteo", referencedColumnName = "sor_codigo")
@@ -243,5 +246,13 @@ public class Factura implements Serializable {
     @Override
     public String toString() {
         return "Factura{" + "codigo=" + codigo + '}';
+    }
+
+    public String getHechaPor() {
+        return hechaPor;
+    }
+
+    public void setHechaPor(String hechaPor) {
+        this.hechaPor = hechaPor;
     }
 }

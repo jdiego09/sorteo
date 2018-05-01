@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author jdiego
  */
 @Entity
-@Table(name = "sor_menu")
+@Table(name = "sor_menu", schema="sorteo")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Menu.findAll", query = "SELECT m FROM Menu m")
@@ -50,7 +50,7 @@ public class Menu implements Serializable {
     @Column(name = "men_estado")
     private String menEstado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "mxrCodmenu", fetch = FetchType.LAZY)
-    private List<MenuXRoll> menuXRollList;
+    private List<MenuXRol> menuXRolList;
 
     public Menu() {
     }
@@ -92,12 +92,12 @@ public class Menu implements Serializable {
     }
 
     @XmlTransient
-    public List<MenuXRoll> getMenuXRollList() {
-        return menuXRollList;
+    public List<MenuXRol> getMenuXRolList() {
+        return menuXRolList;
     }
 
-    public void setMenuXRollList(List<MenuXRoll> menuXRollList) {
-        this.menuXRollList = menuXRollList;
+    public void setMenuXRolList(List<MenuXRol> menuXRolList) {
+        this.menuXRolList = menuXRolList;
     }
 
     @Override

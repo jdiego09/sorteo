@@ -39,7 +39,7 @@ import sorteo.utils.GenValorCombo;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
-    , @NamedQuery(name = "Usuario.findByUsuCodigo", query = "SELECT u FROM Usuario u WHERE u.usuCodigo = :usuCodigo")
+    , @NamedQuery(name = "Usuario.findByUsuCodigo", query = "SELECT u FROM Usuario u WHERE u.usuCodigo = :usuCodigo and u.usuEstado = 'A'")
     , @NamedQuery(name = "Usuario.findByUsuDescripcion", query = "SELECT u FROM Usuario u WHERE u.usuDescripcion = :usuDescripcion")
     , @NamedQuery(name = "Usuario.findByUsuContrasena", query = "SELECT u FROM Usuario u WHERE u.usuContrasena = :usuContrasena")
     , @NamedQuery(name = "Usuario.findByUsuEstado", query = "SELECT u FROM Usuario u WHERE u.usuEstado = :usuEstado")})
@@ -62,6 +62,10 @@ public class Usuario implements Serializable {
     private List<RolXUsuario> rolXUsuarioList;
 
     public Usuario() {
+        this.usuCodigo = new SimpleStringProperty();
+        this.usuDescripcion = new SimpleStringProperty();
+        this.usuContrasena = new SimpleStringProperty();
+        this.usuEstado = new SimpleObjectProperty();
     }
 
     public Usuario(String usuCodigo) {
