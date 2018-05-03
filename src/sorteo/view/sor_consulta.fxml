@@ -6,7 +6,6 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.ToolBar?>
@@ -19,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="acpRoot" prefHeight="743.0" prefWidth="1024.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.102" fx:controller="sorteo.controller.ConsultaController">
+<AnchorPane id="AnchorPane" fx:id="acpRoot" prefHeight="743.0" prefWidth="1024.0" styleClass="form" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sorteo.controller.ConsultaController">
     <stylesheets>
         <URL value="@sorteo.css" />
     </stylesheets>
@@ -110,13 +109,7 @@
                                     <Font name="System Bold" size="18.0" />
                                  </font>
                               </Label>
-                              <TableView fx:id="tbvResultados" layoutX="36.0" layoutY="53.0" prefHeight="561.0" prefWidth="707.0" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="45.0">
-                                <columns>
-                                  <TableColumn fx:id="tbcLinea" prefWidth="79.0" text="Línea" />
-                                  <TableColumn fx:id="tbcNumero" prefWidth="93.0" text="Número" />
-                                    <TableColumn fx:id="tbcMonto" prefWidth="192.0" text="Monto" />
-                                </columns>
-                              </TableView>
+                              <TableView fx:id="tbvResultados" layoutX="36.0" layoutY="53.0" prefHeight="561.0" prefWidth="707.0" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="45.0" />
                               <Label fx:id="lblTotalVenta" alignment="CENTER_RIGHT" layoutX="368.0" layoutY="608.0" prefHeight="35.0" prefWidth="194.0" text="Label">
                                  <font>
                                     <Font size="24.0" />

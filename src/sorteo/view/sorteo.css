@@ -16,9 +16,10 @@
 }
 
 .main{
-   -fx-background-image: url("../view/images/logo.png");
-   -fx-background-size: 1024 768;
+   -fx-background-image: url("../view/images/fondo.jpg");
+   -fx-background-size: 1024px 669px;
    -fx-background-position: center;
+   -fx-background-repeat: no-repeat;
 }
 
 .apptitle{
@@ -214,4 +215,25 @@
 
 .buttonDrawer:hover{
    -fx-background-color: lightgrey;
+}
+
+.etiqueta{
+    -fx-text-fill: whitesmoke;
+    -fx-font: 16px System;
+    
+}
+
+
+.menu{
+   -fx-background-color: #8d6e63;
+   -fx-text-fill: whitesmoke;
+   -fx-fill: transparent;
+}
+
+.menu:hover{
+   -fx-background-color: #be9c91;
+}
+
+.menu:pressed{
+   -fx-background-color: #5f4339;
 }

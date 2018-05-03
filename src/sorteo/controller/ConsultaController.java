@@ -1,13 +1,18 @@
 package sorteo.controller;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -18,7 +23,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javax.xml.bind.annotation.XmlTransient;
+import sorteo.model.dao.SorteoDao;
 import sorteo.model.dao.TipoSorteoDao;
+import sorteo.model.entities.DetalleFactura;
+import sorteo.model.entities.Sorteo;
 import sorteo.model.entities.TipoSorteo;
 import sorteo.utils.AppWindowController;
 import sorteo.utils.GenValorCombo;
@@ -41,11 +49,11 @@ public class ConsultaController extends Controller implements Initializable {
 
     @XmlTransient
     ObservableList<GenValorCombo> sorteos = FXCollections
-    .observableArrayList();
+       .observableArrayList();
 
     @XmlTransient
     ObservableList<GenValorCombo> numeros = FXCollections
-    .observableArrayList();
+       .observableArrayList();
 
     ArrayList<TipoSorteo> tiposSorteo;
 
@@ -65,16 +73,7 @@ public class ConsultaController extends Controller implements Initializable {
     private Label lblReporte;
 
     @FXML
-    private TableView<?> tbvResultados;
-
-    @FXML
-    private TableColumn<?, ?> tbcLinea;
-
-    @FXML
-    private TableColumn<?, ?> tbcNumero;
-
-    @FXML
-    private TableColumn<?, ?> tbcMonto;
+    private TableView tbvResultados;
 
     @FXML
     private Label lblTotalVenta;
@@ -86,7 +85,7 @@ public class ConsultaController extends Controller implements Initializable {
 
     @FXML
     void salir(ActionEvent event) {
-        AppWindowController.getInstance().cerrarVentana();
+        AppWindowController.getInstance().goHome();
     }
 
     @Override
@@ -121,12 +120,50 @@ public class ConsultaController extends Controller implements Initializable {
     private void init() {
         tiposSorteo = new ArrayList<>();
         cargarSorteos();
-        //GenValorCombo valor = cmbSorteo.getSelectionModel().getSelectedItem();
-        //TipoSorteo tsorteo = new TipoSorteo(Integer.valueOf(valor.getCodigo()));
-        //cargarNumeros(tiposSorteo.get(tiposSorteo.indexOf(tsorteo)));
+        cargarNumeros(tiposSorteo.get(cmbSorteo.getSelectionModel().getSelectedIndex()));
     }
 
     private void consultarVenta() {
+        String queryName = null;
+        boolean esResumen = rdbResumen.isSelected();
 
+        if (rdbResumen.isSelected()) {
+            queryName = "Sorteo.resumenVentaFecha";
+
+        }
+        if (rdbDetalle.isSelected()) {
+            queryName = "Sorteo.detalleVentaFecha";
+        }
+        Resultado<ArrayList<Object>> resultado = SorteoDao.getInstance().getVentasDia(queryName, tiposSorteo.get(cmbSorteo.getSelectionModel().getSelectedIndex()).getCodigo(), Date.from(dtpFecha.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+
+        if (!resultado.getResultado().equals(TipoResultado.SUCCESS)) {
+            AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Consultar ventas", resultado.getMensaje());
+        }
+        setDatosTableView(esResumen, resultado.get());
+    }
+
+    private void setDatosTableView(boolean esResumen, ArrayList<Object> datos) {
+        HashMap<String, TableColumn> columnas = new HashMap<>();
+        if (esResumen) {
+
+            TableColumn<Sorteo, LocalDate> tbcFecSorteo = new TableColumn<>("Fec. Sorteo");
+            tbcFecSorteo.setPrefWidth(100);
+            tbcFecSorteo.setCellValueFactory(cd -> cd.getValue().getFechaProperty());
+            columnas.put("fecha", tbcFecSorteo);
+
+//            TableColumn<BikPersona, String> tbcNombre = new TableColumn<>("Nombre");
+//            tbcNombre.setPrefWidth(400);
+//            tbcNombre.setCellValueFactory(cd -> cd.getValue().getNombreCompletoProperty());
+        }
+
+//        tbvResultados.getColumns()
+//           .clear();
+//        tbvResultados.getItems()
+//           .clear();
+//        tbvResultados.getColumns()
+//           .add(tbcCedula);
+//        tbvResultados.getColumns()
+//           .add(tbcNombre);
+//        tbvResultados.refresh();
     }
 }

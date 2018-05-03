@@ -20,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import jfxtras.scene.control.CalendarPicker?>
 
-<AnchorPane fx:id="acpRoot" prefHeight="743.0" prefWidth="1024.0" stylesheets="@sorteo.css" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sorteo.controller.VentaController">
+<AnchorPane fx:id="acpRoot" prefHeight="743.0" prefWidth="1024.0" styleClass="form" stylesheets="@sorteo.css" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sorteo.controller.VentaController">
    <effect>
       <Glow />
    </effect>

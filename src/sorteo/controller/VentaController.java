@@ -186,14 +186,7 @@ public class VentaController extends Controller implements Initializable {
         totalFacturaProperty = new SimpleDoubleProperty(Double.valueOf("0.0"));
 
         lblSubTotGen.textProperty().bindBidirectional(totalFacturaProperty, Formater.getInstance().decimalFormat);
-        /*
-        lblFecha.setText("Fecha: " + Formater.getInstance().formatFechaHora.format(new Date()));
-        Timeline timeline = new Timeline(new KeyFrame(
-        Duration.millis(1000),
-        ae -> lblFecha.setText("Fecha: " + Formater.getInstance().formatFechaHora.format(new Date()))));
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
-         */
+        
         sorteo = new Sorteo();
         factura = new Factura();
         bindFactura();
@@ -589,9 +582,9 @@ public class VentaController extends Controller implements Initializable {
     @FXML
     void salir(ActionEvent event) {
         if (Aplicacion.getInstance().getRolesUsuario().equalsIgnoreCase("ven")) {
-            AppWindowController.getInstance().cerrarVentana();
-        } else {
             AppWindowController.getInstance().cerrarAplicacion();
+        } else {
+            AppWindowController.getInstance().goHome();
         }
     }
 

@@ -23,7 +23,6 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
-import sorteo.controller.BusquedaController;
 import sorteo.controller.ConsultaController;
 import sorteo.controller.Controller;
 
@@ -180,29 +179,6 @@ public class AppWindowController {
         }
     }
 
-    public void abrirBusqueda(String ventana, String titulo, String busqueda) {
-        if (cargarView(ventana)) {
-            FXMLLoader loader = getLoader(ventana);
-            BusquedaController controller = loader.getController();
-            controller.initialize();
-            Stage stage = new Stage();
-            stage.getIcons().addAll(mainStage.getIcons());
-            stage.setTitle(mainStage.getTitle());
-            stage.setResizable(false);
-            stage.setOnHidden((WindowEvent event) -> {
-                controller.setStage(null);
-            });
-            //controller.busquedaPersonas();
-            controller.setStage(stage);
-            Scene scene = new Scene(roots.get(ventana));
-            stage.setScene(scene);
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.initOwner(mainStage);
-            stage.centerOnScreen();
-            stage.showAndWait();
-        }
-    }
-
     public void abrirVentanaEnPrincipal(String ventana, String location, String funcion) {
         if (cargarView(ventana)) {
             Controller controller = loaders.get(ventana).getController();
@@ -279,19 +255,18 @@ public class AppWindowController {
                 case "Left":
                     ((BorderPane) mainStage.getScene().getRoot()).setLeft(getViewRoot(ventana));
                     break;
-                default:                    
+                default:
                     ((BorderPane) mainStage.getScene().getRoot()).setCenter(getViewRoot(ventana));
             }
         }
     }
 
-    public void loadHomeImage() {
-        AppWindowController.getInstance().abrirVentanaEnPrincipal("bik_inicio", "Center");
+    public void loadHome() {
+        AppWindowController.getInstance().abrirVentanaEnPrincipal("sor_inicio", "Center");
     }
 
     public void goHome() {
-
-        loadHomeImage();
+        loadHome();
     }
 
     public void cerrarVentana() {
