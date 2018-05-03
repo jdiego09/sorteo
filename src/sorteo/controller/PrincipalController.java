@@ -50,7 +50,7 @@ public class PrincipalController extends Controller implements Initializable {
     private void setMenuPrincipal() {
         mnuPrincipal.getMenus().clear();
         for (RolXUsuario r : Aplicacion.getInstance().getUsuario().getRolXUsuarioList()) {
-            Menu modulo = new Menu();
+            Menu modulo = new Menu();            
             modulo.setId(r.getRxuCodrol().getRolCodigo());
             modulo.setText(r.getRxuCodrol().getRolDescripcion());
             mnuPrincipal.getMenus().add(modulo);
@@ -81,7 +81,7 @@ public class PrincipalController extends Controller implements Initializable {
             if (opcion.getId().equalsIgnoreCase("ext")) {
                 AppWindowController.getInstance().cerrarAplicacion();
             } else {
-                AppWindowController.getInstance().abrirVentanaModal(opcion.getId(), "Sorteos - " + opcion.getText());
+                AppWindowController.getInstance().abrirVentanaEnPrincipal(opcion.getId(), "Center");
             }
         }
         event.consume();

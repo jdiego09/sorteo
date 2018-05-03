@@ -279,7 +279,7 @@ public class AppWindowController {
                 case "Left":
                     ((BorderPane) mainStage.getScene().getRoot()).setLeft(getViewRoot(ventana));
                     break;
-                default:
+                default:                    
                     ((BorderPane) mainStage.getScene().getRoot()).setCenter(getViewRoot(ventana));
             }
         }

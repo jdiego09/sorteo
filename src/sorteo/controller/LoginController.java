@@ -67,9 +67,9 @@ public class LoginController extends Controller {
                     Aplicacion.getInstance().setRolesUsuario(roles);
                     AppWindowController.getInstance().initApplication();
                     if (roles.equalsIgnoreCase("ven")) {
-                        AppWindowController.getInstance().abrirVentana("sor_venta", "Sorteos - Venta", false);
+                        AppWindowController.getInstance().abrirVentanaEnPrincipal("sor_venta", "Center");
                     } else {
-                        AppWindowController.getInstance().abrirVentana("sor_main", "Sorteos - Principal", false);
+                        AppWindowController.getInstance().abrirVentanaEnPrincipal("sor_main", "Center");
                     }
                 } else {
                     AppWindowController.getInstance().mensaje(AlertType.ERROR, "Acceso denegado", "Contraseña incorrecta.");

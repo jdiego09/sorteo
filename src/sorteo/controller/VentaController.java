@@ -76,9 +76,6 @@ public class VentaController extends Controller implements Initializable {
     private AnchorPane acpRoot;
 
     @FXML
-    private BorderPane brpSecciones;
-
-    @FXML
     private CalendarPicker calFechaSorteo;
 
     @FXML
@@ -103,19 +100,10 @@ public class VentaController extends Controller implements Initializable {
     private Button btnAplicar;
 
     @FXML
-    private Pane pneTeclado;
-
-    @FXML
     private TextField txtCliente;
 
     @FXML
     private FlowPane flpNumeros, flpMontos;
-
-    @FXML
-    private Label lblUsuario;
-
-    @FXML
-    private Label lblFecha;
 
     @FXML
     private Button btnLimpiar;
@@ -198,12 +186,14 @@ public class VentaController extends Controller implements Initializable {
         totalFacturaProperty = new SimpleDoubleProperty(Double.valueOf("0.0"));
 
         lblSubTotGen.textProperty().bindBidirectional(totalFacturaProperty, Formater.getInstance().decimalFormat);
+        /*
         lblFecha.setText("Fecha: " + Formater.getInstance().formatFechaHora.format(new Date()));
         Timeline timeline = new Timeline(new KeyFrame(
         Duration.millis(1000),
         ae -> lblFecha.setText("Fecha: " + Formater.getInstance().formatFechaHora.format(new Date()))));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
+         */
         sorteo = new Sorteo();
         factura = new Factura();
         bindFactura();
