@@ -7,6 +7,12 @@ package sorteo.model.entities;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,66 +23,114 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import sorteo.utils.GenValorCombo;
 
 /**
  *
  * @author jdiego
  */
 @Entity
-@Table(name = "sor_roles")
+@Access(AccessType.FIELD)
+@Table(name = "sor_roles", schema = "sorteo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Roles.findAll", query = "SELECT r FROM Roles r")
-    , @NamedQuery(name = "Roles.findByRolCodigo", query = "SELECT r FROM Roles r WHERE r.rolCodigo = :rolCodigo")
-    , @NamedQuery(name = "Roles.findByRolDescripcion", query = "SELECT r FROM Roles r WHERE r.rolDescripcion = :rolDescripcion")
-    , @NamedQuery(name = "Roles.findByRolEstado", query = "SELECT r FROM Roles r WHERE r.rolEstado = :rolEstado")})
+    @NamedQuery(name = "Roles.findAll", query = "SELECT r FROM Roles r WHERE r.rolEstado = 'A'")
+    , @NamedQuery(name = "Roles.findByUsuario", query = "SELECT r.rxuCodrol \n"
+       + "  FROM RolXUsuario r\n"
+       + "  JOIN r.rxuCodusuario u \n"
+       + " WHERE u.usuCodigo = :codUsuario")
+    ,
+@NamedQuery(name = "Roles.noAsignadosUsuario", query = "SELECT x \n"
+       + "  FROM Roles x\n"
+       + " WHERE x.rolCodigo NOT IN (\n"
+       + "          SELECT r.rxuCodrol.rolCodigo \n"
+       + "            FROM RolXUsuario r\n"
+       + "            JOIN r.rxuCodusuario u \n"
+       + "            WHERE u.usuCodigo = :codUsuario)\n"
+       + "   AND x.rolEstado = 'A'")})
 public class Roles implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @Column(name = "rol_codigo")
-    private String rolCodigo;
-    @Column(name = "rol_descripcion")
-    private String rolDescripcion;
-    @Column(name = "rol_estado")
-    private String rolEstado;
+
+    @Transient
+    private SimpleStringProperty rolCodigo;
+
+    @Transient
+    private SimpleStringProperty rolDescripcion;
+
+    @Transient
+    private ObjectProperty<GenValorCombo> rolEstado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "mxrCodrol", fetch = FetchType.LAZY)
     private List<MenuXRol> menuXRollList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rxuCodrol", fetch = FetchType.LAZY)
     private List<RolXUsuario> rolXUsuarioList;
 
     public Roles() {
+        this.rolCodigo = new SimpleStringProperty();
+        this.rolDescripcion = new SimpleStringProperty();
+        this.rolEstado = new SimpleObjectProperty();
     }
 
     public Roles(String rolCodigo) {
-        this.rolCodigo = rolCodigo;
+        this.rolCodigo = new SimpleStringProperty(rolCodigo);
     }
 
+    @Id
+    @Basic(optional = false)
+    @Column(name = "rol_codigo")
+    @Access(AccessType.PROPERTY)
     public String getRolCodigo() {
+        return rolCodigo.get();
+    }
+
+    public SimpleStringProperty getRolCodigoProperty() {
         return rolCodigo;
     }
 
     public void setRolCodigo(String rolCodigo) {
-        this.rolCodigo = rolCodigo;
+        if (this.rolCodigo == null) {
+            this.rolCodigo = new SimpleStringProperty();
+        }
+        this.rolCodigo.set(rolCodigo);
     }
 
+    @Column(name = "rol_descripcion")
+    @Access(AccessType.PROPERTY)
     public String getRolDescripcion() {
+        return rolDescripcion.get();
+    }
+
+    public SimpleStringProperty getRolDescripcionProperty() {
         return rolDescripcion;
     }
 
     public void setRolDescripcion(String rolDescripcion) {
-        this.rolDescripcion = rolDescripcion;
+        if (this.rolDescripcion == null) {
+            this.rolDescripcion = new SimpleStringProperty();
+        }
+        this.rolDescripcion.set(rolDescripcion);
     }
 
+    @Column(name = "rol_estado")
+    @Access(AccessType.PROPERTY)
     public String getRolEstado() {
-        return rolEstado;
+        return rolEstado.get().getCodigo();
     }
 
     public void setRolEstado(String rolEstado) {
-        this.rolEstado = rolEstado;
+        GenValorCombo valorEstado = null;
+        if (this.rolEstado == null) {
+            this.rolEstado = new SimpleObjectProperty();
+        }
+        if (rolEstado.equalsIgnoreCase("a")) {
+            valorEstado = new GenValorCombo("A", "Activo");
+        } else {
+            valorEstado = new GenValorCombo("I", "Inactivo");
+        }
+        this.rolEstado.set(valorEstado);
     }
 
     @XmlTransient
@@ -99,19 +153,24 @@ public class Roles implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (rolCodigo != null ? rolCodigo.hashCode() : 0);
+        int hash = 3;
+        hash = 71 * hash + Objects.hashCode(this.rolCodigo);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Roles)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Roles other = (Roles) object;
-        if ((this.rolCodigo == null && other.rolCodigo != null) || (this.rolCodigo != null && !this.rolCodigo.equals(other.rolCodigo))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Roles other = (Roles) obj;
+        if (!Objects.equals(this.rolCodigo, other.rolCodigo)) {
             return false;
         }
         return true;
@@ -119,7 +178,6 @@ public class Roles implements Serializable {
 
     @Override
     public String toString() {
-        return "sorteo.model.entities.Roles[ rolCodigo=" + rolCodigo + " ]";
+        return "Roles{" + "rolCodigo=" + rolCodigo + '}';
     }
-    
 }

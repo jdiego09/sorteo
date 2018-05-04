@@ -59,16 +59,6 @@
    -fx-background-position:  center;
 }
 
-.actionbuttonlimpiar{
-   -fx-background-color: white;
-   -fx-text-fill: transparent;
-   -fx-fill: transparent;
-   -fx-background-image: url("../view/images/clear.png");
-   -fx-background-size: 32px;
-   -fx-background-repeat: no-repeat;
-   -fx-background-position:  center;
-}
-
 .actionbuttonborrar{
     -fx-background-color: white;
     -fx-text-fill: transparent;
@@ -76,6 +66,35 @@
     -fx-background-size: 32px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
+}
+
+.actionbuttonguardar{
+    -fx-background-color: white;
+    -fx-text-fill: transparent;
+    -fx-background-image: url("../view/images/save.png");
+    -fx-background-size: 32px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+.actionbuttonagregar{
+    -fx-background-color: transparent;
+    -fx-text-fill: transparent;
+    -fx-fill: transparent;
+    -fx-background-image: url("../view/images/add.png");
+    -fx-background-size: 32px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:  center;
+}
+
+.actionbuttoneliminar{
+    -fx-background-color: transparent;
+    -fx-text-fill: transparent;
+    -fx-fill: transparent;
+    -fx-background-image: url("../view/images/remove.png");
+    -fx-background-size: 32px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:  center;
 }
 
 .buttonmonto {

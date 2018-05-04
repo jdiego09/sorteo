@@ -35,7 +35,7 @@ import sorteo.utils.GenValorCombo;
  */
 @Entity
 @Access(AccessType.FIELD)
-@Table(name = "sor_usuario")
+@Table(name = "sor_usuario", schema = "sorteo")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
@@ -80,6 +80,10 @@ public class Usuario implements Serializable {
         return usuCodigo.get();
     }
 
+    public SimpleStringProperty getUsuCodigoProperty() {
+        return usuCodigo;
+    }
+
     public void setUsuCodigo(String usuCodigo) {
         this.usuCodigo.set(usuCodigo);
     }
@@ -89,6 +93,10 @@ public class Usuario implements Serializable {
 
     public String getUsuDescripcion() {
         return usuDescripcion.get();
+    }
+
+    public SimpleStringProperty getUsuDescripcionProperty() {
+        return usuCodigo;
     }
 
     public void setUsuDescripcion(String usuDescripcion) {

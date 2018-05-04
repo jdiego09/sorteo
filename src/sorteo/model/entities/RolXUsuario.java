@@ -29,7 +29,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "RolXUsuario.findAll", query = "SELECT r FROM RolXUsuario r")
-    , @NamedQuery(name = "RolXUsuario.findByRxuCodigo", query = "SELECT r FROM RolXUsuario r WHERE r.rxuCodigo = :rxuCodigo")})
+    , @NamedQuery(name = "RolXUsuario.findByUsuario", query = "SELECT r \n"
+       + "  FROM RolXUsuario r\n"
+       + "  JOIN r.rxuCodusuario u \n"
+       + " WHERE u.usuCodigo = :codUsuario")})
 public class RolXUsuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,6 +53,11 @@ public class RolXUsuario implements Serializable {
 
     public RolXUsuario(Integer rxuCodigo) {
         this.rxuCodigo = rxuCodigo;
+    }
+
+    public RolXUsuario(Usuario usuario, Roles rol) {
+        this.rxuCodusuario = usuario;
+        this.rxuCodrol = rol;
     }
 
     public Integer getRxuCodigo() {
