@@ -8,11 +8,14 @@ package sorteo.controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
@@ -26,6 +29,7 @@ import sorteo.model.dao.UsuarioDao;
 import sorteo.model.entities.Roles;
 import sorteo.model.entities.RolXUsuario;
 import sorteo.model.entities.Usuario;
+import sorteo.utils.Aplicacion;
 import sorteo.utils.AppWindowController;
 import sorteo.utils.GenValorCombo;
 import sorteo.utils.Resultado;
@@ -35,7 +39,7 @@ import sorteo.utils.TipoResultado;
  *
  * @author Luis Diego
  */
-public class UsuarioController extends Controller {
+public class UsuarioController extends Controller implements Initializable {
 
     private Usuario usuario;
 
@@ -90,90 +94,78 @@ public class UsuarioController extends Controller {
 
     @Override
     public void initialize() {
-        iniciarPantalla();
+        init();
     }
 
-    private void nuevoUsuarioSistema() {
+    private void nuevoUsuario() {
         this.usuario = new Usuario();
         this.usuario.setRolXUsuarioList(new ArrayList<>());
+        unbindUsuario();
     }
 
-    private void iniciarPantalla() {
-
-        nuevoUsuarioSistema();
-
+    private void init() {
         this.estados.clear();
         this.estados.add(new GenValorCombo("A", "Activo"));
         this.estados.add(new GenValorCombo("I", "Inactivo"));
         jcmbEstado.setItems(this.estados);
-
         if (this.usuario != null) {
-            unbindUsuarioSistema();
+            unbindUsuario();
         }
+        nuevoUsuario();
+        bindUsuario();
 
-        bindUsuarioSistema();
-
-        bindListaUsuariosSistema();
-        bindListaRolesActivos();
-        bindListaRolesUsuario();
-
-        jtxfCodigo.setDisable(false);
+        cargarUsuarios();
+        bindListaUsuarios();
+        addListenerTableUsuarios(tbvUsuarios);
 
         jcmbEstado.getSelectionModel().selectFirst();
-
-        addListenerTableUsuariosSistema(tbvUsuarios);
-
-        this.rolesActivos.clear();
-        tbvRolesActivos.getItems().clear();
-        Resultado<ArrayList<Roles>> roles = UsuarioDao.getInstance().getRolesNoAsignados(this.usuario.getUsuCodigo());
-        roles.get().stream().forEach(this.rolesActivos::add);
-
-        this.usuariosSistema.clear();
-        tbvUsuarios.getItems().clear();
-        Resultado<ArrayList<Usuario>> usuarios = UsuarioDao.getInstance().findUsuariosSistema();
-        usuarios.get().stream().forEach(this.usuariosSistema::add);
-
+        jtxfCodigo.requestFocus();
     }
 
-    private void bindUsuarioSistema() {
+    private void bindUsuario() {
         jtxfCodigo.textProperty().bindBidirectional(this.usuario.getUsuCodigoProperty());
         jtxfDescripcion.textProperty().bindBidirectional(this.usuario.getUsuDescripcionProperty());
-        //jcmbEstado.valueProperty().bindBidirectional(this.usuario.getUsuEstadoProperty());
-        // jtpfContrasena.textProperty().bindBidirectional(this.usuarioSistema.getUssContrasenaProperty());
+        jcmbEstado.valueProperty().bindBidirectional(this.usuario.getUsuEstadoProperty());
     }
 
-    private void unbindUsuarioSistema() {
+    private void unbindUsuario() {
         jtxfCodigo.textProperty().unbindBidirectional(this.usuario.getUsuCodigoProperty());
         jtxfDescripcion.textProperty().unbindBidirectional(this.usuario.getUsuDescripcionProperty());
-        //jcmbEstado.valueProperty().unbindBidirectional(this.usuario.getUsuEstadoProperty());
-        // jtpfContrasena.textProperty().unbindBidirectional(this.usuarioSistema.getUssContrasenaProperty());
+        jcmbEstado.valueProperty().unbindBidirectional(this.usuario.getUsuEstadoProperty());
     }
 
-    private void addListenerTableUsuariosSistema(TableView table) {
+    private void addListenerTableUsuarios(TableView table) {
         table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            unbindUsuario();
             if (newSelection != null) {
-
-                unbindUsuarioSistema();
-
                 this.usuario = (Usuario) newSelection;
+                this.rolesActivos.clear();
+                tbvRolesActivos.getItems().clear();
+                Resultado<ArrayList<Roles>> rolesSistema = UsuarioDao.getInstance().getRolesNoAsignados(this.usuario.getUsuCodigo());
+                rolesSistema.get().stream().forEach(this.rolesActivos::add);
+                bindListaRolesActivos();
 
                 Resultado<ArrayList<RolXUsuario>> roles = UsuarioDao.getInstance().getRolesUsuario(this.usuario.getUsuCodigo());
                 this.rolesUsuario.clear();
                 tbvRolesUsuario.getItems().clear();
                 roles.get().stream().forEach(this.rolesUsuario::add);
-
-                bindUsuarioSistema();
-
+                bindListaRolesUsuario();
+                jtxfCodigo.setDisable(true);
             }
+            bindUsuario();
+            jcmbEstado.requestFocus();
+            jtxfDescripcion.requestFocus();
+            jtxfCodigo.requestFocus();
         });
     }
 
-    private void bindListaUsuariosSistema() {
+    private void bindListaUsuarios() {
         if (this.usuariosSistema != null) {
             tbvUsuarios.setItems(this.usuariosSistema);
             tbvUsuarios.refresh();
         }
         tbcCodigo.setCellValueFactory(new PropertyValueFactory<>("usuCodigo"));
+        tbcDescipcion.setCellValueFactory(new PropertyValueFactory<>("usuDescripcion"));
         tbcEstado.setCellValueFactory(new PropertyValueFactory<>("descripcionEstado"));
     }
 
@@ -182,7 +174,7 @@ public class UsuarioController extends Controller {
             tbvRolesActivos.setItems(this.rolesActivos);
             tbvRolesActivos.refresh();
         }
-        tbcCodRolActivo.setCellValueFactory(new PropertyValueFactory<>("rolCodigo"));
+        tbcCodRolActivo.setCellValueFactory(r -> r.getValue().getRolCodigoProperty());
     }
 
     private void bindListaRolesUsuario() {
@@ -194,17 +186,15 @@ public class UsuarioController extends Controller {
     }
 
     private void traerUsuario(String codigo) {
-
-        unbindUsuarioSistema();
-
-        Resultado<Usuario> usuario = UsuarioDao.getInstance().getUsuarioByCodigo(codigo);
-        if (usuario.getResultado().equals(TipoResultado.ERROR)) {
-            AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Buscar usuario", usuario.getMensaje());
+        unbindUsuario();
+        Resultado<Usuario> user = UsuarioDao.getInstance().getUsuarioByCodigo(codigo);
+        if (user.getResultado().equals(TipoResultado.ERROR)) {
+            AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Buscar usuario", user.getMensaje());
             return;
         }
-        if (usuario.get() != null) {
-            if (usuario.get().getUsuCodigo() != null) {
-                this.usuario = usuario.get();
+        if (user.get() != null) {
+            if (user.get().getUsuCodigo() != null) {
+                this.usuario = user.get();
                 jtxfCodigo.setDisable(true);
                 // Se cargan los roles del usuario.
                 Resultado<ArrayList<RolXUsuario>> roles = UsuarioDao.getInstance().getRolesUsuario(codigo);
@@ -225,7 +215,10 @@ public class UsuarioController extends Controller {
     }
 
     @FXML
-    private void guardarUsuarioSistema(ActionEvent event) {
+    private void guardarUsuario(ActionEvent event) {
+        this.usuario.setUsuCodsucursal(Aplicacion.getInstance().getSucursalDefault());
+        this.usuario.setRolXUsuarioList(this.rolesUsuario);
+
         UsuarioDao.getInstance().setUsuarioSistema(this.usuario);
         Resultado<Usuario> resultado = UsuarioDao.getInstance().save();
 
@@ -248,35 +241,29 @@ public class UsuarioController extends Controller {
 
     @FXML
     void regresar(ActionEvent event) {
+        clearForm();
         AppWindowController.getInstance().goHome();
     }
 
     @FXML
-    private void limpiarUsuario() {
-        unbindUsuarioSistema();
-        this.rolesUsuario.clear();
-        nuevoUsuarioSistema();
-        bindUsuarioSistema();
-        this.jtxfCodigo.requestFocus();
+    private void limpiar() {
+        clearForm();
     }
 
     @FXML
-    private void agregarRolUsuario() {
-
+    private void agregarRol() {
         RolXUsuario rol = new RolXUsuario(this.usuario, tbvRolesActivos.getSelectionModel().getSelectedItem());
 
-        if (!this.usuario.getRolXUsuarioList().contains(rol)) {
-            this.usuario.getRolXUsuarioList().add(rol);
+        if ((!this.usuario.getRolXUsuarioList().stream().filter(d -> d.getRxuCodrol().getRolCodigo().equals(rol.getRxuCodrol().getRolCodigo())).findFirst().isPresent())) {
             this.rolesUsuario.add(rol);
             tbvRolesUsuario.refresh();
         } else {
             AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Agregar rol", "El usuario [" + this.usuario.getUsuCodigo() + "] ya tiene el rol asignado.");
         }
-
     }
 
     @FXML
-    private void eliminarRolUsuario() {
+    private void eliminarRol() {
 
         RolXUsuario rol = tbvRolesUsuario.getSelectionModel().getSelectedItem();
 
@@ -296,7 +283,29 @@ public class UsuarioController extends Controller {
             this.rolesUsuario.remove(rol);
             tbvRolesUsuario.refresh();
         }
+    }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        init();
+    }
+
+    private void cargarUsuarios() {
+        Resultado<ArrayList<Usuario>> usuarios = UsuarioDao.getInstance().findUsuariosSistema();
+        if (!usuarios.getResultado().equals(TipoResultado.ERROR)) {
+            this.usuariosSistema = FXCollections.observableArrayList(usuarios.get());
+        } else {
+            AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Cargar usuarios", usuarios.getMensaje());
+        }
+    }
+
+    private void clearForm() {
+        unbindUsuario();
+        this.rolesUsuario.clear();
+        nuevoUsuario();
+        bindUsuario();
+        this.jtxfCodigo.setDisable(false);
+        this.jtxfCodigo.requestFocus();
     }
 
 }

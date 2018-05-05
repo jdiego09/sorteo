@@ -17,20 +17,20 @@
 
 <AnchorPane id="AnchorPane" fx:id="apRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="503.0" styleClass="form" stylesheets="@sorteo.css" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sorteo.controller.UsuarioController">
    <children>
-      <Pane prefHeight="50.0" prefWidth="503.0" styleClass="actionbar" stylesheets="@biketso.css">
+      <Pane prefHeight="50.0" prefWidth="503.0" styleClass="actionbar">
          <children>
-            <JFXButton fx:id="jbtnSalir" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="474.0" layoutY="11.0" onAction="#regresar" prefHeight="30.0" prefWidth="30.0" styleClass="actionbuttonsalir" textOverrun="WORD_ELLIPSIS">
+            <JFXButton fx:id="jbtnSalir" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="454.0" layoutY="8.0" onAction="#regresar" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonsalir" textOverrun="WORD_ELLIPSIS">
                <tooltip>
                   <Tooltip text="Regresar" />
                </tooltip>
             </JFXButton>
-            <Button fx:id="btnLimpiar" layoutX="61.0" layoutY="11.0" mnemonicParsing="false" onAction="#limpiar" prefHeight="30.0" prefWidth="30.0" styleClass="actionbuttonlimpiar" text="Button">
+            <Button fx:id="btnLimpiar" layoutX="59.0" layoutY="8.0" mnemonicParsing="false" onAction="#limpiar" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonlimpiar" text="Button">
                <tooltip>
                   <Tooltip text="Limpiar" />
                </tooltip>
             </Button>
-            <Button fx:id="btnGuardaUsuario" layoutX="14.0" layoutY="11.0" mnemonicParsing="false" onAction="#guardarUsuario" prefHeight="30.0" prefWidth="37.0" styleClass="actionbuttonguardar" text="Button" />
-            <Label layoutX="104.0" layoutY="8.0" text="Registro de usuarios del sistema" textFill="#f8f8f8">
+            <Button fx:id="btnGuardaUsuario" layoutX="14.0" layoutY="8.0" mnemonicParsing="false" onAction="#guardarUsuario" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonguardar" text="Button" />
+            <Label layoutX="104.0" layoutY="8.0" prefHeight="35.0" prefWidth="361.0" text="Gestión de usuarios" textFill="#f8f8f8">
                <font>
                   <Font size="24.0" />
                </font>
@@ -48,7 +48,7 @@
                         <TableView fx:id="tbvUsuarios" layoutX="-1.0" prefHeight="208.0" prefWidth="503.0">
                           <columns>
                             <TableColumn fx:id="tbcCodigo" editable="false" prefWidth="102.0" text="Código usuario" />
-                              <TableColumn prefWidth="298.0" text="Descripción" />
+                              <TableColumn fx:id="tbcDescipcion" prefWidth="298.0" text="Descripción" />
                             <TableColumn fx:id="tbcEstado" editable="false" prefWidth="100.0" text="Estado" />
                           </columns>
                         </TableView>
@@ -82,12 +82,12 @@
                         </Label>
                         <JFXButton fx:id="jbtnAgregarRol" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="231.0" layoutY="77.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#agregarRol" prefHeight="30.0" prefWidth="30.0" styleClass="actionbuttonagregar" textOverrun="WORD_ELLIPSIS">
                            <tooltip>
-                              <Tooltip text="Agregar padecimiento" />
+                              <Tooltip text="Agregar rol" />
                            </tooltip>
                         </JFXButton>
                         <JFXButton fx:id="jbtnEliminarRol" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="231.0" layoutY="129.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#eliminarRol" prefHeight="30.0" prefWidth="30.0" styleClass="actionbuttoneliminar" textOverrun="WORD_ELLIPSIS">
                            <tooltip>
-                              <Tooltip text="Agregar padecimiento" />
+                              <Tooltip text="Eliminar rol" />
                            </tooltip>
                         </JFXButton>
                      </children>

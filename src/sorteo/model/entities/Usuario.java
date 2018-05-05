@@ -96,7 +96,7 @@ public class Usuario implements Serializable {
     }
 
     public SimpleStringProperty getUsuDescripcionProperty() {
-        return usuCodigo;
+        return usuDescripcion;
     }
 
     public void setUsuDescripcion(String usuDescripcion) {
@@ -119,6 +119,10 @@ public class Usuario implements Serializable {
         return usuEstado.get().getCodigo();
     }
 
+    public ObjectProperty getUsuEstadoProperty() {
+        return usuEstado;
+    }
+
     public void setUsuEstado(String usuEstado) {
         GenValorCombo valorEstado = null;
         if (this.usuEstado == null) {
@@ -130,6 +134,13 @@ public class Usuario implements Serializable {
             valorEstado = new GenValorCombo("I", "Inactivo");
         }
         this.usuEstado.set(valorEstado);
+    }
+
+    public String getDescripcionEstado() {
+        if (this.usuEstado == null) {
+            this.usuEstado = new SimpleObjectProperty();
+        }
+        return this.usuEstado.get().getDescripcion();
     }
 
     public Sucursal getUsuCodsucursal() {
