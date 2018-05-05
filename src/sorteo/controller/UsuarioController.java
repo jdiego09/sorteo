@@ -31,6 +31,7 @@ import sorteo.model.entities.RolXUsuario;
 import sorteo.model.entities.Usuario;
 import sorteo.utils.Aplicacion;
 import sorteo.utils.AppWindowController;
+import sorteo.utils.Encriptor;
 import sorteo.utils.GenValorCombo;
 import sorteo.utils.Resultado;
 import sorteo.utils.TipoResultado;
@@ -217,6 +218,9 @@ public class UsuarioController extends Controller implements Initializable {
     @FXML
     private void guardarUsuario(ActionEvent event) {
         this.usuario.setUsuCodsucursal(Aplicacion.getInstance().getSucursalDefault());
+        if (this.usuario.getUsuContrasena() == null || this.usuario.getUsuContrasena().isEmpty()) {
+            this.usuario.setUsuContrasena(Encriptor.getInstance().encriptar(this.usuario.getUsuCodigo()));
+        }
         this.usuario.setRolXUsuarioList(this.rolesUsuario);
 
         UsuarioDao.getInstance().setUsuarioSistema(this.usuario);

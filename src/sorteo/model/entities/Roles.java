@@ -37,11 +37,12 @@ import sorteo.utils.GenValorCombo;
 @Table(name = "sor_roles", schema = "sorteo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Roles.findAll", query = "SELECT r FROM Roles r WHERE r.rolEstado = 'A'")
+    @NamedQuery(name = "Roles.findAll", query = "SELECT r FROM Roles r WHERE r.rolEstado = 'A' ORDER BY r.rolCodigo")
     , @NamedQuery(name = "Roles.findByUsuario", query = "SELECT r.rxuCodrol \n"
        + "  FROM RolXUsuario r\n"
        + "  JOIN r.rxuCodusuario u \n"
-       + " WHERE u.usuCodigo = :codUsuario")
+       + " WHERE u.usuCodigo = :codUsuario"
+       + " ORDER BY r.rxuCodigo")
     ,
 @NamedQuery(name = "Roles.noAsignadosUsuario", query = "SELECT x \n"
        + "  FROM Roles x\n"
@@ -50,7 +51,8 @@ import sorteo.utils.GenValorCombo;
        + "            FROM RolXUsuario r\n"
        + "            JOIN r.rxuCodusuario u \n"
        + "            WHERE u.usuCodigo = :codUsuario)\n"
-       + "   AND x.rolEstado = 'A'")})
+       + "   AND x.rolEstado = 'A'"
+       + " ORDER BY x.rolCodigo")})
 public class Roles implements Serializable {
 
     private static final long serialVersionUID = 1L;

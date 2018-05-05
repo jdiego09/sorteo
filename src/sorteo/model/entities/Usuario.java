@@ -38,7 +38,7 @@ import sorteo.utils.GenValorCombo;
 @Table(name = "sor_usuario", schema = "sorteo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
+    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u ORDER BY u.usuCodigo")
     , @NamedQuery(name = "Usuario.findByUsuCodigo", query = "SELECT u FROM Usuario u WHERE u.usuCodigo = :usuCodigo and u.usuEstado = 'A'")
     , @NamedQuery(name = "Usuario.findByUsuDescripcion", query = "SELECT u FROM Usuario u WHERE u.usuDescripcion = :usuDescripcion")
     , @NamedQuery(name = "Usuario.findByUsuContrasena", query = "SELECT u FROM Usuario u WHERE u.usuContrasena = :usuContrasena")
