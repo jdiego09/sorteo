@@ -51,9 +51,9 @@ import sorteo.utils.GenValorCombo;
 @Table(name = "sor_tiposorteo", schema = "sorteo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "TipoSorteo.findAll", query = "SELECT s FROM TipoSorteo s")
+    @NamedQuery(name = "TipoSorteo.findAll", query = "SELECT s FROM TipoSorteo s ORDER BY s.codigo")
     , @NamedQuery(name = "TipoSorteo.findByCodigo", query = "SELECT s FROM TipoSorteo s WHERE s.codigo = :codigo")
-    , @NamedQuery(name = "TipoSorteo.findAllActivos", query = "SELECT s FROM TipoSorteo s WHERE s.estado = 'A'")})
+    , @NamedQuery(name = "TipoSorteo.findAllActivos", query = "SELECT s FROM TipoSorteo s WHERE s.estado = 'A' ORDER BY s.codigo")})
 public class TipoSorteo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -122,6 +122,10 @@ public class TipoSorteo implements Serializable {
     @Access(AccessType.PROPERTY)
     public String getDescripcion() {
         return descripcion.get();
+    }
+
+    public SimpleStringProperty getDescripcionProperty() {
+        return descripcion;
     }
 
     public void setDescripcion(String descripcion) {
@@ -247,6 +251,13 @@ public class TipoSorteo implements Serializable {
         return this.estado;
     }
 
+    public String getDescripcionEstado() {
+        if (this.estado == null) {
+            this.estado = new SimpleObjectProperty();
+        }
+        return this.estado.get().getDescripcion();
+    }
+
     public void setEstado(String estado) {
         GenValorCombo valor = null;
         if (estado.equalsIgnoreCase("a")) {
@@ -300,6 +311,13 @@ public class TipoSorteo implements Serializable {
         } else {
             return null;
         }
+    }
+
+    public SimpleObjectProperty getHoraCorteProperty() {
+        if (this.horaCorte == null) {
+            this.horaCorte = new SimpleObjectProperty();
+        }
+        return this.horaCorte;
     }
 
     public void setHoraCorte(Date horaCorte) {

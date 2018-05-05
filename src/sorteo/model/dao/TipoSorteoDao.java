@@ -6,13 +6,11 @@
 package sorteo.model.dao;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import sorteo.model.entities.Sorteo;
 import sorteo.model.entities.TipoSorteo;
 import sorteo.utils.Resultado;
 import sorteo.utils.TipoResultado;
@@ -21,10 +19,10 @@ import sorteo.utils.TipoResultado;
  *
  * @author jdiego
  */
-public class TipoSorteoDao  extends BaseDao<Integer, TipoSorteo> {
+public class TipoSorteoDao extends BaseDao<Integer, TipoSorteo> {
 
     private static TipoSorteoDao INSTANCE;
-    private TipoSorteoDao tipoSorteo;
+    private TipoSorteo tipoSorteo;
 
     private TipoSorteoDao() {
     }
@@ -50,7 +48,7 @@ public class TipoSorteoDao  extends BaseDao<Integer, TipoSorteo> {
         return INSTANCE;
     }
 
-    public void setTipoSorteo(TipoSorteoDao tipoSorteo) {
+    public void setTipoSorteo(TipoSorteo tipoSorteo) {
         this.tipoSorteo = tipoSorteo;
     }
 
@@ -105,35 +103,30 @@ public class TipoSorteoDao  extends BaseDao<Integer, TipoSorteo> {
             return resultado;
         }
     }
-}
-/*
-    public Resultado<Sorteo> save() {
-        Resultado<Sorteo> result = new Resultado<>();
-        try {
-            if (tipoSorteo.getCodigo() == null || tipoSorteo.getCodigo() <= 0) {
-                //expediente.setExpFechaIngreso(new Date());
-                //expediente.setExpUsuarioingresa(Aplicacion.getInstance().getUsuario().getUssCodigo());
-                //expediente.getExpUsucodigo().setUsuSedcodigo(Aplicacion.getInstance().getDefaultSede());
-                ;
-            } else {
-                /*expediente.setExpFechamodifica(new Date());
-                expediente.setExpUsuariomodifica(Aplicacion.getInstance().getUsuario().getUssCodigo());
-                expediente.getExpUsucodigo().setUsuUsuariomodifica(Aplicacion.getInstance().getUsuario().getUssCodigo());
-                expediente.getExpUsucodigo().setUsuFechamodifica(new Date());*/
-                //;
-            //}
-//
-//            tipoSorteo = (Sorteo) super.save(tipoSorteo);
-//            result.setResultado(TipoResultado.SUCCESS);
-//            result.set(tipoSorteo);
-//            result.setMensaje("El sorteo se guardó correctamente.");
-//            return result;
-//        } catch (Exception ex) {
-//            Logger.getLogger(SorteoDao.class.getName()).log(Level.SEVERE, null, ex);
-//            result.setResultado(TipoResultado.ERROR);
-//            result.setMensaje("Error al registrar el sorteo.");
-//            return result;
-//        }
-//    }*/
 
-//}
+    public Resultado<TipoSorteo> save() {
+        Resultado<TipoSorteo> result = new Resultado<>();
+        try {
+            tipoSorteo = (TipoSorteo) super.save(tipoSorteo);
+            if (this.tipoSorteo.getCodigo() != null) {
+                result.setResultado(TipoResultado.SUCCESS);
+                result.set(tipoSorteo);
+                result.setMensaje("El sorteo se guardó correctamente.");
+
+            } else {
+                result.setResultado(TipoResultado.ERROR);
+                result.setMensaje("No se pudo guardar el sorteo.");
+            }
+
+            return result;
+
+        } catch (Exception ex) {
+            Logger.getLogger(SorteoDao.class
+               .getName()).log(Level.SEVERE, null, ex);
+            result.setResultado(TipoResultado.ERROR);
+            result.setMensaje("Error al registrar el sorteo.");
+            return result;
+        }
+    }
+
+}

@@ -195,7 +195,7 @@ public class UsuarioDao extends BaseDao<Integer, Usuario> {
          } else {
             resultado.setResultado(TipoResultado.ERROR);
             resultado.set(this.usuarioSistema);
-            resultado.setMensaje("No se pudo guardar la persona.");
+            resultado.setMensaje("No se pudo guardar el usuario.");
          }
 
          return resultado;

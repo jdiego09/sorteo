@@ -329,6 +329,7 @@ public class VentaController extends Controller implements Initializable {
 
     private void cargarSorteos() {
         vbxSorteos.getChildren().clear();
+        sorteos.clear();
         Resultado<ArrayList<TipoSorteo>> sorteosResult = TipoSorteoDao.getInstance().findAllActivos();
         if (sorteosResult.getResultado() == TipoResultado.SUCCESS) {
             sorteosResult.get().stream().forEach(s -> {

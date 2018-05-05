@@ -37,9 +37,7 @@ public class Aplicacion {
     private static Aplicacion INSTANCE;
 
     private static Usuario usuario;
-    private static String rolesUsuario;/*
-    private static ArrayList<MenuXRol> accesoRol;
-    private static ArrayList<Menu> menu;*/
+    private static String rolesUsuario;
 
     private static Sucursal sucursal;
     private static Empresa empresa;
@@ -134,7 +132,7 @@ public class Aplicacion {
                 urlBD = prop.getProperty("conexion.url");
             }
             if (prop.containsKey("conexion.driver")) {
-                urlBD = prop.getProperty("conexion.url");
+                driverBD = prop.getProperty("conexion.driver");
             }
             if (prop.containsKey("conexion.usuario")) {
                 usuarioBD = prop.getProperty("conexion.usuario");
@@ -214,7 +212,7 @@ public class Aplicacion {
       return urlBD;
    }
 
-   public static String getDriverBD() {
+   public String getDriverBD() {
       return driverBD;
    }   
    
@@ -222,7 +220,7 @@ public class Aplicacion {
       return usuarioBD;
    }
 
-   public static String getPasswordBD() {
+   public String getPasswordBD() {
       return passwordBD;
    }
     

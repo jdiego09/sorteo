@@ -151,7 +151,29 @@ public class SorteoDao extends BaseDao<Integer, Sorteo> {
             Logger.getLogger(TipoSorteoDao.class.getName()).log(Level.SEVERE, null, ex);
             resultado.setResultado(TipoResultado.ERROR);
             resultado.setMensaje("Error al traer las ventas del día: " + Formater.getInstance().formatFechaCorta.format(fechaVenta)
-            + ".");
+               + ".");
+            return resultado;
+        }
+    }
+
+    public Resultado<ArrayList<TipoSorteo>> getTiposSorteo() {
+        Resultado<ArrayList<TipoSorteo>> resultado = new Resultado<>();
+        ArrayList<TipoSorteo> resultados = new ArrayList<>();
+        List<TipoSorteo> result;
+        try {
+            Query query = getEntityManager().createNamedQuery("TipoSorteo.findAll");
+            result = query.getResultList();
+            result.stream().forEach(resultados::add);
+            resultado.setResultado(TipoResultado.SUCCESS);
+            resultado.set(resultados);
+            return resultado;
+        } catch (NoResultException nre) {
+            resultado.setResultado(TipoResultado.WARNING);
+            return resultado;
+        } catch (Exception ex) {
+            Logger.getLogger(TipoSorteoDao.class.getName()).log(Level.SEVERE, null, ex);
+            resultado.setResultado(TipoResultado.ERROR);
+            resultado.setMensaje("Error al traer los sorteos.");
             return resultado;
         }
     }
@@ -159,7 +181,7 @@ public class SorteoDao extends BaseDao<Integer, Sorteo> {
     public Resultado<Sorteo> save() {
         Resultado<Sorteo> result = new Resultado<>();
         try {
-            if (sorteo.getCodigo() == null || sorteo.getCodigo() <= 0) {
+            if (this.sorteo.getCodigo() == null || this.sorteo.getCodigo() <= 0) {
                 //expediente.setExpFechaIngreso(new Date());
                 //expediente.setExpUsuarioingresa(Aplicacion.getInstance().getUsuario().getUssCodigo());
                 //expediente.getExpUsucodigo().setUsuSedcodigo(Aplicacion.getInstance().getDefaultSede());
@@ -172,10 +194,16 @@ public class SorteoDao extends BaseDao<Integer, Sorteo> {
                 ;
             }
 
-            sorteo = (Sorteo) super.save(sorteo);
-            result.setResultado(TipoResultado.SUCCESS);
-            result.set(sorteo);
-            result.setMensaje("El sorteo se guardó correctamente.");
+            this.sorteo = (Sorteo) super.save(this.sorteo);
+            if (this.sorteo.getCodigo() != null) {
+                result.setResultado(TipoResultado.SUCCESS);
+                result.set(this.sorteo);
+                result.setMensaje("El sorteo se guardó correctamente.");
+
+            } else {
+                result.setResultado(TipoResultado.ERROR);
+                result.setMensaje("No se pudo guardar el sorteo.");
+            }
             return result;
         } catch (Exception ex) {
             Logger.getLogger(SorteoDao.class.getName()).log(Level.SEVERE, null, ex);

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTimePicker?>
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" fx:id="acpRoot" prefHeight="600.0" prefWidth="600.0" styleClass="form" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.102" fx:controller="sorteo.controller.TipoSorteoController">
+    <stylesheets>
+        <URL value="@sorteo.css" />
+    </stylesheets>
+   <effect>
+      <Glow />
+   </effect>
+   <children>
+      <Pane layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="503.0" styleClass="actionbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <JFXButton fx:id="jbtnSalir" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="558.0" layoutY="8.0" onAction="#regresar" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonsalir" textOverrun="WORD_ELLIPSIS">
+               <tooltip>
+                  <Tooltip text="Regresar" />
+               </tooltip>
+            </JFXButton>
+            <Button fx:id="btnLimpiar" layoutX="59.0" layoutY="8.0" mnemonicParsing="false" onAction="#limpiar" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonlimpiar" text="Button">
+               <tooltip>
+                  <Tooltip text="Limpiar" />
+               </tooltip>
+            </Button>
+            <Button fx:id="btnGuardar" layoutX="14.0" layoutY="8.0" mnemonicParsing="false" onAction="#guardar" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonguardar" text="Button" />
+            <Label layoutX="104.0" layoutY="8.0" prefHeight="35.0" prefWidth="361.0" text="Gestión de sorteos" textFill="#f8f8f8">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <JFXTextField fx:id="jtxfDescripcion" labelFloat="true" layoutX="24.0" layoutY="82.0" prefHeight="37.0" prefWidth="419.0" promptText="Descripción sorteo" styleClass="edittext">
+         <tooltip>
+            <Tooltip text="Descripción del sorteo" />
+         </tooltip>
+      </JFXTextField>
+      <JFXTextField fx:id="jtxfNumMinimo" labelFloat="true" layoutX="24.0" layoutY="148.0" prefHeight="37.0" prefWidth="135.0" promptText="Número mínimo" styleClass="edittext">
+         <tooltip>
+            <Tooltip text="Número más bajo del sorteo" />
+         </tooltip>
+      </JFXTextField>
+      <JFXTextField fx:id="jtxfNumMaximo" labelFloat="true" layoutX="308.0" layoutY="148.0" prefHeight="37.0" prefWidth="135.0" promptText="Número máximo" styleClass="edittext">
+         <tooltip>
+            <Tooltip text="Número más alto del sorteo" />
+         </tooltip>
+      </JFXTextField>
+      <JFXTextField fx:id="jtxfMontoMax" labelFloat="true" layoutX="24.0" layoutY="214.0" prefHeight="37.0" prefWidth="135.0" promptText="Monto máximo" styleClass="edittext">
+         <tooltip>
+            <Tooltip text="Monto máximo a apostar por número en cada sorteo" />
+         </tooltip>
+      </JFXTextField>
+      <JFXTextField fx:id="jtxfCantMax" labelFloat="true" layoutX="308.0" layoutY="214.0" prefHeight="37.0" prefWidth="135.0" promptText="Cantidad " styleClass="edittext">
+         <tooltip>
+            <Tooltip text="Cantidad máxima de números por venta para cada sorteo" />
+         </tooltip>
+      </JFXTextField>
+      <JFXTimePicker fx:id="jtpHoraCorte" layoutX="24.0" layoutY="294.0" prefHeight="20.0" prefWidth="135.0" styleClass="edittext">
+         <tooltip>
+            <Tooltip text="Hora de corte para la venta de números del sorteo" />
+         </tooltip>
+      </JFXTimePicker>
+      <Label layoutX="24.0" layoutY="269.0" text="Hora corte" textFill="#8d6e63">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Line endX="450.0" layoutX="125.0" layoutY="353.0" startX="-100.0" />
+      <TableView fx:id="tbvSorteos" layoutX="24.0" layoutY="377.0" prefHeight="200.0" prefWidth="551.0" styleClass="tableview">
+        <columns>
+          <TableColumn fx:id="tbcDescripcion" prefWidth="388.0" text="Sorteo" />
+          <TableColumn fx:id="tbcEstado" minWidth="0.0" prefWidth="153.0" text="Estado" />
+        </columns>
+      </TableView>
+      <JFXComboBox fx:id="jcmbEstado" labelFloat="true" layoutX="308.0" layoutY="294.0" prefHeight="37.0" prefWidth="135.0" promptText="Estado" styleClass="edittext">
+         <tooltip>
+            <Tooltip text="Estado del sorteo" />
+         </tooltip>
+      </JFXComboBox>
+   </children>
+</AnchorPane>
