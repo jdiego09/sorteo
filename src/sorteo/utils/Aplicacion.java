@@ -55,6 +55,7 @@ public class Aplicacion {
     private static Integer defaultSucursal;
 
     private static String urlBD;
+    private static String driverBD;
     private static String usuarioBD;
     private static String passwordBD;
 
@@ -132,6 +133,9 @@ public class Aplicacion {
             if (prop.containsKey("conexion.url")) {
                 urlBD = prop.getProperty("conexion.url");
             }
+            if (prop.containsKey("conexion.driver")) {
+                urlBD = prop.getProperty("conexion.url");
+            }
             if (prop.containsKey("conexion.usuario")) {
                 usuarioBD = prop.getProperty("conexion.usuario");
             }
@@ -206,6 +210,22 @@ public class Aplicacion {
         Aplicacion.eventoMenu = evento;
     }
 
+   public String getUrlBD() {
+      return urlBD;
+   }
+
+   public static String getDriverBD() {
+      return driverBD;
+   }   
+   
+   public String getUsuarioBD() {
+      return usuarioBD;
+   }
+
+   public static String getPasswordBD() {
+      return passwordBD;
+   }
+    
     /*
    los parametros deben cargarse antes de cada llamado a reporte
    param.put("pEncFac", encabezado);
@@ -254,5 +274,5 @@ public class Aplicacion {
         } catch (ClassNotFoundException | SQLException | JRException ex) {
             Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }    
 }

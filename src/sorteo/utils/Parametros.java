@@ -13,9 +13,7 @@ public class Parametros {
     private String pathViews = "view/";
     private static HashMap<String, String> parametros = new HashMap<>();
     private static Parametros INSTANCE;
-    private static final EntityManagerFactory ENTITYMANAGERFACTORY = Persistence.createEntityManagerFactory("SorteoPU" );
-    public static final PersistenceUnitUtil PERSISTENCEUTIL = ENTITYMANAGERFACTORY.getPersistenceUnitUtil();
-
+    
     private Parametros() {
     }
 
@@ -53,9 +51,5 @@ public class Parametros {
     }
     public String getParametro(String parametro) {
         return parametros.get(parametro);
-    }
-
-    public static EntityManagerFactory getENTITYMANAGERFACTORY() {
-        return ENTITYMANAGERFACTORY;
     }
 }
