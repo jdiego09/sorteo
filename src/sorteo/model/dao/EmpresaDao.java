@@ -208,7 +208,7 @@ public class EmpresaDao extends BaseDao<Integer, Empresa> {
       try {
 
          getEntityManager().getTransaction().begin();
-         Integer id = (Integer) getPERSISTENCEUTIL().getIdentifier(sucursal);
+         Integer id = (Integer) Parametros.PERSISTENCEUTIL.getIdentifier(sucursal);
          if (id != null) {
             existe = (Sucursal) getEntityManager().find(Sucursal.class, id);
          }

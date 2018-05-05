@@ -17,6 +17,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceUnitUtil;
 import sorteo.model.entities.Empresa;
 import sorteo.model.entities.Sucursal;
 import net.sf.jasperreports.engine.JRException;
@@ -208,22 +212,22 @@ public class Aplicacion {
         Aplicacion.eventoMenu = evento;
     }
 
-   public String getUrlBD() {
-      return urlBD;
-   }
+    public String getUrlBD() {
+        return urlBD;
+    }
 
-   public String getDriverBD() {
-      return driverBD;
-   }   
-   
-   public String getUsuarioBD() {
-      return usuarioBD;
-   }
+    public String getDriverBD() {
+        return driverBD;
+    }
 
-   public String getPasswordBD() {
-      return passwordBD;
-   }
-    
+    public String getUsuarioBD() {
+        return usuarioBD;
+    }
+
+    public String getPasswordBD() {
+        return passwordBD;
+    }
+
     /*
    los parametros deben cargarse antes de cada llamado a reporte
    param.put("pEncFac", encabezado);
@@ -242,11 +246,11 @@ public class Aplicacion {
             // Crea la conexión para el reporte
             Connection connection = null;
             connection = DriverManager.getConnection(this.urlBD,
-            this.usuarioBD, this.passwordBD); //hacer procedimiento para desencriptar
+               this.usuarioBD, this.passwordBD); //hacer procedimiento para desencriptar
 
             if (connection != null) {
                 JasperPrint print = JasperFillManager.fillReport(pathDir
-                + reporte + ".jasper", parametros, connection);
+                   + reporte + ".jasper", parametros, connection);
                 JasperPrintManager.printReport(print, false);
                 connection.close();
             }
@@ -261,16 +265,16 @@ public class Aplicacion {
             // Crea la conexión para el reporte
             Connection connection = null;
             connection = DriverManager.getConnection(this.urlBD,
-            this.usuarioBD, this.passwordBD); //hacer procedimiento para desencriptar
+               this.usuarioBD, this.passwordBD); //hacer procedimiento para desencriptar
 
             if (connection != null) {
                 JasperPrint print = JasperFillManager.fillReport(pathDir
-                + reporte + ".jasper", parametros, connection);
+                   + reporte + ".jasper", parametros, connection);
                 JasperViewer.viewReport(print, false);
                 connection.close();
             }
         } catch (ClassNotFoundException | SQLException | JRException ex) {
             Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }    
+    }
 }

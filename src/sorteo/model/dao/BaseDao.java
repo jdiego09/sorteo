@@ -8,52 +8,18 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnitUtil;
 import sorteo.utils.Aplicacion;
+import sorteo.utils.Parametros;
 
 public class BaseDao<K, E> implements DaoBase<K, E> {
 
     private Class<E> entityClass;
-    EntityManagerFactory entityManagerFactory = null;
-    private static EntityManager entityManager;
-    private static PersistenceUnitUtil PERSISTENCEUTIL;
+    private EntityManager entityManager;
 
     public EntityManager getEntityManager() {
-        String url = Aplicacion.getInstance().getUrlBD();
-        String driver = Aplicacion.getInstance().getDriverBD();
-        String usuario = Aplicacion.getInstance().getUsuarioBD();
-        String password = Aplicacion.getInstance().getPasswordBD();
-
-        Properties propiedades = new Properties();
-        if (usuario != null) {
-            propiedades.put("javax.persistence.jdbc.user", usuario);
-        }
-        if (driver != null) {
-            propiedades.put("javax.persistence.jdbc.driver", driver);
-        }
-        if (password != null) {
-            propiedades.put("javax.persistence.jdbc.password", password);
-        }
-        if (url != null) {
-            propiedades.put("javax.persistence.jdbc.url", url);
-        }
-
-        try {
-            entityManagerFactory = Persistence.createEntityManagerFactory("SorteoPU",
-               propiedades);
-            if (entityManager == null) {
-                entityManager = entityManagerFactory.createEntityManager();
-            }
-            PERSISTENCEUTIL = entityManagerFactory.getPersistenceUnitUtil();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        if (entityManager == null) {
+            entityManager = Parametros.getENTITYMANAGERFACTORY().createEntityManager();
         }
         return entityManager;
-    }
-
-    public PersistenceUnitUtil getPERSISTENCEUTIL() {
-        if (PERSISTENCEUTIL == null) {
-            entityManagerFactory.getPersistenceUnitUtil();
-        }
-        return PERSISTENCEUTIL;
     }
 
     @Override
@@ -61,7 +27,7 @@ public class BaseDao<K, E> implements DaoBase<K, E> {
         try {
             E existe = null;
             getEntityManager().getTransaction().begin();
-            K id = (K) PERSISTENCEUTIL.getIdentifier(entity);
+            K id = (K) Parametros.PERSISTENCEUTIL.getIdentifier(entity);
             if (id != null) {
                 existe = (E) getEntityManager().find(entity.getClass(), id);
             }
@@ -83,7 +49,7 @@ public class BaseDao<K, E> implements DaoBase<K, E> {
     public void delete(E entity) {
         try {
             getEntityManager().getTransaction().begin();
-            K id = (K) getPERSISTENCEUTIL().getIdentifier(entity);
+            K id = (K) Parametros.PERSISTENCEUTIL.getIdentifier(entity);
             E existe = null;
             if (id != null) {
                 existe = (E) getEntityManager().find(entity.getClass(), id);
