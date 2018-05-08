@@ -14,20 +14,7 @@
     <class>sorteo.model.entities.Usuario</class>
     <class>sorteo.model.entities.Montos</class>
     <class>sorteo.model.entities.MenuXRol</class>
+    <class>sorteo.model.entities.DetVentasFecha</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
-    <!--  
-          <properties>
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/sorteo?zeroDateTimeBehavior=convertToNull"/>
-            <property name="javax.persistence.jdbc.user" value="root"/>     
-            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-            <property name="javax.persistence.jdbc.password" value="biketso"/>
-          </properties>
-        -->
-    <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/sorteo?zeroDateTimeBehavior=convertToNull"/>
-      <property name="javax.persistence.jdbc.user" value="root"/>
-      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-      <property name="javax.persistence.jdbc.password" value="biketso"/>
-    </properties>
   </persistence-unit>
 </persistence>

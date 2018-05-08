@@ -12,7 +12,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTimePicker;
-import java.text.Format;
 import java.util.ArrayList;
 import java.util.Date;
 import javafx.collections.FXCollections;
@@ -27,7 +26,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.converter.NumberStringConverter;
 import javax.xml.bind.annotation.XmlTransient;
-import sorteo.model.dao.SorteoDao;
 import sorteo.model.dao.TipoSorteoDao;
 import sorteo.model.entities.TipoSorteo;
 import sorteo.utils.Aplicacion;
@@ -160,7 +158,7 @@ public class TipoSorteoController extends Controller implements Initializable {
     private void cargarSorteos() {
         this.tiposSorteo.clear();
         tbvSorteos.getItems().clear();
-        Resultado<ArrayList<TipoSorteo>> tipSorteos = SorteoDao.getInstance().getTiposSorteo();
+        Resultado<ArrayList<TipoSorteo>> tipSorteos = TipoSorteoDao.getInstance().findAll();
         tipSorteos.get().stream().forEach(this.tiposSorteo::add);
         bindListaSorteos();
     }
@@ -170,8 +168,8 @@ public class TipoSorteoController extends Controller implements Initializable {
             unbindSorteo();
             if (newSelection != null) {
                 this.tipoSorteo = (TipoSorteo) newSelection;
-            }
-            bindSorteo();
+                 bindSorteo();
+            }           
             jcmbEstado.requestFocus();
             this.jtxfDescripcion.requestFocus();
         });

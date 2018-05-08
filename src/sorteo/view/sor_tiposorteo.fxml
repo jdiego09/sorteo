@@ -16,7 +16,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="acpRoot" prefHeight="600.0" prefWidth="600.0" styleClass="form" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.102" fx:controller="sorteo.controller.TipoSorteoController">
+<AnchorPane id="AnchorPane" fx:id="acpRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" styleClass="form" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sorteo.controller.TipoSorteoController">
     <stylesheets>
         <URL value="@sorteo.css" />
     </stylesheets>
@@ -80,7 +80,7 @@
          </font>
       </Label>
       <Line endX="450.0" layoutX="125.0" layoutY="353.0" startX="-100.0" />
-      <TableView fx:id="tbvSorteos" layoutX="24.0" layoutY="377.0" prefHeight="200.0" prefWidth="551.0" styleClass="tableview">
+      <TableView fx:id="tbvSorteos" layoutX="24.0" layoutY="377.0" prefHeight="200.0" prefWidth="551.0">
         <columns>
           <TableColumn fx:id="tbcDescripcion" prefWidth="388.0" text="Sorteo" />
           <TableColumn fx:id="tbcEstado" minWidth="0.0" prefWidth="153.0" text="Estado" />

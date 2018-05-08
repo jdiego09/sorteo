@@ -21,8 +21,9 @@ import sorteo.utils.Parametros;
 public class Sorteo extends Application {
     
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) throws Exception {        
         Aplicacion.getInstance().cargaProperties();
+        Parametros.getInstance().setEntityManager();
         Parametros.getInstance().setParametro("pathViews", "/sorteo/view/");
         AppWindowController.getInstance().abrirVentana("sor_login", "Sorteos - Inicio de sesión", false);
     }

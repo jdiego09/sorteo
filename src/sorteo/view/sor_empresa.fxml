@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" fx:id="acpRoot" prefHeight="600.0" prefWidth="600.0" styleClass="form" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.102" fx:controller="sorteo.controller.EmpresaController">
+    <stylesheets>
+        <URL value="@sorteo.css" />
+    </stylesheets>
+   <effect>
+      <Glow />
+   </effect>
+   <children>
+      <Pane layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="503.0" styleClass="actionbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <JFXButton fx:id="jbtnSalir" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="551.0" layoutY="8.0" onAction="#regresar" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonsalir" textOverrun="WORD_ELLIPSIS">
+               <tooltip>
+                  <Tooltip text="Regresar" />
+               </tooltip>
+            </JFXButton>
+            <Button fx:id="btnLimpiar" layoutX="59.0" layoutY="8.0" mnemonicParsing="false" onAction="#limpiar" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonlimpiar" text="Button">
+               <tooltip>
+                  <Tooltip text="Limpiar" />
+               </tooltip>
+            </Button>
+            <Button fx:id="btnGuardaUsuario" layoutX="14.0" layoutY="8.0" mnemonicParsing="false" onAction="#guardarUsuario" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonguardar" text="Button" />
+            <Label layoutX="104.0" layoutY="8.0" prefHeight="35.0" prefWidth="361.0" text="Gestión de empresas" textFill="#f8f8f8">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <TabPane layoutX="87.0" layoutY="90.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+        <tabs>
+          <Tab text="Empresas">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <JFXTextField fx:id="jtxfCedJuridica" labelFloat="true" layoutX="32.0" layoutY="29.0" onKeyPressed="#codigoUsuarioOnEnterKey" prefHeight="37.0" prefWidth="177.0" promptText="Cédula jurídica" styleClass="edittext" />
+                        <JFXTextField fx:id="jtxfDescripcion" labelFloat="true" layoutX="223.0" layoutY="29.0" onKeyPressed="#codigoUsuarioOnEnterKey" prefHeight="37.0" prefWidth="361.0" promptText="Descripción" styleClass="edittext" />
+                        <JFXTextField fx:id="jtxfTelefono" labelFloat="true" layoutX="32.0" layoutY="100.0" onKeyPressed="#codigoUsuarioOnEnterKey" prefHeight="37.0" prefWidth="177.0" promptText="Teléfono" styleClass="edittext" />
+                        <JFXTextField fx:id="jtxfEmail" labelFloat="true" layoutX="223.0" layoutY="100.0" onKeyPressed="#codigoUsuarioOnEnterKey" prefHeight="37.0" prefWidth="361.0" promptText="Correo electrónico" styleClass="edittext" />
+                        <JFXTextField fx:id="jtxfLogo" labelFloat="true" layoutX="32.0" layoutY="167.0" onKeyPressed="#codigoUsuarioOnEnterKey" prefHeight="37.0" prefWidth="504.0" promptText="Ubicación logotipo empresa" styleClass="edittext" />
+                        <JFXButton fx:id="jbtnBuscarLogo" layoutX="547.0" layoutY="171.0" onAction="#buscarArchivoLogo" prefHeight="30.0" prefWidth="37.0" styleClass="buttonbuscar" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Sucursales">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>

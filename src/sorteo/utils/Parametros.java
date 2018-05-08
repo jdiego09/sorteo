@@ -2,6 +2,7 @@ package sorteo.utils;
 //hola
 
 import java.util.HashMap;
+import java.util.Properties;
 import javafx.scene.Parent;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -14,8 +15,8 @@ public class Parametros {
     private String pathViews = "view/";
     private static HashMap<String, String> parametros = new HashMap<>();
     private static Parametros INSTANCE;
-    private static final EntityManagerFactory ENTITYMANAGERFACTORY = Persistence.createEntityManagerFactory("SorteoPU");
-    public static final PersistenceUnitUtil PERSISTENCEUTIL = ENTITYMANAGERFACTORY.getPersistenceUnitUtil();
+    private static EntityManagerFactory ENTITYMANAGERFACTORY; // = Persistence.createEntityManagerFactory("SorteoPU");
+    public static PersistenceUnitUtil PERSISTENCEUTIL;// = ENTITYMANAGERFACTORY.getPersistenceUnitUtil();
 
     private Parametros() {
     }
@@ -59,5 +60,20 @@ public class Parametros {
 
     public static EntityManagerFactory getENTITYMANAGERFACTORY() {
         return ENTITYMANAGERFACTORY;
+    }
+    
+    public void setEntityManager(){
+        String url = Aplicacion.getInstance().getUrlBD();
+        String driver = Aplicacion.getInstance().getDriverBD();
+        String usuario = Aplicacion.getInstance().getUsuarioBD();
+        String password = Aplicacion.getInstance().getPasswordBD();
+        
+        Properties props = new Properties();
+        props.put("javax.persistence.jdbc.url", url);
+        props.put("javax.persistence.jdbc.driver", driver);
+        props.put("javax.persistence.jdbc.user", usuario);
+        props.put("javax.persistence.jdbc.password", password);
+       ENTITYMANAGERFACTORY = Persistence.createEntityManagerFactory("SorteoPU",props);
+       PERSISTENCEUTIL = ENTITYMANAGERFACTORY.getPersistenceUnitUtil();
     }
 }

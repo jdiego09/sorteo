@@ -97,7 +97,7 @@ public class TipoSorteo implements Serializable {
         this.montoMaximo = new SimpleDoubleProperty(0);
         this.cantNumVenta = new SimpleIntegerProperty(0);
         this.diasHabiles = new SimpleStringProperty();
-        this.estado = new SimpleObjectProperty();
+        this.estado = new SimpleObjectProperty(new GenValorCombo("A", "Activo"));
         this.horaCorte = new SimpleObjectProperty(LocalTime.now());
     }
 
@@ -125,10 +125,16 @@ public class TipoSorteo implements Serializable {
     }
 
     public SimpleStringProperty getDescripcionProperty() {
+        if (this.descripcion == null) {
+            this.descripcion = new SimpleStringProperty();
+        }
         return descripcion;
     }
 
     public void setDescripcion(String descripcion) {
+        if (this.descripcion == null) {
+            this.descripcion = new SimpleStringProperty();
+        }
         this.descripcion.set(descripcion);
     }
 
@@ -260,13 +266,13 @@ public class TipoSorteo implements Serializable {
 
     public void setEstado(String estado) {
         GenValorCombo valor = null;
-        if (estado.equalsIgnoreCase("a")) {
-            valor = new GenValorCombo(estado, "Activo");
-        } else {
-            valor = new GenValorCombo(estado, "Inactivo");
-        }
         if (this.estado == null) {
             this.estado = new SimpleObjectProperty();
+        }
+        if (estado.equalsIgnoreCase("a")) {
+            valor = new GenValorCombo("A", "Activo");
+        } else {
+            valor = new GenValorCombo("I", "Inactivo");
         }
         this.estado.set(valor);
     }
