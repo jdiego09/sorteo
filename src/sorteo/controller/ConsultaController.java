@@ -1,7 +1,6 @@
 package sorteo.controller;
 
 import java.net.URL;
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,22 +11,18 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javax.xml.bind.annotation.XmlTransient;
-import sorteo.model.dao.SorteoDao;
 import sorteo.model.dao.TipoSorteoDao;
-import sorteo.model.entities.DetalleFactura;
-import sorteo.model.entities.Sorteo;
 import sorteo.model.entities.TipoSorteo;
+import sorteo.utils.Aplicacion;
 import sorteo.utils.AppWindowController;
 import sorteo.utils.GenValorCombo;
 import sorteo.utils.Resultado;
@@ -80,7 +75,7 @@ public class ConsultaController extends Controller implements Initializable {
 
     @FXML
     void consultar(ActionEvent event) {
-
+        consultarVenta();
     }
 
     @FXML
@@ -124,46 +119,16 @@ public class ConsultaController extends Controller implements Initializable {
     }
 
     private void consultarVenta() {
-        String queryName = null;
-        boolean esResumen = rdbResumen.isSelected();
+        HashMap<String, Object> parametros = new HashMap<>();
+        parametros.put("fechasorteo", Date.from(this.dtpFecha.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        parametros.put("tipoSorteo", this.cmbSorteo.getValue().getCodigo());
+        parametros.put("numero", this.cmbNumero.getValue().getCodigo());
 
         if (rdbResumen.isSelected()) {
-            queryName = "Sorteo.resumenVentaFecha";
-
+            Aplicacion.getInstance().generarReporte("rpt_resVentasFecha", parametros);
         }
         if (rdbDetalle.isSelected()) {
-            queryName = "Sorteo.detalleVentaFecha";
+            Aplicacion.getInstance().generarReporte("rpt_detVentasFecha", parametros);
         }
-        Resultado<ArrayList<Object>> resultado = SorteoDao.getInstance().getVentasDia(queryName, tiposSorteo.get(cmbSorteo.getSelectionModel().getSelectedIndex()).getCodigo(), Date.from(dtpFecha.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
-
-        if (!resultado.getResultado().equals(TipoResultado.SUCCESS)) {
-            AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Consultar ventas", resultado.getMensaje());
-        }
-        setDatosTableView(esResumen, resultado.get());
-    }
-
-    private void setDatosTableView(boolean esResumen, ArrayList<Object> datos) {
-        HashMap<String, TableColumn> columnas = new HashMap<>();
-        if (esResumen) {
-
-            TableColumn<Sorteo, LocalDate> tbcFecSorteo = new TableColumn<>("Fec. Sorteo");
-            tbcFecSorteo.setPrefWidth(100);
-            tbcFecSorteo.setCellValueFactory(cd -> cd.getValue().getFechaProperty());
-            columnas.put("fecha", tbcFecSorteo);
-
-//            TableColumn<BikPersona, String> tbcNombre = new TableColumn<>("Nombre");
-//            tbcNombre.setPrefWidth(400);
-//            tbcNombre.setCellValueFactory(cd -> cd.getValue().getNombreCompletoProperty());
-        }
-
-//        tbvResultados.getColumns()
-//           .clear();
-//        tbvResultados.getItems()
-//           .clear();
-//        tbvResultados.getColumns()
-//           .add(tbcCedula);
-//        tbvResultados.getColumns()
-//           .add(tbcNombre);
-//        tbvResultados.refresh();
     }
 }

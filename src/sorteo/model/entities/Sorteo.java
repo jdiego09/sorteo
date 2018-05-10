@@ -82,7 +82,7 @@ public class Sorteo implements Serializable {
     @Transient
     private Integer codigo;
     @Transient
-    SimpleObjectProperty<LocalDate> fecha;
+    private SimpleObjectProperty<LocalDate> fecha;
     @OneToMany(mappedBy = "sorteo", fetch = FetchType.LAZY)
     private List<Factura> listaFacturas;
     @JoinColumn(name = "sor_codsucursal", referencedColumnName = "suc_codigo")
