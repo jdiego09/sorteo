@@ -5,7 +5,6 @@
  */
 package sorteo.utils;
 
-import com.jfoenix.controls.JFXHamburger;
 import java.sql.Connection;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,10 +16,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceUnitUtil;
 import sorteo.model.entities.Empresa;
 import sorteo.model.entities.Sucursal;
 import net.sf.jasperreports.engine.JRException;
@@ -31,6 +26,17 @@ import net.sf.jasperreports.view.JasperViewer;
 import sorteo.model.dao.EmpresaDao;
 import sorteo.model.entities.DetalleFactura;
 import sorteo.model.entities.Usuario;
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.export.JRPrintServiceExporter;
+import net.sf.jasperreports.engine.export.JRPrintServiceExporterParameter;
 
 /**
  *
@@ -245,12 +251,13 @@ public class Aplicacion {
             Class.forName("com.mysql.jdbc.Driver");
             // Crea la conexión para el reporte
             Connection connection = null;
-            connection = DriverManager.getConnection(this.urlBD,
-               this.usuarioBD, this.passwordBD); //hacer procedimiento para desencriptar
+            connection = DriverManager.getConnection(getUrlBD(),
+               getUsuarioBD(), getPasswordBD()); //hacer procedimiento para desencriptar
 
             if (connection != null) {
                 JasperPrint print = JasperFillManager.fillReport(pathDir
                    + reporte + ".jasper", parametros, connection);
+
                 JasperPrintManager.printReport(print, false);
                 connection.close();
             }
@@ -264,8 +271,8 @@ public class Aplicacion {
             Class.forName("com.mysql.jdbc.Driver");
             // Crea la conexión para el reporte
             Connection connection = null;
-            connection = DriverManager.getConnection(this.urlBD,
-               this.usuarioBD, this.passwordBD); //hacer procedimiento para desencriptar
+            connection = DriverManager.getConnection(getUrlBD(),
+               getUsuarioBD(), getPasswordBD()); //hacer procedimiento para desencriptar
 
             if (connection != null) {
                 JasperPrint print = JasperFillManager.fillReport(pathDir
@@ -277,4 +284,48 @@ public class Aplicacion {
             Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public void print(String reporte, HashMap<String, Object> parametros) throws JRException {
+        String printer = "Microsoft Print to PDF";
+
+        PrintService printService = null;
+        PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
+        //   aset.add(MediaSizeName.ISO_A4);
+        PrintService[] servicios = PrintServiceLookup.lookupPrintServices(null, null);
+
+        for (PrintService servicio : servicios) {
+            if (servicio.getName().trim().equals(printer.trim())) {
+                printService = servicio;
+            }
+        }
+
+        if (printService == null) {
+            System.out.println("PRINTER NOT FOUND->" + printer);
+            
+        } else {
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                // Crea la conexión para el reporte
+                Connection connection = null;
+                connection = DriverManager.getConnection(getUrlBD(),
+                   getUsuarioBD(), getPasswordBD()); //hacer procedimiento para desencriptar
+
+                if (connection != null) {
+                    JasperPrint jp = JasperFillManager.fillReport(pathDir
+                       + reporte + ".jasper", parametros, connection);
+
+                    JRExporter exporter = new JRPrintServiceExporter();
+                    exporter.setParameter(JRExporterParameter.JASPER_PRINT, jp);
+                    exporter.setParameter(JRPrintServiceExporterParameter.PRINT_REQUEST_ATTRIBUTE_SET, printService.getAttributes());
+                    exporter.setParameter(JRPrintServiceExporterParameter.PRINT_SERVICE_ATTRIBUTE_SET, printService.getAttributes());
+                    exporter.setParameter(JRPrintServiceExporterParameter.DISPLAY_PAGE_DIALOG, Boolean.FALSE);
+                    exporter.setParameter(JRPrintServiceExporterParameter.DISPLAY_PRINT_DIALOG, Boolean.FALSE);
+                    exporter.exportReport();
+                }
+            } catch (ClassNotFoundException | SQLException | JRException ex) {
+                Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
 }

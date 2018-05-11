@@ -68,6 +68,7 @@ public class Factura implements Serializable {
 
     @Column(name = "fac_hechapor")
     private String hechaPor;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.LAZY)
     private List<DetalleFactura> detalleFactura;
     @JoinColumn(name = "fac_codsorteo", referencedColumnName = "sor_codigo")

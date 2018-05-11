@@ -1,49 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
-<!-- 2018-05-09T22:23:05 -->
+<!-- 2018-05-10T22:40:21 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptTicket" pageWidth="226" pageHeight="340" whenNoDataType="AllSectionsNoDetail" columnWidth="198" leftMargin="14" rightMargin="14" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="9d12d48e-d537-4a76-9256-306fdf34bafc">
 	<property name="com.jaspersoft.studio.unit." value="cm"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Servicentro"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sorteo"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<parameter name="idFactura" class="java.lang.String">
-		<parameterDescription><![CDATA[Id despacho combustible VOX.]]></parameterDescription>
-		<defaultValueExpression><![CDATA["123"]]></defaultValueExpression>
-	</parameter>
+	<style name="Table_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+		</box>
+	</style>
+	<subDataset name="dtsDetalleFactura" uuid="20e7f462-7a11-46d2-8996-42253c38c4af">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sorteo"/>
+		<parameter name="idFactura" class="java.lang.Integer"/>
+		<queryString>
+			<![CDATA[SELECT 
+    @rownum:=@rownum + 1 AS row_number, t.*
+FROM
+    (SELECT 
+        d.dfa_numero, d.dfa_monto
+    FROM
+        sorteo.sor_detfactura d
+    WHERE
+        d.dfa_codfac =  $P{idFactura}
+    ORDER BY d.dfa_numero) t,
+    (SELECT @rownum:=0) r]]>
+		</queryString>
+		<field name="row_number" class="java.lang.Double"/>
+		<field name="dfa_numero" class="java.lang.Integer"/>
+		<field name="dfa_monto" class="java.lang.Double"/>
+	</subDataset>
+	<parameter name="idFactura" class="java.lang.Integer"/>
 	<queryString language="SQL">
-		<![CDATA[select * from sorteo.sor_factura
-            ]]>
+		<![CDATA[SELECT 
+    e.emp_logo,
+    e.emp_cedjuridica,
+    e.emp_nombre empresa,
+    x.suc_nombre sucursal,
+    x.suc_telefono,
+    f.fac_codigo,
+    f.fac_fecha,
+    f.fac_hechapor,
+    t.tso_descripcion sorteo,
+    CONCAT('Fec. Sorteo: ',
+            DATE_FORMAT(s.sor_fecha, '%d/%m/%Y')) sor_fecha,
+    f.fac_total
+FROM
+    sorteo.sor_factura f
+        JOIN
+    sorteo.sor_sorteo s ON s.sor_codigo = f.fac_codsorteo
+        JOIN
+    sorteo.sor_tiposorteo t ON t.tso_codigo = s.sor_tiposorteo
+        JOIN
+    sorteo.sor_sucursal x ON x.suc_codigo = s.sor_codsucursal
+        JOIN
+    sorteo.sor_empresa e ON e.emp_codigo = x.suc_codempresa
+ WHERE f.fac_codigo = $P{idFactura} ]]>
 	</queryString>
+	<field name="emp_logo" class="java.lang.String"/>
+	<field name="emp_cedjuridica" class="java.lang.String"/>
+	<field name="empresa" class="java.lang.String"/>
+	<field name="sucursal" class="java.lang.String"/>
+	<field name="suc_telefono" class="java.lang.String"/>
+	<field name="fac_codigo" class="java.lang.Integer"/>
+	<field name="fac_fecha" class="java.sql.Date"/>
+	<field name="fac_hechapor" class="java.lang.String"/>
+	<field name="sorteo" class="java.lang.String"/>
+	<field name="sor_fecha" class="java.lang.String"/>
+	<field name="fac_total" class="java.lang.Double"/>
 	<variable name="DateFormatter" class="java.text.DateFormat" calculation="System">
 		<initialValueExpression><![CDATA[new java.text.SimpleDateFormat("MMM dd, yy HH:mm")]]></initialValueExpression>
 	</variable>
-	<background>
-		<band splitType="Stretch"/>
-	</background>
 	<title>
-		<band height="4" splitType="Stretch"/>
+		<band height="41" splitType="Stretch">
+			<image scaleImage="RealSize" hAlign="Center" vAlign="Middle">
+				<reportElement x="1" y="0" width="196" height="40" uuid="7bb8e66b-1db0-48e2-9eee-879a5cdcab35"/>
+				<imageExpression><![CDATA[$F{emp_logo}]]></imageExpression>
+			</image>
+		</band>
 	</title>
 	<pageHeader>
-		<band height="118" splitType="Stretch">
-			<textField>
-				<reportElement x="0" y="0" width="197" height="80" uuid="3db5a9d4-47c2-4607-93c6-3f8a21029b3f"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$P{pEncFac}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="30" y="83" width="47" height="13" uuid="5c12e93c-7dc4-4e26-a4e1-4a0e570ef763">
-					<property name="local_mesure_unitheight" value="cm"/>
-					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
-				</reportElement>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[TICKET#]]></text>
-			</staticText>
+		<band height="180" splitType="Stretch">
 			<textField pattern="">
-				<reportElement x="77" y="83" width="120" height="13" uuid="ec6682c1-45e6-4c68-88b6-775ace92b406">
+				<reportElement x="1" y="83" width="196" height="13" uuid="ec6682c1-45e6-4c68-88b6-775ace92b406">
 					<property name="local_mesure_unitheight" value="cm"/>
 					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
 				</reportElement>
-				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$P{idFactura}]]></textFieldExpression>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["TICKET# " + $P{idFactura}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="1" y="101" width="43" height="13" uuid="99d50989-0fa2-4905-8259-059fb9deefae">
@@ -60,123 +127,147 @@
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
-		</band>
-	</pageHeader>
-	<columnHeader>
-		<band height="38" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="50" y="115" width="148" height="13" uuid="b3ca4ec8-0612-4d73-bba0-afa8cf50de30"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{fac_hechapor}]]></textFieldExpression>
+				<patternExpression><![CDATA[$F{fac_hechapor}]]></patternExpression>
+			</textField>
 			<staticText>
-				<reportElement x="1" y="8" width="197" height="22" uuid="aec1e5d7-758d-4d68-9b2c-e00e5bb9ba2f"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[** Comprobante Despacho Combustible **]]></text>
-			</staticText>
-		</band>
-	</columnHeader>
-	<detail>
-		<band height="67" splitType="Stretch"/>
-		<band height="66" splitType="Stretch">
-			<staticText>
-				<reportElement x="1" y="0" width="76" height="13" uuid="126d46aa-7f6b-4f1a-b410-fe9318ade07f">
+				<reportElement x="2" y="115" width="43" height="13" uuid="f0e42cae-64e0-4f9d-a49d-8dd18d12c419">
 					<property name="local_mesure_unitheight" value="cm"/>
 					<property name="local_mesure_unitwidth" value="cm"/>
-					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
 					<property name="com.jaspersoft.studio.unit.width" value="cm"/>
+					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<text><![CDATA[DISPENSADOR:]]></text>
+				<text><![CDATA[CAJERO:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="90" y="0" width="108" height="13" uuid="79a0ade1-58a9-421b-b5c5-797d4c3ddc78">
-					<property name="local_mesure_unitheight" value="cm"/>
-					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
-				</reportElement>
-				<textElement textAlignment="Left" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$P{pDispensador}]]></textFieldExpression>
+				<reportElement x="1" y="22" width="197" height="20" uuid="458ef7c6-d895-4678-81eb-565075721bf6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{emp_cedjuridica}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="1" y="13" width="76" height="13" uuid="4e7cd33f-1392-417b-a4ad-9e2942810ca1">
-					<property name="local_mesure_unitheight" value="cm"/>
-					<property name="local_mesure_unitwidth" value="cm"/>
-					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
-				</reportElement>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<text><![CDATA[PRODUCTO:]]></text>
-			</staticText>
-			<textField pattern="">
-				<reportElement x="90" y="13" width="107" height="13" uuid="7aca582a-0083-44e3-be3a-1c056d2e6217">
-					<property name="local_mesure_unitheight" value="cm"/>
-					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
-				</reportElement>
-				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$P{pProducto}]]></textFieldExpression>
+			<textField>
+				<reportElement x="1" y="2" width="197" height="20" uuid="17b46182-1f4b-4f6e-aded-e85c355868bd"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{empresa} + " " + $F{sucursal}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="1" y="26" width="76" height="13" uuid="32aaa18c-b2a5-4950-8666-1b4900307ff5">
-					<property name="local_mesure_unitheight" value="cm"/>
-					<property name="local_mesure_unitwidth" value="cm"/>
-					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
-					<property name="local_mesure_unitx" value="cm"/>
-					<property name="com.jaspersoft.studio.unit.x" value="cm"/>
-				</reportElement>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<text><![CDATA[PRECIO/LITRO:]]></text>
-			</staticText>
-			<textField pattern="#,###,###,##0.00">
-				<reportElement x="90" y="26" width="107" height="13" uuid="f9883b78-4abf-47f4-a9bd-50cac551d023">
-					<property name="local_mesure_unitheight" value="cm"/>
-					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
-					<property name="local_mesure_unitx" value="cm"/>
-					<property name="com.jaspersoft.studio.unit.x" value="cm"/>
-				</reportElement>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$P{pPrecio}]]></textFieldExpression>
+			<textField>
+				<reportElement x="1" y="42" width="197" height="20" uuid="28fdcfa0-bc8b-49e8-9ca0-e69263013bf8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{suc_telefono}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="1" y="39" width="76" height="13" uuid="710edb40-ec5e-45af-bc6d-70238d8297f7">
-					<property name="local_mesure_unitheight" value="cm"/>
-					<property name="local_mesure_unitwidth" value="cm"/>
-					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
-					<property name="local_mesure_unitx" value="cm"/>
-					<property name="com.jaspersoft.studio.unit.x" value="cm"/>
-				</reportElement>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<text><![CDATA[VOLUMEN:]]></text>
-			</staticText>
-			<textField pattern="#,###,###,##0.00">
-				<reportElement x="90" y="39" width="107" height="13" uuid="bd490fa0-24b6-449c-bb98-1002b4df1722">
-					<property name="local_mesure_unitheight" value="cm"/>
-					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
-					<property name="local_mesure_unitx" value="cm"/>
-					<property name="com.jaspersoft.studio.unit.x" value="cm"/>
-				</reportElement>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$P{pVolumen}]]></textFieldExpression>
+			<textField>
+				<reportElement x="0" y="140" width="197" height="20" uuid="fe7f7591-6436-4e6e-92e0-e4517f35f350"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sorteo}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="0" y="160" width="197" height="20" uuid="59bb2d94-7353-4b98-8fcc-c4b19cb23bfc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{sor_fecha}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="47" splitType="Stretch">
+			<componentElement>
+				<reportElement x="1" y="7" width="195" height="40" uuid="67570f3f-d774-4491-80b4-f52b1375dabd">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="dtsDetalleFactura" uuid="b2e9347a-326f-46db-a28a-da1c9fbe42cc">
+						<datasetParameter name="idFactura">
+							<datasetParameterExpression><![CDATA[$F{fac_codigo}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="60" uuid="01114365-1aab-4d25-8fb3-1e525e492f41">
+						<jr:columnHeader style="Table_CH" height="20">
+							<staticText>
+								<reportElement x="0" y="0" width="60" height="20" uuid="e6456c2d-afd8-49a9-aa59-48f69c106ea5"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="SansSerif" size="12" isBold="false"/>
+								</textElement>
+								<text><![CDATA[Línea]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="20">
+							<textField pattern="###">
+								<reportElement x="0" y="0" width="60" height="20" uuid="4930bdaa-35a9-49ed-a817-d85ed105e79b"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="SansSerif"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{row_number}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="60" uuid="93804136-5bdc-4a0a-a099-47dd9796d991">
+						<jr:columnHeader style="Table_CH" height="20">
+							<staticText>
+								<reportElement x="0" y="0" width="60" height="20" uuid="e359bded-2574-4955-82ac-c3ddabe10368"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="SansSerif" size="12" isBold="false"/>
+								</textElement>
+								<text><![CDATA[Número]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="60" height="20" uuid="7d0113c4-89d0-4d64-bcb2-f059adfd92a6"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{dfa_numero}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="75" uuid="f9d61d04-9626-452f-8f51-c95ef35c4a4f">
+						<jr:columnHeader style="Table_CH" height="20">
+							<staticText>
+								<reportElement x="0" y="0" width="75" height="20" uuid="24e25e41-ca6a-4c68-b2dd-05f216093daa"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="SansSerif" size="12" isBold="false"/>
+								</textElement>
+								<text><![CDATA[Monto]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="20">
+							<textField pattern="###,##0.00">
+								<reportElement x="0" y="0" width="75" height="20" uuid="e8cc192b-595b-40b2-b57a-0af377f29e4a"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{dfa_monto}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
 		</band>
 	</detail>
-	<columnFooter>
-		<band height="17" splitType="Stretch">
-			<textField pattern="#,###,###,##0.00">
-				<reportElement x="100" y="0" width="102" height="13" uuid="c8435731-8842-4dcc-bd8b-7628d706a2f0">
-					<property name="local_mesure_unitheight" value="cm"/>
-					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
-				</reportElement>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$P{pVenta}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="-10" y="0" width="110" height="13" uuid="81f48351-9114-4306-9254-62e9d5083615">
-					<property name="local_mesure_unitheight" value="cm"/>
-					<property name="local_mesure_unitwidth" value="cm"/>
-					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
-					<property name="local_mesure_unitx" value="cm"/>
-					<property name="com.jaspersoft.studio.unit.x" value="cm"/>
-				</reportElement>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<text><![CDATA[MONTO POR PAGAR:]]></text>
-			</staticText>
-		</band>
-	</columnFooter>
 	<pageFooter>
-		<band splitType="Stretch"/>
+		<band height="72">
+			<staticText>
+				<reportElement x="8" y="3" width="100" height="21" uuid="14dc4252-4a83-4174-8b87-4766dfd40469"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<textField pattern="###,###,##0.00">
+				<reportElement x="108" y="3" width="89" height="21" uuid="9d267a06-56b7-4e1a-98a0-9077f0f99aa7"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fac_total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="24" width="194" height="48" uuid="75c45f41-54c0-43b9-9f58-2bd964d30375"/>
+				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+			</textField>
+		</band>
 	</pageFooter>
 </jasperReport>

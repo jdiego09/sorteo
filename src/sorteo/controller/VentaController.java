@@ -10,7 +10,10 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -36,6 +39,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import jfxtras.internal.scene.control.skin.CalendarPickerControlSkin;
 import jfxtras.internal.scene.control.skin.CalendarPickerControlSkin.ShowWeeknumbers;
 import jfxtras.scene.control.CalendarPicker;
+import net.sf.jasperreports.engine.JRException;
 import sorteo.model.dao.FacturaDao;
 import sorteo.model.dao.MontosDao;
 import sorteo.model.dao.SorteoDao;
@@ -152,11 +156,11 @@ public class VentaController extends Controller implements Initializable {
 
     @XmlTransient
     public ObservableList<TipoSorteo> sorteos = FXCollections
-    .observableArrayList();
+       .observableArrayList();
 
     @XmlTransient
     public ObservableList<DetalleFactura> detalleFactura = FXCollections
-    .observableArrayList();
+       .observableArrayList();
 
     @Override
     public void initialize() {
@@ -177,7 +181,7 @@ public class VentaController extends Controller implements Initializable {
         totalFacturaProperty = new SimpleDoubleProperty(Double.valueOf("0.0"));
 
         lblSubTotGen.textProperty().bindBidirectional(totalFacturaProperty, Formater.getInstance().decimalFormat);
-        
+
         sorteo = new Sorteo();
         factura = new Factura();
         bindFactura();
@@ -273,7 +277,7 @@ public class VentaController extends Controller implements Initializable {
 
     private void startCalendar() {
         CalendarPickerControlSkin calendarPickerControlSkin = new CalendarPickerControlSkin(
-        calFechaSorteo);
+           calFechaSorteo);
         calendarPickerControlSkin.setShowWeeknumbers(ShowWeeknumbers.NO);
         calFechaSorteo.setSkin(calendarPickerControlSkin);
 
@@ -362,9 +366,9 @@ public class VentaController extends Controller implements Initializable {
                 return false;
             }
             if (Formater.getInstance().formatFechaCorta.parse(fechaElegida).equals(Formater.getInstance().formatFechaCorta.parse(HOY))
-            && LocalTime.now(ZoneId.systemDefault()).isAfter(LocalDateTime.ofInstant(Instant.ofEpochMilli(sorteo.getHoraCorte().getTime()), ZoneId.systemDefault()).toLocalTime())) {
+               && LocalTime.now(ZoneId.systemDefault()).isAfter(LocalDateTime.ofInstant(Instant.ofEpochMilli(sorteo.getHoraCorte().getTime()), ZoneId.systemDefault()).toLocalTime())) {
                 AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Hora del sorteo", "No se puede vender números para el sorteo: " + sorteo.getDescripcion() + ", ya pasó la hora de cierre para la venta de números: "
-                + Formater.getInstance().formatoHora.format(sorteo.getHoraCorte()) + ").");
+                   + Formater.getInstance().formatoHora.format(sorteo.getHoraCorte()) + ").");
                 return false;
             }
 
@@ -536,6 +540,13 @@ public class VentaController extends Controller implements Initializable {
         Resultado<Factura> facturaSave = FacturaDao.getInstance().save();
         if (facturaSave.getResultado().equals(TipoResultado.SUCCESS)) {
             this.factura = facturaSave.get();
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("idFactura", this.factura.getCodigo());
+            try {
+                Aplicacion.getInstance().print("rptTicket", params);
+            } catch (JRException ex) {
+                Logger.getLogger(VentaController.class.getName()).log(Level.SEVERE, null, ex);
+            }
             reiniciar();
             AppWindowController.getInstance().mensaje(Alert.AlertType.INFORMATION, "Venta aplicada", "Venta aplicada exitosamente.");
         } else {
@@ -549,8 +560,8 @@ public class VentaController extends Controller implements Initializable {
             if (montoApostado.get().compareTo(this.factura.getSorteo().getTipoSorteo().getMontoMaximo()) > 0) {
                 //el monto apostado ya superó el máximo
                 AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto apuesta", "El monto máximo de la apuesta para el número: "
-                + String.valueOf(detalleFactura.get(detalleSeleccionado).getNumero())
-                + ",  ha sido alcanzado para el sorteo. No se puede aceptar la nueva apuesta.");
+                   + String.valueOf(detalleFactura.get(detalleSeleccionado).getNumero())
+                   + ",  ha sido alcanzado para el sorteo. No se puede aceptar la nueva apuesta.");
                 return false;
             }
         }
@@ -558,9 +569,9 @@ public class VentaController extends Controller implements Initializable {
         if (diferencia > 0) {
             //el monto apostado + la nueva apuesta exceden el máximo permitido
             AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto apuesta", "El monto de la apuesta para el número: "
-            + String.valueOf(detalleFactura.get(detalleSeleccionado).getNumero())
-            + ",  excede por: " + Formater.getInstance().decimalFormat.format(diferencia)
-            + " el monto máximo permitido apostar por número. No se puede aceptar la nueva apuesta.");
+               + String.valueOf(detalleFactura.get(detalleSeleccionado).getNumero())
+               + ",  excede por: " + Formater.getInstance().decimalFormat.format(diferencia)
+               + " el monto máximo permitido apostar por número. No se puede aceptar la nueva apuesta.");
             return false;
         }
         return true;
