@@ -41,7 +41,7 @@
             <Button fx:id="btnSalir" layoutX="551.0" layoutY="8.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#salir" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonsalir" text="Button" />
          </children>
       </Pane>
-      <TabPane layoutX="87.0" layoutY="90.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+      <TabPane fx:id="tabEmpresas" layoutX="87.0" layoutY="90.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
         <tabs>
           <Tab text="Empresas">
             <content>

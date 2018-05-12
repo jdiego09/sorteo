@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -110,6 +111,9 @@ public class EmpresaController extends Controller implements Initializable {
     private JFXButton jbtnEliminar;
 
     @FXML
+    private TabPane tabEmpresas;
+
+    @FXML
     void buscarArchivoLogo(ActionEvent event) {
 
     }
@@ -122,7 +126,6 @@ public class EmpresaController extends Controller implements Initializable {
     @FXML
     void limpiar(ActionEvent event) {
         clearForm();
-        init();
     }
 
     @FXML
@@ -133,7 +136,7 @@ public class EmpresaController extends Controller implements Initializable {
 
     @FXML
     void agregar(ActionEvent event) {
-
+        agregarSucursalALista(this.sucursal);
     }
 
     @FXML
@@ -221,22 +224,25 @@ public class EmpresaController extends Controller implements Initializable {
                 tbvSucursales.getItems().clear();
                 this.listaSucursales = FXCollections.observableArrayList(this.empresa.getSucursales());
                 bindListaSucursales();
+                addListenerTableSucursales(tbvSucursales);
+                bindEmpresa();
                 jtxfCedJuridica.setDisable(true);
             }
-            bindEmpresa();
             jtxfDescripcion.requestFocus();
         });
     }
 
     private void addListenerTableSucursales(TableView table) {
         table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            unbindSucursal();
+            if (this.sucursal != null) {
+                unbindSucursal();
+            }
             if (newSelection != null) {
                 this.sucursal = (Sucursal) newSelection;
                 bindListaSucursales();
                 addListenerTableSucursales(tbvSucursales);
+                bindSucursal();
             }
-            bindSucursal();
             jtxfSucDescripcion.requestFocus();
         });
     }
@@ -309,16 +315,28 @@ public class EmpresaController extends Controller implements Initializable {
     }
 
     private void clearForm() {
-        unbindEmpresa();
-        if (this.sucursal != null) {
+        if (tabEmpresas.getSelectionModel().getSelectedItem().getText().toLowerCase().equals("empresa")) {
+            unbindEmpresa();
+            if (this.sucursal != null) {
+                unbindSucursal();
+            }
+            this.listaEmpresas.clear();
+            this.listaSucursales.clear();
+            nuevaEmpresa();
+            bindEmpresa();
+
+            cargarEmpresas();
+            bindListaEmpresas();
+
+            this.jtxfCedJuridica.setDisable(false);
+            this.jtxfCedJuridica.requestFocus();
+        } else {
             unbindSucursal();
+            nuevaSucursal();
+            bindSucursal();
+            jcmbSucEstado.requestFocus();
+            jtxfSucDescripcion.requestFocus();
         }
-        this.listaEmpresas.clear();
-        this.listaSucursales.clear();
-        nuevaEmpresa();
-        bindEmpresa();
-        this.jtxfCedJuridica.setDisable(false);
-        this.jtxfCedJuridica.requestFocus();
     }
 
 }
