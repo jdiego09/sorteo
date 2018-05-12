@@ -8,9 +8,6 @@ package sorteo.controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTimePicker;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,8 +17,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.converter.NumberStringConverter;
@@ -54,7 +53,7 @@ public class TipoSorteoController extends Controller implements Initializable {
     private AnchorPane acpRoot;
 
     @FXML
-    private JFXButton jbtnSalir;
+    private Button jbtnSalir;
 
     @FXML
     private Button btnLimpiar;
@@ -63,25 +62,25 @@ public class TipoSorteoController extends Controller implements Initializable {
     private Button btnGuardar;
 
     @FXML
-    private JFXTextField jtxfDescripcion;
+    private TextField jtxfDescripcion;
 
     @FXML
-    private JFXTextField jtxfNumMinimo;
+    private TextField jtxfNumMinimo;
 
     @FXML
-    private JFXTextField jtxfNumMaximo;
+    private TextField jtxfNumMaximo;
 
     @FXML
-    private JFXTextField jtxfMontoMax;
+    private TextField jtxfMontoMax;
 
     @FXML
-    private JFXTextField jtxfCantMax;
+    private TextField jtxfCantMax;
 
     @FXML
     private JFXTimePicker jtpHoraCorte;
 
     @FXML
-    private JFXComboBox<GenValorCombo> jcmbEstado;
+    private ComboBox<GenValorCombo> jcmbEstado;
 
     @FXML
     private TableView<TipoSorteo> tbvSorteos;
@@ -168,8 +167,8 @@ public class TipoSorteoController extends Controller implements Initializable {
             unbindSorteo();
             if (newSelection != null) {
                 this.tipoSorteo = (TipoSorteo) newSelection;
-                 bindSorteo();
-            }           
+                bindSorteo();
+            }
             jcmbEstado.requestFocus();
             this.jtxfDescripcion.requestFocus();
         });

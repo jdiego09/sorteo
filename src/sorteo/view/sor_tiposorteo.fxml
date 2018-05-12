@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTimePicker?>
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.effect.Glow?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -26,11 +25,6 @@
    <children>
       <Pane layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="503.0" styleClass="actionbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <JFXButton fx:id="jbtnSalir" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="558.0" layoutY="8.0" onAction="#regresar" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonsalir" textOverrun="WORD_ELLIPSIS">
-               <tooltip>
-                  <Tooltip text="Regresar" />
-               </tooltip>
-            </JFXButton>
             <Button fx:id="btnLimpiar" layoutX="59.0" layoutY="8.0" mnemonicParsing="false" onAction="#limpiar" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonlimpiar" text="Button">
                <tooltip>
                   <Tooltip text="Limpiar" />
@@ -42,39 +36,49 @@
                   <Font size="24.0" />
                </font>
             </Label>
+            <Button fx:id="jbtnSalir" layoutX="551.0" layoutY="8.0" mnemonicParsing="false" onAction="#regresar" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonsalir" text="Button">
+               <tooltip>
+                  <Tooltip text="Salir" />
+               </tooltip>
+            </Button>
          </children>
       </Pane>
-      <JFXTextField fx:id="jtxfDescripcion" labelFloat="true" layoutX="24.0" layoutY="82.0" prefHeight="37.0" prefWidth="419.0" promptText="Descripción sorteo" styleClass="edittext">
+      <TextField fx:id="jtxfDescripcion" layoutX="25.0" layoutY="88.0" prefHeight="37.0" prefWidth="433.0" styleClass="edittext">
          <tooltip>
             <Tooltip text="Descripción del sorteo" />
          </tooltip>
-      </JFXTextField>
-      <JFXTextField fx:id="jtxfNumMinimo" labelFloat="true" layoutX="24.0" layoutY="148.0" prefHeight="37.0" prefWidth="135.0" promptText="Número mínimo" styleClass="edittext">
+      </TextField>
+      <TextField fx:id="jtxfNumMinimo" layoutX="23.0" layoutY="158.0" prefHeight="37.0" prefWidth="135.0" styleClass="edittext">
          <tooltip>
-            <Tooltip text="Número más bajo del sorteo" />
+            <Tooltip text="Número más bajo elegible" />
          </tooltip>
-      </JFXTextField>
-      <JFXTextField fx:id="jtxfNumMaximo" labelFloat="true" layoutX="308.0" layoutY="148.0" prefHeight="37.0" prefWidth="135.0" promptText="Número máximo" styleClass="edittext">
+      </TextField>
+      <TextField fx:id="jtxfNumMaximo" layoutX="323.0" layoutY="158.0" prefHeight="37.0" prefWidth="135.0" styleClass="edittext">
          <tooltip>
-            <Tooltip text="Número más alto del sorteo" />
+            <Tooltip text="Número más alto elegible" />
          </tooltip>
-      </JFXTextField>
-      <JFXTextField fx:id="jtxfMontoMax" labelFloat="true" layoutX="24.0" layoutY="214.0" prefHeight="37.0" prefWidth="135.0" promptText="Monto máximo" styleClass="edittext">
+      </TextField>
+      <TextField fx:id="jtxfMontoMax" layoutX="23.0" layoutY="224.0" prefHeight="37.0" prefWidth="135.0" styleClass="edittext">
          <tooltip>
-            <Tooltip text="Monto máximo a apostar por número en cada sorteo" />
+            <Tooltip text="Monto máximo a apostar por número" />
          </tooltip>
-      </JFXTextField>
-      <JFXTextField fx:id="jtxfCantMax" labelFloat="true" layoutX="308.0" layoutY="214.0" prefHeight="37.0" prefWidth="135.0" promptText="Cantidad " styleClass="edittext">
+      </TextField>
+      <TextField fx:id="jtxfCantMax" layoutX="323.0" layoutY="224.0" prefHeight="37.0" prefWidth="135.0" styleClass="edittext">
          <tooltip>
-            <Tooltip text="Cantidad máxima de números por venta para cada sorteo" />
+            <Tooltip text="Cantidad máxima de números a elegir por venta" />
          </tooltip>
-      </JFXTextField>
-      <JFXTimePicker fx:id="jtpHoraCorte" layoutX="24.0" layoutY="294.0" prefHeight="20.0" prefWidth="135.0" styleClass="edittext">
+      </TextField>
+      <JFXTimePicker fx:id="jtpHoraCorte" defaultColor="#8d6e63" layoutX="24.0" layoutY="294.0" prefHeight="20.0" prefWidth="135.0" styleClass="edittext">
          <tooltip>
             <Tooltip text="Hora de corte para la venta de números del sorteo" />
          </tooltip>
       </JFXTimePicker>
-      <Label layoutX="24.0" layoutY="269.0" text="Hora corte" textFill="#8d6e63">
+      <ComboBox fx:id="jcmbEstado" layoutX="298.0" layoutY="294.0" prefHeight="37.0" prefWidth="160.0" styleClass="edittext">
+         <tooltip>
+            <Tooltip text="Estado del sorteo" />
+         </tooltip>
+      </ComboBox>
+      <Label layoutX="24.0" layoutY="269.0" text="Hora corte">
          <font>
             <Font size="14.0" />
          </font>
@@ -85,11 +89,39 @@
           <TableColumn fx:id="tbcDescripcion" prefWidth="388.0" text="Sorteo" />
           <TableColumn fx:id="tbcEstado" minWidth="0.0" prefWidth="153.0" text="Estado" />
         </columns>
-      </TableView>
-      <JFXComboBox fx:id="jcmbEstado" labelFloat="true" layoutX="308.0" layoutY="294.0" prefHeight="37.0" prefWidth="135.0" promptText="Estado" styleClass="edittext">
          <tooltip>
-            <Tooltip text="Estado del sorteo" />
+            <Tooltip text="Detalle de sorteos registrados" />
          </tooltip>
-      </JFXComboBox>
+      </TableView>
+      <Label layoutX="25.0" layoutY="65.0" text="Descripción sorteo">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="24.0" layoutY="138.0" text="Número mínimo">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="323.0" layoutY="138.0" text="Número máximo">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="24.0" layoutY="204.0" text="Monto máximo">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="323.0" layoutY="204.0" text="Cantidad">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="300.0" layoutY="269.0" text="Estado">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

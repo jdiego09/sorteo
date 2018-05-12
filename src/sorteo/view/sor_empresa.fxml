@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXTextField?>
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.effect.Glow?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -47,12 +47,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <JFXTextField fx:id="jtxfCedJuridica" labelFloat="true" layoutX="32.0" layoutY="29.0" prefHeight="37.0" prefWidth="177.0" promptText="Cédula jurídica" styleClass="edittext" />
-                        <JFXTextField fx:id="jtxfDescripcion" labelFloat="true" layoutX="223.0" layoutY="29.0" prefHeight="37.0" prefWidth="361.0" promptText="Descripción" styleClass="edittext" />
-                        <JFXTextField fx:id="jtxfTelefono" labelFloat="true" layoutX="32.0" layoutY="100.0" prefHeight="37.0" prefWidth="177.0" promptText="Teléfono" styleClass="edittext" />
-                        <JFXTextField fx:id="jtxfEmail" labelFloat="true" layoutX="223.0" layoutY="100.0" prefHeight="37.0" prefWidth="361.0" promptText="Correo electrónico" styleClass="edittext" />
-                        <JFXTextField fx:id="jtxfLogo" labelFloat="true" layoutX="32.0" layoutY="167.0" prefHeight="37.0" prefWidth="504.0" promptText="Ubicación logotipo empresa" styleClass="edittext" />
-                        <JFXButton fx:id="jbtnBuscarLogo" layoutX="547.0" layoutY="171.0" onAction="#buscarArchivoLogo" prefHeight="30.0" prefWidth="37.0" styleClass="buttonbuscar" />
+                        <JFXButton fx:id="jbtnBuscarLogo" layoutX="547.0" layoutY="181.0" onAction="#buscarArchivoLogo" prefHeight="30.0" prefWidth="37.0" styleClass="buttonbuscar" />
                         <TableView fx:id="tbvEmpresas" layoutX="32.0" layoutY="255.0" prefHeight="246.0" prefWidth="551.0">
                           <columns>
                             <TableColumn fx:id="tbcCedula" prefWidth="155.0" text="Céd. Jurídica" />
@@ -65,6 +60,36 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
+                        <TextField fx:id="jtxfCedJuridica" layoutX="33.0" layoutY="41.0" prefHeight="25.0" prefWidth="176.0" styleClass="edittext" />
+                        <TextField fx:id="jtxfDescripcion" layoutX="223.0" layoutY="41.0" prefHeight="37.0" prefWidth="361.0" styleClass="edittext" />
+                        <TextField fx:id="jtxfTelefono" layoutX="33.0" layoutY="110.0" prefHeight="25.0" prefWidth="176.0" styleClass="edittext" />
+                        <TextField fx:id="jtxfEmail" layoutX="223.0" layoutY="110.0" prefHeight="37.0" prefWidth="361.0" styleClass="edittext" />
+                        <TextField fx:id="jtxfLogo" layoutX="32.0" layoutY="178.0" prefHeight="37.0" prefWidth="503.0" styleClass="edittext" />
+                        <Label layoutX="32.0" layoutY="21.0" text="Céd. Jurídica">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="223.0" layoutY="21.0" text="Descripción">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="32.0" layoutY="90.0" text="Teléfono">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="223.0" layoutY="90.0" text="Correo electrónico">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="33.0" layoutY="158.0" text="Ubicación logo empresa">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
                      </children>
                   </AnchorPane>
             </content>
@@ -73,10 +98,6 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <JFXTextField fx:id="jtxfSucDescripcion" labelFloat="true" layoutX="32.0" layoutY="32.0" prefHeight="37.0" prefWidth="361.0" promptText="Descripción" styleClass="edittext" />
-                        <JFXComboBox fx:id="jcmbSucEstado" labelFloat="true" layoutX="400.0" layoutY="32.0" prefHeight="37.0" prefWidth="176.0" promptText="Estado" styleClass="edittext" />
-                        <JFXTextField fx:id="jtxfSucTelefono" labelFloat="true" layoutX="32.0" layoutY="111.0" prefHeight="37.0" prefWidth="177.0" promptText="Teléfono" styleClass="edittext" />
-                        <JFXTextField fx:id="jtxfSucEmail" labelFloat="true" layoutX="214.0" layoutY="111.0" prefHeight="37.0" prefWidth="361.0" promptText="Correo electrónico" styleClass="edittext" />
                         <TableView fx:id="tbvSucursales" layoutX="23.0" layoutY="224.0" prefHeight="246.0" prefWidth="551.0">
                            <columns>
                               <TableColumn fx:id="tbcSucDescripcion" prefWidth="389.0" text="Descripción" />
@@ -99,6 +120,30 @@
                               <Tooltip text="Eliminar sucursal" />
                            </tooltip>
                         </JFXButton>
+                        <TextField fx:id="jtxfSucDescripcion" layoutX="31.0" layoutY="34.0" prefHeight="37.0" prefWidth="361.0" styleClass="edittext" />
+                        <Label layoutX="32.0" layoutY="14.0" text="Descripción">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="jcmbSucEstado" layoutX="397.0" layoutY="34.0" prefHeight="37.0" prefWidth="182.0" styleClass="edittext" />
+                        <Label layoutX="397.0" layoutY="14.0" text="Estado">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="jtxfSucTelefono" layoutX="29.0" layoutY="103.0" prefHeight="37.0" prefWidth="180.0" styleClass="edittext" />
+                        <Label layoutX="30.0" layoutY="83.0" text="Teléfono">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="jtxfSucEmail" layoutX="217.0" layoutY="103.0" prefHeight="37.0" prefWidth="361.0" styleClass="edittext" />
+                        <Label layoutX="218.0" layoutY="83.0" text="Correo electrónico">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
                      </children></AnchorPane>
             </content>
           </Tab>

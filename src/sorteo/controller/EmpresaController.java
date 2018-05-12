@@ -1,8 +1,6 @@
 package sorteo.controller;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextField;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
@@ -14,9 +12,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -60,19 +60,19 @@ public class EmpresaController extends Controller implements Initializable {
     private Button btnSalir;
 
     @FXML
-    private JFXTextField jtxfCedJuridica;
+    private TextField jtxfCedJuridica;
 
     @FXML
-    private JFXTextField jtxfDescripcion;
+    private TextField jtxfDescripcion;
 
     @FXML
-    private JFXTextField jtxfTelefono;
+    private TextField jtxfTelefono;
 
     @FXML
-    private JFXTextField jtxfEmail;
+    private TextField jtxfEmail;
 
     @FXML
-    private JFXTextField jtxfLogo;
+    private TextField jtxfLogo;
 
     @FXML
     private JFXButton jbtnBuscarLogo;
@@ -87,15 +87,15 @@ public class EmpresaController extends Controller implements Initializable {
     private TableColumn<Empresa, String> tbcDescripcion;
 
     @FXML
-    private JFXTextField jtxfSucDescripcion;
+    private TextField jtxfSucDescripcion;
 
     @FXML
-    private JFXComboBox<GenValorCombo> jcmbSucEstado;
+    private ComboBox<GenValorCombo> jcmbSucEstado;
     @FXML
-    private JFXTextField jtxfSucTelefono;
+    private TextField jtxfSucTelefono;
 
     @FXML
-    private JFXTextField jtxfSucEmail;
+    private TextField jtxfSucEmail;
 
     @FXML
     private TableView<Sucursal> tbvSucursales;

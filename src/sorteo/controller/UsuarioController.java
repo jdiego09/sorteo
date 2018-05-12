@@ -6,8 +6,6 @@
 package sorteo.controller;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -18,8 +16,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -54,10 +54,10 @@ public class UsuarioController extends Controller implements Initializable {
     private Button btnLimpiar, btnGuardaUsuario;
 
     @FXML
-    private JFXTextField jtxfCodigo, jtxfDescripcion;
+    private TextField jtxfCodigo, jtxfDescripcion;
 
     @FXML
-    private JFXComboBox<GenValorCombo> jcmbEstado;
+    private ComboBox<GenValorCombo> jcmbEstado;
 
     @FXML
     private TableView<Usuario> tbvUsuarios;
