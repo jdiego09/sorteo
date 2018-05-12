@@ -95,6 +95,13 @@ public class Sucursal implements Serializable {
     public String getNombre() {
         return nombre.get();
     }
+    
+    public SimpleStringProperty getNombreProperty() {
+        if (this.nombre == null) {
+            this.nombre = new SimpleStringProperty();
+        }
+        return this.nombre;
+    }
 
     public void setNombre(String nombre) {
         this.nombre.set(nombre);
@@ -104,6 +111,13 @@ public class Sucursal implements Serializable {
     @Access(AccessType.PROPERTY)
     public String getTelefono() {
         return telefono.get();
+    }
+    
+    public SimpleStringProperty getTelefonoProperty() {
+        if (this.telefono == null) {
+            this.telefono = new SimpleStringProperty();
+        }
+        return this.telefono;
     }
 
     public void setTelefono(String telefono) {
@@ -116,6 +130,13 @@ public class Sucursal implements Serializable {
         return email.get();
     }
 
+    public SimpleStringProperty getEmailProperty() {
+        if (this.email == null) {
+            this.email = new SimpleStringProperty();
+        }
+        return this.email;
+    }
+    
     public void setEmail(String email) {
         this.email.set(email);
     }

@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.effect.Glow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="acpRoot" prefHeight="600.0" prefWidth="600.0" styleClass="form" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.102" fx:controller="sorteo.controller.EmpresaController">
+<AnchorPane id="AnchorPane" fx:id="acpRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" styleClass="form" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sorteo.controller.EmpresaController">
     <stylesheets>
         <URL value="@sorteo.css" />
     </stylesheets>
@@ -23,22 +27,18 @@
    <children>
       <Pane layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="503.0" styleClass="actionbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <JFXButton fx:id="jbtnSalir" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="551.0" layoutY="8.0" onAction="#regresar" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonsalir" textOverrun="WORD_ELLIPSIS">
-               <tooltip>
-                  <Tooltip text="Regresar" />
-               </tooltip>
-            </JFXButton>
             <Button fx:id="btnLimpiar" layoutX="59.0" layoutY="8.0" mnemonicParsing="false" onAction="#limpiar" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonlimpiar" text="Button">
                <tooltip>
                   <Tooltip text="Limpiar" />
                </tooltip>
             </Button>
-            <Button fx:id="btnGuardaUsuario" layoutX="14.0" layoutY="8.0" mnemonicParsing="false" onAction="#guardarUsuario" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonguardar" text="Button" />
+            <Button fx:id="btnGuardaUsuario" layoutX="14.0" layoutY="8.0" mnemonicParsing="false" onAction="#guardar" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonguardar" text="Button" />
             <Label layoutX="104.0" layoutY="8.0" prefHeight="35.0" prefWidth="361.0" text="Gestión de empresas" textFill="#f8f8f8">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
+            <Button fx:id="btnSalir" layoutX="551.0" layoutY="8.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#salir" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonsalir" text="Button" />
          </children>
       </Pane>
       <TabPane layoutX="87.0" layoutY="90.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
@@ -47,19 +47,59 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <JFXTextField fx:id="jtxfCedJuridica" labelFloat="true" layoutX="32.0" layoutY="29.0" onKeyPressed="#codigoUsuarioOnEnterKey" prefHeight="37.0" prefWidth="177.0" promptText="Cédula jurídica" styleClass="edittext" />
-                        <JFXTextField fx:id="jtxfDescripcion" labelFloat="true" layoutX="223.0" layoutY="29.0" onKeyPressed="#codigoUsuarioOnEnterKey" prefHeight="37.0" prefWidth="361.0" promptText="Descripción" styleClass="edittext" />
-                        <JFXTextField fx:id="jtxfTelefono" labelFloat="true" layoutX="32.0" layoutY="100.0" onKeyPressed="#codigoUsuarioOnEnterKey" prefHeight="37.0" prefWidth="177.0" promptText="Teléfono" styleClass="edittext" />
-                        <JFXTextField fx:id="jtxfEmail" labelFloat="true" layoutX="223.0" layoutY="100.0" onKeyPressed="#codigoUsuarioOnEnterKey" prefHeight="37.0" prefWidth="361.0" promptText="Correo electrónico" styleClass="edittext" />
-                        <JFXTextField fx:id="jtxfLogo" labelFloat="true" layoutX="32.0" layoutY="167.0" onKeyPressed="#codigoUsuarioOnEnterKey" prefHeight="37.0" prefWidth="504.0" promptText="Ubicación logotipo empresa" styleClass="edittext" />
+                        <JFXTextField fx:id="jtxfCedJuridica" labelFloat="true" layoutX="32.0" layoutY="29.0" prefHeight="37.0" prefWidth="177.0" promptText="Cédula jurídica" styleClass="edittext" />
+                        <JFXTextField fx:id="jtxfDescripcion" labelFloat="true" layoutX="223.0" layoutY="29.0" prefHeight="37.0" prefWidth="361.0" promptText="Descripción" styleClass="edittext" />
+                        <JFXTextField fx:id="jtxfTelefono" labelFloat="true" layoutX="32.0" layoutY="100.0" prefHeight="37.0" prefWidth="177.0" promptText="Teléfono" styleClass="edittext" />
+                        <JFXTextField fx:id="jtxfEmail" labelFloat="true" layoutX="223.0" layoutY="100.0" prefHeight="37.0" prefWidth="361.0" promptText="Correo electrónico" styleClass="edittext" />
+                        <JFXTextField fx:id="jtxfLogo" labelFloat="true" layoutX="32.0" layoutY="167.0" prefHeight="37.0" prefWidth="504.0" promptText="Ubicación logotipo empresa" styleClass="edittext" />
                         <JFXButton fx:id="jbtnBuscarLogo" layoutX="547.0" layoutY="171.0" onAction="#buscarArchivoLogo" prefHeight="30.0" prefWidth="37.0" styleClass="buttonbuscar" />
+                        <TableView fx:id="tbvEmpresas" layoutX="32.0" layoutY="255.0" prefHeight="246.0" prefWidth="551.0">
+                          <columns>
+                            <TableColumn fx:id="tbcCedula" prefWidth="155.0" text="Céd. Jurídica" />
+                            <TableColumn fx:id="tbcDescripcion" prefWidth="309.0" text="Descripción" />
+                          </columns>
+                        </TableView>
+                        <Line endX="450.0" layoutX="133.0" layoutY="247.0" startX="-100.0" />
+                        <Label layoutX="32.0" layoutY="220.0" text="Empresas">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
                      </children>
                   </AnchorPane>
             </content>
           </Tab>
           <Tab text="Sucursales">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <JFXTextField fx:id="jtxfSucDescripcion" labelFloat="true" layoutX="32.0" layoutY="32.0" prefHeight="37.0" prefWidth="361.0" promptText="Descripción" styleClass="edittext" />
+                        <JFXComboBox fx:id="jcmbSucEstado" labelFloat="true" layoutX="400.0" layoutY="32.0" prefHeight="37.0" prefWidth="176.0" promptText="Estado" styleClass="edittext" />
+                        <JFXTextField fx:id="jtxfSucTelefono" labelFloat="true" layoutX="32.0" layoutY="111.0" prefHeight="37.0" prefWidth="177.0" promptText="Teléfono" styleClass="edittext" />
+                        <JFXTextField fx:id="jtxfSucEmail" labelFloat="true" layoutX="214.0" layoutY="111.0" prefHeight="37.0" prefWidth="361.0" promptText="Correo electrónico" styleClass="edittext" />
+                        <TableView fx:id="tbvSucursales" layoutX="23.0" layoutY="224.0" prefHeight="246.0" prefWidth="551.0">
+                           <columns>
+                              <TableColumn fx:id="tbcSucDescripcion" prefWidth="389.0" text="Descripción" />
+                              <TableColumn fx:id="tbcSucEstado" prefWidth="130.0" text="Estado" />
+                           </columns>
+                        </TableView>
+                        <Line endX="450.0" layoutX="125.0" layoutY="207.0" startX="-100.0" />
+                        <Label layoutX="32.0" layoutY="180.0" text="Sucursales">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <JFXButton fx:id="jbtnAgregar" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="488.0" layoutY="165.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#agregar" prefHeight="30.0" prefWidth="30.0" styleClass="actionbuttonagregar" textOverrun="WORD_ELLIPSIS">
+                           <tooltip>
+                              <Tooltip text="Agregar sucursal" />
+                           </tooltip>
+                        </JFXButton>
+                        <JFXButton fx:id="jbtnEliminar" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="544.0" layoutY="165.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#eliminar" prefHeight="30.0" prefWidth="30.0" styleClass="actionbuttoneliminar" textOverrun="WORD_ELLIPSIS">
+                           <tooltip>
+                              <Tooltip text="Eliminar sucursal" />
+                           </tooltip>
+                        </JFXButton>
+                     </children></AnchorPane>
             </content>
           </Tab>
         </tabs>

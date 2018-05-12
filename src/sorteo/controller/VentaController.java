@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -542,11 +540,8 @@ public class VentaController extends Controller implements Initializable {
             this.factura = facturaSave.get();
             HashMap<String, Object> params = new HashMap<>();
             params.put("idFactura", this.factura.getCodigo());
-            try {
-                Aplicacion.getInstance().print("rptTicket", params);
-            } catch (JRException ex) {
-                Logger.getLogger(VentaController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            Aplicacion.getInstance().imprimirReporte("rptTicket", params);
+
             reiniciar();
             AppWindowController.getInstance().mensaje(Alert.AlertType.INFORMATION, "Venta aplicada", "Venta aplicada exitosamente.");
         } else {

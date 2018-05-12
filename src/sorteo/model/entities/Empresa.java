@@ -88,6 +88,13 @@ public class Empresa implements Serializable {
         return cedJuridica.get();
     }
 
+    public SimpleStringProperty getCedJuridicaProperty() {
+        if (this.cedJuridica == null) {
+            this.cedJuridica = new SimpleStringProperty();
+        }
+        return this.cedJuridica;
+    }
+
     public void setCedJuridica(String cedJuridica) {
         this.cedJuridica.set(cedJuridica);
     }
@@ -96,6 +103,13 @@ public class Empresa implements Serializable {
     @Column(name = "emp_nombre")
     public String getNombre() {
         return nombre.get();
+    }
+
+    public SimpleStringProperty getNombreProperty() {
+        if (this.nombre == null) {
+            this.nombre = new SimpleStringProperty();
+        }
+        return this.nombre;
     }
 
     public void setNombre(String nombre) {
@@ -108,6 +122,13 @@ public class Empresa implements Serializable {
         return logo.get();
     }
 
+    public SimpleStringProperty getLogoProperty() {
+        if (this.logo == null) {
+            this.logo = new SimpleStringProperty();
+        }
+        return this.logo;
+    }
+
     public void setLogo(String logo) {
         this.logo.set(logo);
     }
@@ -118,6 +139,13 @@ public class Empresa implements Serializable {
         return telefono.get();
     }
 
+    public SimpleStringProperty getTelefonoProperty() {
+        if (this.telefono == null) {
+            this.telefono = new SimpleStringProperty();
+        }
+        return this.telefono;
+    }
+
     public void setTelefono(String telefono) {
         this.telefono.set(telefono);
     }
@@ -126,6 +154,13 @@ public class Empresa implements Serializable {
     @Column(name = "emp_email")
     public String getEmail() {
         return email.get();
+    }
+
+    public SimpleStringProperty getEmailProperty() {
+        if (this.email == null) {
+            this.email = new SimpleStringProperty();
+        }
+        return this.email;
     }
 
     public void setEmail(String email) {
