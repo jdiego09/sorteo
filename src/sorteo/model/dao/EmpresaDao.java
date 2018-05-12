@@ -23,212 +23,240 @@ import sorteo.utils.TipoResultado;
  */
 public class EmpresaDao extends BaseDao<Integer, Empresa> {
 
-   private static EmpresaDao INSTANCE;
-   private Empresa empresa;
+    private static EmpresaDao INSTANCE;
+    private Empresa empresa;
 
-   private EmpresaDao() {
-   }
+    private EmpresaDao() {
+    }
 
-   private static void createInstance() {
-      if (INSTANCE == null) {
-         // Sólo se accede a la zona sincronizada
-         // cuando la instancia no está creada
-         synchronized (EmpresaDao.class) {
-            // En la zona sincronizada sería necesario volver
-            // a comprobar que no se ha creado la instancia
-            if (INSTANCE == null) {
-               INSTANCE = new EmpresaDao();
+    private static void createInstance() {
+        if (INSTANCE == null) {
+            // Sólo se accede a la zona sincronizada
+            // cuando la instancia no está creada
+            synchronized (EmpresaDao.class) {
+                // En la zona sincronizada sería necesario volver
+                // a comprobar que no se ha creado la instancia
+                if (INSTANCE == null) {
+                    INSTANCE = new EmpresaDao();
+                }
             }
-         }
-      }
-   }
+        }
+    }
 
-   public static EmpresaDao getInstance() {
-      if (INSTANCE == null) {
-         createInstance();
-      }
-      return INSTANCE;
-   }
+    public static EmpresaDao getInstance() {
+        if (INSTANCE == null) {
+            createInstance();
+        }
+        return INSTANCE;
+    }
 
-   public void setEmpresa(Empresa empresa) {
-      this.empresa = this.empresa;
-   }
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
 
-   //para que solamente exista una instancia del objeto
-   @Override
-   public Object clone() throws CloneNotSupportedException {
-      throw new CloneNotSupportedException();
-   }
+    //para que solamente exista una instancia del objeto
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        throw new CloneNotSupportedException();
+    }
 
-   public Resultado<Empresa> getCentro(String cedulaJuridica) {
-      Resultado<Empresa> resultado = new Resultado<>();
-      try {
-         Query query = getEntityManager().createNamedQuery("Empresa.findByCedulajuridica");
-         query.setParameter("Cedulajuridica", cedulaJuridica);
-         empresa = (Empresa) query.getSingleResult();
+    public Resultado<Empresa> getCentro(String cedulaJuridica) {
+        Resultado<Empresa> resultado = new Resultado<>();
+        try {
+            Query query = getEntityManager().createNamedQuery("Empresa.findByCedulajuridica");
+            query.setParameter("Cedulajuridica", cedulaJuridica);
+            empresa = (Empresa) query.getSingleResult();
 
-         resultado.setResultado(TipoResultado.SUCCESS);
-         resultado.set(empresa);
-         return resultado;
-      } catch (NoResultException nre) {
-         resultado.setResultado(TipoResultado.WARNING);
-         resultado.setMensaje("La empresa con la cédula jurídica [" + cedulaJuridica + "], no se encuentra registrado.");
-         return resultado;
-      } catch (Exception ex) {
-         Logger.getLogger(EmpresaDao.class.getName()).log(Level.SEVERE, null, ex);
-         resultado.setResultado(TipoResultado.ERROR);
-         resultado.setMensaje("Error al traer información de la empresa con la cédula jurídica [" + cedulaJuridica + "].");
-         return resultado;
-      }
-   }
-
-   public Resultado<ArrayList<Sucursal>> getSucursales(Empresa empresa) {
-      Resultado<ArrayList<Sucursal>> resultado = new Resultado<>();
-      ArrayList<Sucursal> listaSucursales = new ArrayList<>();
-      List<Sucursal> sucursales;
-      try {
-         Query query = getEntityManager().createNamedQuery("Sucursal.findByCodigoEmpresa");
-         query.setParameter("codigoEmpresa", empresa.getCodigo());
-         sucursales = query.getResultList();
-         sucursales.stream().forEach(listaSucursales::add);
-         resultado.setResultado(TipoResultado.SUCCESS);
-         resultado.set(listaSucursales);
-         return resultado;
-      } catch (NoResultException nre) {
-         resultado.setResultado(TipoResultado.WARNING);
-         return resultado;
-      } catch (Exception ex) {
-         Logger.getLogger(EmpresaDao.class.getName()).log(Level.SEVERE, null, ex);
-         resultado.setResultado(TipoResultado.ERROR);
-         resultado.setMensaje("Error al traer las sucursales para la epmresa [" + empresa.getCodigo() + "].");
-         return resultado;
-      }
-   }
-
-   public Resultado<ArrayList<Empresa>> findAll() {
-      Resultado<ArrayList<Empresa>> resultado = new Resultado<>();
-      ArrayList<Empresa> empresas = new ArrayList<>();
-      List<Empresa> resultados;
-      try {
-         Query query = getEntityManager().createNamedQuery("Empresa.findAll");
-         resultados = query.getResultList();
-         resultados.forEach(m -> {
-            empresas.add(m);
-         });
-         resultado.setResultado(TipoResultado.SUCCESS);
-         resultado.set(empresas);
-         return resultado;
-      } catch (Exception ex) {
-         Logger.getLogger(EmpresaDao.class.getName()).log(Level.SEVERE, null, ex);
-         resultado.setResultado(TipoResultado.ERROR);
-         resultado.setMensaje("Error consultando las empresas.");
-         return resultado;
-      }
-   }
-
-   public Resultado<Sucursal> findSucursalByCodigo(Integer codigoSucursal) {
-      Sucursal sucursal;
-      Resultado<Sucursal> resultado = new Resultado<>();
-      try {
-         Query query = getEntityManager().createNamedQuery("Sucursal.findByCodigo");
-         query.setParameter("codigo", codigoSucursal);
-         sucursal = (Sucursal) query.getSingleResult();
-
-         resultado.setResultado(TipoResultado.SUCCESS);
-         resultado.set(sucursal);
-         return resultado;
-      } catch (NoResultException nre) {
-         Logger.getLogger(EmpresaDao.class.getName()).log(Level.SEVERE, null, nre);
-         resultado.setResultado(TipoResultado.ERROR);
-         resultado.setMensaje("No existe la ssucursal con el código [" + String.valueOf(codigoSucursal) + "].");
-         return resultado;
-      } catch (Exception ex) {
-         Logger.getLogger(EmpresaDao.class.getName()).log(Level.SEVERE, null, ex);
-         resultado.setResultado(TipoResultado.ERROR);
-         resultado.setMensaje("Error consultando la sucursal con el código [" + String.valueOf(codigoSucursal) + "].");
-         return resultado;
-      }
-   }
-
-   public Resultado<Empresa> findEmpresaByCodigo(Integer codigoEmpresa) {
-      Empresa queryResult;
-      Resultado<Empresa> resultado = new Resultado<>();
-      try {
-         Query query = getEntityManager().createNamedQuery("Empresa.findByCodigo");
-         query.setParameter("codigo", codigoEmpresa);
-         queryResult = (Empresa) query.getSingleResult();
-
-         resultado.setResultado(TipoResultado.SUCCESS);
-         resultado.set(queryResult);
-         return resultado;
-      } catch (NoResultException nre) {
-         Logger.getLogger(EmpresaDao.class.getName()).log(Level.SEVERE, null, nre);
-         resultado.setResultado(TipoResultado.ERROR);
-         resultado.setMensaje("No existe la empresa con el código [" + String.valueOf(codigoEmpresa) + "].");
-         return resultado;
-      } catch (Exception ex) {
-         Logger.getLogger(EmpresaDao.class.getName()).log(Level.SEVERE, null, ex);
-         resultado.setResultado(TipoResultado.ERROR);
-         resultado.setMensaje("Error consultando la empresa con el código [" + String.valueOf(codigoEmpresa) + "].");
-         return resultado;
-      }
-   }
-
-   // Procedimiento para guardar la información del empresa.
-   public Resultado<Empresa> save() {
-      Resultado<Empresa> resultado = new Resultado<>();
-      try {
-
-         empresa = (Empresa) super.save(empresa);
-
-         if (empresa.getCodigo() != null) {
             resultado.setResultado(TipoResultado.SUCCESS);
             resultado.set(empresa);
-            resultado.setMensaje("Empresa guardada correctamente.");
-
-         } else {
+            return resultado;
+        } catch (NoResultException nre) {
+            resultado.setResultado(TipoResultado.WARNING);
+            resultado.setMensaje("La empresa con la cédula jurídica [" + cedulaJuridica + "], no se encuentra registrado.");
+            return resultado;
+        } catch (Exception ex) {
+            Logger.getLogger(EmpresaDao.class.getName()).log(Level.SEVERE, null, ex);
             resultado.setResultado(TipoResultado.ERROR);
-            resultado.set(empresa);
-            resultado.setMensaje("No se pudo guardar la empresa.");
-         }
+            resultado.setMensaje("Error al traer información de la empresa con la cédula jurídica [" + cedulaJuridica + "].");
+            return resultado;
+        }
+    }
 
-         return resultado;
+    public Resultado<ArrayList<Sucursal>> getSucursales(Empresa empresa) {
+        Resultado<ArrayList<Sucursal>> resultado = new Resultado<>();
+        ArrayList<Sucursal> listaSucursales = new ArrayList<>();
+        List<Sucursal> sucursales;
+        try {
+            Query query = getEntityManager().createNamedQuery("Sucursal.findByCodigoEmpresa");
+            query.setParameter("codigoEmpresa", empresa.getCodigo());
+            sucursales = query.getResultList();
+            sucursales.stream().forEach(listaSucursales::add);
+            resultado.setResultado(TipoResultado.SUCCESS);
+            resultado.set(listaSucursales);
+            return resultado;
+        } catch (NoResultException nre) {
+            resultado.setResultado(TipoResultado.WARNING);
+            return resultado;
+        } catch (Exception ex) {
+            Logger.getLogger(EmpresaDao.class.getName()).log(Level.SEVERE, null, ex);
+            resultado.setResultado(TipoResultado.ERROR);
+            resultado.setMensaje("Error al traer las sucursales para la epmresa [" + empresa.getCodigo() + "].");
+            return resultado;
+        }
+    }
 
-      } catch (Exception ex) {
-         Logger.getLogger(EmpresaDao.class.getName()).log(Level.SEVERE, null, ex);
-         resultado.setResultado(TipoResultado.ERROR);
-         resultado.setMensaje("Error al guardar la empresa [" + this.empresa.getCodigo() + "].");
-         return resultado;
-      }
-   }
+    public Resultado<ArrayList<Empresa>> findAll() {
+        Resultado<ArrayList<Empresa>> resultado = new Resultado<>();
+        ArrayList<Empresa> empresas = new ArrayList<>();
+        List<Empresa> resultados;
+        try {
+            Query query = getEntityManager().createNamedQuery("Empresa.findAll");
+            resultados = query.getResultList();
+            resultados.forEach(m -> {
+                empresas.add(m);
+            });
+            resultado.setResultado(TipoResultado.SUCCESS);
+            resultado.set(empresas);
+            return resultado;
+        } catch (Exception ex) {
+            Logger.getLogger(EmpresaDao.class.getName()).log(Level.SEVERE, null, ex);
+            resultado.setResultado(TipoResultado.ERROR);
+            resultado.setMensaje("Error consultando las empresas.");
+            return resultado;
+        }
+    }
 
-   public Resultado<String> deleteSucursal(Sucursal sucursal) {
-      Resultado<String> resultado = new Resultado<>();
-      Sucursal existe = null;
-      try {
+    public Resultado<Sucursal> findSucursalByCodigo(Integer codigoSucursal) {
+        Sucursal sucursal;
+        Resultado<Sucursal> resultado = new Resultado<>();
+        try {
+            Query query = getEntityManager().createNamedQuery("Sucursal.findByCodigo");
+            query.setParameter("codigo", codigoSucursal);
+            sucursal = (Sucursal) query.getSingleResult();
 
-         getEntityManager().getTransaction().begin();
-         Integer id = (Integer) Parametros.PERSISTENCEUTIL.getIdentifier(sucursal);
-         if (id != null) {
-            existe = (Sucursal) getEntityManager().find(Sucursal.class, id);
-         }
+            resultado.setResultado(TipoResultado.SUCCESS);
+            resultado.set(sucursal);
+            return resultado;
+        } catch (NoResultException nre) {
+            Logger.getLogger(EmpresaDao.class.getName()).log(Level.SEVERE, null, nre);
+            resultado.setResultado(TipoResultado.ERROR);
+            resultado.setMensaje("No existe la ssucursal con el código [" + String.valueOf(codigoSucursal) + "].");
+            return resultado;
+        } catch (Exception ex) {
+            Logger.getLogger(EmpresaDao.class.getName()).log(Level.SEVERE, null, ex);
+            resultado.setResultado(TipoResultado.ERROR);
+            resultado.setMensaje("Error consultando la sucursal con el código [" + String.valueOf(codigoSucursal) + "].");
+            return resultado;
+        }
+    }
 
-         if (existe != null) {
-            if (!getEntityManager().contains(sucursal)) {
-               sucursal = getEntityManager().merge(sucursal);
+    public Resultado<Empresa> findEmpresaByCodigo(Integer codigoEmpresa) {
+        Empresa queryResult;
+        Resultado<Empresa> resultado = new Resultado<>();
+        try {
+            Query query = getEntityManager().createNamedQuery("Empresa.findByCodigo");
+            query.setParameter("codigo", codigoEmpresa);
+            queryResult = (Empresa) query.getSingleResult();
+
+            resultado.setResultado(TipoResultado.SUCCESS);
+            resultado.set(queryResult);
+            return resultado;
+        } catch (NoResultException nre) {
+            Logger.getLogger(EmpresaDao.class.getName()).log(Level.SEVERE, null, nre);
+            resultado.setResultado(TipoResultado.ERROR);
+            resultado.setMensaje("No existe la empresa con el código [" + String.valueOf(codigoEmpresa) + "].");
+            return resultado;
+        } catch (Exception ex) {
+            Logger.getLogger(EmpresaDao.class.getName()).log(Level.SEVERE, null, ex);
+            resultado.setResultado(TipoResultado.ERROR);
+            resultado.setMensaje("Error consultando la empresa con el código [" + String.valueOf(codigoEmpresa) + "].");
+            return resultado;
+        }
+    }
+
+    // Procedimiento para guardar la información del empresa.
+    public Resultado<Empresa> save() {
+        Resultado<Empresa> resultado = new Resultado<>();
+        try {
+
+            empresa = (Empresa) super.save(empresa);
+
+            if (empresa.getCodigo() != null) {
+                resultado.setResultado(TipoResultado.SUCCESS);
+                resultado.set(empresa);
+                resultado.setMensaje("Empresa guardada correctamente.");
+
+            } else {
+                resultado.setResultado(TipoResultado.ERROR);
+                resultado.set(empresa);
+                resultado.setMensaje("No se pudo guardar la empresa.");
             }
-            getEntityManager().remove(sucursal);
-         }
-         getEntityManager().getTransaction().commit();
-         resultado.setResultado(TipoResultado.SUCCESS);
-         return resultado;
 
-      } catch (Exception ex) {
-         getEntityManager().getTransaction().rollback();
-         Logger.getLogger(EmpresaDao.class.getName()).log(Level.SEVERE, null, ex);
-         resultado.setResultado(TipoResultado.ERROR);
-         resultado.setMensaje("Error al eliminar la sucursal [" + sucursal.getNombre() + "].");
-         return resultado;
-      }
-   }
+            return resultado;
+
+        } catch (Exception ex) {
+            Logger.getLogger(EmpresaDao.class.getName()).log(Level.SEVERE, null, ex);
+            resultado.setResultado(TipoResultado.ERROR);
+            resultado.setMensaje("Error al guardar la empresa [" + this.empresa.getNombre() + "].");
+            return resultado;
+        }
+    }
+
+    public Resultado<String> deleteSucursal(Sucursal sucursal) {
+        Resultado<String> resultado = new Resultado<>();
+        Sucursal existe = null;
+        try {
+
+            getEntityManager().getTransaction().begin();
+            Integer id = (Integer) Parametros.PERSISTENCEUTIL.getIdentifier(sucursal);
+            if (id != null) {
+                existe = (Sucursal) getEntityManager().find(Sucursal.class, id);
+            }
+
+            if (existe != null) {
+                if (!getEntityManager().contains(sucursal)) {
+                    sucursal = getEntityManager().merge(sucursal);
+                }
+                getEntityManager().remove(sucursal);
+            }
+            getEntityManager().getTransaction().commit();
+            resultado.setResultado(TipoResultado.SUCCESS);
+            return resultado;
+
+        } catch (Exception ex) {
+            getEntityManager().getTransaction().rollback();
+            Logger.getLogger(EmpresaDao.class.getName()).log(Level.SEVERE, null, ex);
+            resultado.setResultado(TipoResultado.ERROR);
+            resultado.setMensaje("Error al eliminar la sucursal [" + sucursal.getNombre() + "].");
+            return resultado;
+        }
+    }
+
+    public Resultado<String> saveSucursal(Sucursal sucursal) {
+        Resultado<String> resultado = new Resultado<>();
+        Sucursal existe = null;
+        try {
+            getEntityManager().getTransaction().begin();
+            Integer id = (Integer) Parametros.PERSISTENCEUTIL.getIdentifier(sucursal);
+            if (id != null) {
+                existe = (Sucursal) getEntityManager().find(Sucursal.class, id);
+            }
+
+            if (existe != null) {
+                getEntityManager().merge(sucursal);
+            } else {
+                getEntityManager().persist(sucursal);
+            }
+            getEntityManager().getTransaction().commit();
+            resultado.setResultado(TipoResultado.SUCCESS);
+            return resultado;
+
+        } catch (Exception ex) {
+            getEntityManager().getTransaction().rollback();
+            Logger.getLogger(EmpresaDao.class.getName()).log(Level.SEVERE, null, ex);
+            resultado.setResultado(TipoResultado.ERROR);
+            resultado.setMensaje("Error al guardar la sucursal [" + sucursal.getNombre() + "].");
+            return resultado;
+        }
+    }
 }

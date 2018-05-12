@@ -3,6 +3,7 @@ package sorteo.controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import javafx.event.ActionEvent;
@@ -19,6 +20,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 import javax.xml.bind.annotation.XmlTransient;
 import sorteo.model.dao.EmpresaDao;
 import sorteo.model.entities.Empresa;
@@ -115,12 +117,22 @@ public class EmpresaController extends Controller implements Initializable {
 
     @FXML
     void buscarArchivoLogo(ActionEvent event) {
+        FileChooser rutaLogo = new FileChooser();
+        rutaLogo.setTitle("Seleccione el logo de la empresa");
+        rutaLogo.getExtensionFilters().addAll(
+           new FileChooser.ExtensionFilter("PNG", "*.png"),
+           new FileChooser.ExtensionFilter("JPG", "*.jpg"));
 
+        File archivoLogo = rutaLogo.showOpenDialog(null);
+
+        if (archivoLogo != null) {
+            this.empresa.setLogo(archivoLogo.getAbsolutePath());
+        }
     }
 
     @FXML
     void guardar(ActionEvent event) {
-
+        guardarInformacion();
     }
 
     @FXML
@@ -141,7 +153,7 @@ public class EmpresaController extends Controller implements Initializable {
 
     @FXML
     void eliminar(ActionEvent event) {
-
+        eliminarSucursalDeLista(this.sucursal);
     }
 
     @Override
@@ -180,7 +192,7 @@ public class EmpresaController extends Controller implements Initializable {
         cargarEmpresas();
         bindListaEmpresas();
         addListenerTableEmpresas(tbvEmpresas);
-
+        tabEmpresas.getSelectionModel().selectFirst();
         jcmbSucEstado.getSelectionModel().selectFirst();
         jtxfCedJuridica.requestFocus();
     }
@@ -220,11 +232,14 @@ public class EmpresaController extends Controller implements Initializable {
             unbindEmpresa();
             if (newSelection != null) {
                 this.empresa = (Empresa) newSelection;
+                traerEmpresa(this.empresa.getCodigo());
                 this.listaSucursales.clear();
                 tbvSucursales.getItems().clear();
                 this.listaSucursales = FXCollections.observableArrayList(this.empresa.getSucursales());
                 bindListaSucursales();
                 addListenerTableSucursales(tbvSucursales);
+                nuevaSucursal();
+                bindSucursal();
                 bindEmpresa();
                 jtxfCedJuridica.setDisable(true);
             }
@@ -267,7 +282,6 @@ public class EmpresaController extends Controller implements Initializable {
     }
 
     private void traerEmpresa(Integer codigo) {
-        unbindEmpresa();
         Resultado<Empresa> empr = EmpresaDao.getInstance().findEmpresaByCodigo(codigo);
         if (empr.getResultado().equals(TipoResultado.ERROR)) {
             AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR,
@@ -297,12 +311,36 @@ public class EmpresaController extends Controller implements Initializable {
     }
 
     private void agregarSucursalALista(Sucursal nueva) {
-        if (!this.listaSucursales.contains(nueva)) {
-            this.listaSucursales.add(nueva);
-        } else {
-            this.listaSucursales.set(this.listaSucursales.indexOf(nueva), nueva);
+        if (nueva != null) {
+            if (nueva.getEmpresa() == null) {
+                nueva.setEmpresa(this.empresa);
+            }
+            Resultado<String> result = EmpresaDao.getInstance().saveSucursal(nueva);
+            if (result.getResultado().equals(TipoResultado.SUCCESS)) {
+                if (!this.listaSucursales.contains(nueva)) {
+                    this.listaSucursales.add(nueva);
+                } else {
+                    this.listaSucursales.set(this.listaSucursales.indexOf(nueva), nueva);
+                }
+                tbvSucursales.refresh();
+            } else {
+                AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Error al guardar sucursal", result.getMensaje());
+            }
         }
-        tbvSucursales.refresh();
+    }
+
+    private void eliminarSucursalDeLista(Sucursal sucursal) {
+        if (sucursal != null) {
+            Resultado<String> result = EmpresaDao.getInstance().deleteSucursal(this.sucursal);
+            if (result.getResultado().equals(TipoResultado.SUCCESS)) {
+                if (this.listaSucursales.contains(sucursal)) {
+                    this.listaSucursales.remove(sucursal);
+                }
+                tbvSucursales.refresh();
+            } else {
+                AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Error al eliminar sucursal", result.getMensaje());
+            }
+        }
     }
 
     private void cargarEmpresas() {
@@ -315,7 +353,7 @@ public class EmpresaController extends Controller implements Initializable {
     }
 
     private void clearForm() {
-        if (tabEmpresas.getSelectionModel().getSelectedItem().getText().toLowerCase().equals("empresa")) {
+        if (tabEmpresas.getSelectionModel().getSelectedItem().getText().toLowerCase().equals("empresas")) {
             unbindEmpresa();
             if (this.sucursal != null) {
                 unbindSucursal();
@@ -337,6 +375,30 @@ public class EmpresaController extends Controller implements Initializable {
             jcmbSucEstado.requestFocus();
             jtxfSucDescripcion.requestFocus();
         }
+    }
+
+    private void guardarInformacion() {
+        if (tabEmpresas.getSelectionModel().getSelectedItem().getText().toLowerCase().equals("empresas")) {
+            if (this.empresa.getNombre() == null || this.empresa.getNombre().isEmpty()) {
+                AppWindowController.getInstance().mensaje(Alert.AlertType.INFORMATION, "Información incompleta", "Debe definir al menos la descripción de la empresa..");
+                return;
+            }
+        } else {
+            if (this.sucursal != null && (this.sucursal.getNombre() == null || this.sucursal.getNombre().isEmpty())) {
+                AppWindowController.getInstance().mensaje(Alert.AlertType.INFORMATION, "Información incompleta", "Debe definir al menos la descripción de la sucursal.");
+                return;
+            }
+        }
+
+        EmpresaDao.getInstance().setEmpresa(this.empresa);
+        Resultado<Empresa> resultado = EmpresaDao.getInstance().save();
+
+        if (resultado.getResultado().equals(TipoResultado.ERROR)) {
+            AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Guardar empresa", resultado.getMensaje());
+            return;
+        }
+        agregarEmpresaALista(resultado.get());
+        AppWindowController.getInstance().mensaje(Alert.AlertType.INFORMATION, "Guardar empresa", resultado.getMensaje());
     }
 
 }
