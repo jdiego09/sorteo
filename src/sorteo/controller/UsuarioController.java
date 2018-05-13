@@ -48,10 +48,10 @@ public class UsuarioController extends Controller implements Initializable {
     private AnchorPane apRoot;
 
     @FXML
-    private JFXButton jbtnSalir, jbtnAgregarRol, jbtnEliminarRol;
+    private JFXButton jbtnAgregarRol, jbtnEliminarRol;
 
     @FXML
-    private Button btnLimpiar, btnGuardaUsuario;
+    private Button btnLimpiar, btnGuardaUsuario, jbtnSalir;
 
     @FXML
     private TextField jtxfCodigo, jtxfDescripcion;
@@ -63,7 +63,10 @@ public class UsuarioController extends Controller implements Initializable {
     private TableView<Usuario> tbvUsuarios;
 
     @FXML
-    private TableColumn<Usuario, String> tbcCodigo, tbcDescipcion, tbcEstado;
+    private TableColumn<Usuario, String> tbcCodigoUsuario, tbcDescipcion, tbcEstado;
+
+    @FXML
+    private TableColumn<Usuario, Integer> tbcCodigo;
 
     @FXML
     private TableView<Roles> tbvRolesActivos;
@@ -165,7 +168,8 @@ public class UsuarioController extends Controller implements Initializable {
             tbvUsuarios.setItems(this.usuariosSistema);
             tbvUsuarios.refresh();
         }
-        tbcCodigo.setCellValueFactory(new PropertyValueFactory<>("usuCodigo"));
+        tbcCodigo.setCellValueFactory(new PropertyValueFactory<>("consecutivoString"));
+        tbcCodigoUsuario.setCellValueFactory(new PropertyValueFactory<>("usuCodigo"));
         tbcDescipcion.setCellValueFactory(new PropertyValueFactory<>("usuDescripcion"));
         tbcEstado.setCellValueFactory(new PropertyValueFactory<>("descripcionEstado"));
     }
@@ -175,7 +179,7 @@ public class UsuarioController extends Controller implements Initializable {
             tbvRolesActivos.setItems(this.rolesActivos);
             tbvRolesActivos.refresh();
         }
-        tbcCodRolActivo.setCellValueFactory(r -> r.getValue().getRolCodigoProperty());
+        tbcCodRolActivo.setCellValueFactory(r -> r.getValue().getRolDescripcionProperty());
     }
 
     private void bindListaRolesUsuario() {
@@ -183,7 +187,7 @@ public class UsuarioController extends Controller implements Initializable {
             tbvRolesUsuario.setItems(this.rolesUsuario);
             tbvRolesUsuario.refresh();
         }
-        tbcCodRolUsuario.setCellValueFactory(b -> b.getValue().getRxuCodrol().getRolCodigoProperty());
+        tbcCodRolUsuario.setCellValueFactory(b -> b.getValue().getRxuCodrol().getRolDescripcionProperty());
     }
 
     private void traerUsuario(String codigo) {
@@ -215,8 +219,30 @@ public class UsuarioController extends Controller implements Initializable {
         tbvUsuarios.refresh();
     }
 
+    public boolean datosUsuarioCompletos() {
+        String error = null;
+        if (this.usuario.getUsuCodigo() == null || this.usuario.getUsuCodigo().isEmpty()) {
+            error = "Debe indicar el código del usuario";
+        }
+        if (this.usuario.getUsuDescripcion() == null || this.usuario.getUsuDescripcion().isEmpty()) {
+            error = "Debe indicar la descripción del usuario";
+        }
+        if (this.usuario.getUsuEstado() == null || this.usuario.getUsuEstado().isEmpty()) {
+            error = "Debe indicar el estado del usuario";
+        }
+        if (error != null && !error.isEmpty()) {
+            AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Información incompleta", error);
+            return false;
+        }
+
+        return true;
+    }
+
     @FXML
     private void guardarUsuario(ActionEvent event) {
+        if (!datosUsuarioCompletos()) {
+            return;
+        }
         this.usuario.setUsuCodsucursal(Aplicacion.getInstance().getSucursalDefault());
         if (this.usuario.getUsuContrasena() == null || this.usuario.getUsuContrasena().isEmpty()) {
             this.usuario.setUsuContrasena(Encriptor.getInstance().encriptar(this.usuario.getUsuCodigo()));

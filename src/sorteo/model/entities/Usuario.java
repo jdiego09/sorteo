@@ -8,6 +8,7 @@ package sorteo.model.entities;
 import java.io.Serializable;
 import java.util.List;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javax.persistence.Access;
@@ -38,11 +39,8 @@ import sorteo.utils.GenValorCombo;
 @Table(name = "sor_usuario", schema = "sorteo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u ORDER BY u.usuCodigo")
-    , @NamedQuery(name = "Usuario.findByUsuCodigo", query = "SELECT u FROM Usuario u WHERE u.usuCodigo = :usuCodigo and u.usuEstado = 'A'")
-    , @NamedQuery(name = "Usuario.findByUsuDescripcion", query = "SELECT u FROM Usuario u WHERE u.usuDescripcion = :usuDescripcion")
-    , @NamedQuery(name = "Usuario.findByUsuContrasena", query = "SELECT u FROM Usuario u WHERE u.usuContrasena = :usuContrasena")
-    , @NamedQuery(name = "Usuario.findByUsuEstado", query = "SELECT u FROM Usuario u WHERE u.usuEstado = :usuEstado")})
+    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u ORDER BY u.consecutivo")
+    , @NamedQuery(name = "Usuario.findByUsuCodigo", query = "SELECT u FROM Usuario u WHERE u.usuCodigo = :usuCodigo and u.usuEstado = 'A'")})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -53,6 +51,12 @@ public class Usuario implements Serializable {
     private SimpleStringProperty usuDescripcion;
     @Transient
     private SimpleStringProperty usuContrasena;
+    @Transient
+    private SimpleIntegerProperty consecutivo;
+
+    @Transient
+    private SimpleStringProperty consecutivoString;
+
     @Transient
     private ObjectProperty<GenValorCombo> usuEstado;
     @JoinColumn(name = "usu_codsucursal", referencedColumnName = "suc_codigo")
@@ -66,6 +70,7 @@ public class Usuario implements Serializable {
         this.usuDescripcion = new SimpleStringProperty();
         this.usuContrasena = new SimpleStringProperty();
         this.usuEstado = new SimpleObjectProperty();
+        this.consecutivo = new SimpleIntegerProperty();
     }
 
     public Usuario(String usuCodigo) {
@@ -111,6 +116,36 @@ public class Usuario implements Serializable {
 
     public void setUsuContrasena(String usuContrasena) {
         this.usuContrasena.set(usuContrasena);
+    }
+
+    @Column(name = "usu_consecutivo")
+    @Access(AccessType.PROPERTY)
+    public Integer getConsecutivo() {
+        return consecutivo.get();
+    }
+
+    public SimpleIntegerProperty getConsecutivoProperty() {
+        return consecutivo;
+    }
+
+    public void setConsecutivo(Integer consecutivo) {
+        this.consecutivo.set(consecutivo);
+    }
+
+    public String getConsecutivoString() {
+        if (this.consecutivoString == null) {
+            this.consecutivoString = new SimpleStringProperty();
+        }
+        String codigo = null;
+        if (this.consecutivo.get() < 10) {
+            codigo = "00" + String.valueOf(this.consecutivo.get());
+        }
+        if (this.consecutivo.get() < 100) {
+            codigo = "0" + String.valueOf(this.consecutivo.get());
+        }
+
+        this.consecutivoString.set(codigo);
+        return this.consecutivoString.get();
     }
 
     @Column(name = "usu_estado")

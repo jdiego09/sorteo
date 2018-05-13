@@ -14,6 +14,8 @@
     <class>sorteo.model.entities.Usuario</class>
     <class>sorteo.model.entities.Montos</class>
     <class>sorteo.model.entities.MenuXRol</class>
+    <class>sorteo.model.entities.TipoSorteo_1</class>
+    <class>sorteo.model.entities.Exclusion</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>

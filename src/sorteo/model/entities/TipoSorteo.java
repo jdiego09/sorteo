@@ -6,7 +6,6 @@
 package sorteo.model.entities;
 
 import java.io.Serializable;
-import java.sql.Time;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -39,7 +38,6 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import sorteo.utils.Formater;
 import sorteo.utils.GenValorCombo;
 
 /**
@@ -89,6 +87,9 @@ public class TipoSorteo implements Serializable {
 
     @OneToMany(mappedBy = "tipoSorteo", fetch = FetchType.LAZY)
     private List<Sorteo> listaSorteos;
+
+    @OneToMany(mappedBy = "excCodtiposorteo", fetch = FetchType.LAZY)
+    private List<Exclusion> exclusionList;
 
     public TipoSorteo() {
         this.descripcion = new SimpleStringProperty();
@@ -304,7 +305,7 @@ public class TipoSorteo implements Serializable {
 
     @Override
     public String toString() {
-        return "TipoSorteo{" + "codigo=" + codigo + '}';
+        return descripcion.get();
     }
 
     @Column(name = "tso_horacorte")
@@ -364,4 +365,12 @@ public class TipoSorteo implements Serializable {
         this.tsoUsrmod = tsoUsrmod;
     }
 
+    @XmlTransient
+    public List<Exclusion> getExclusionList() {
+        return exclusionList;
+    }
+
+    public void setExclusionList(List<Exclusion> exclusionList) {
+        this.exclusionList = exclusionList;
+    }
 }

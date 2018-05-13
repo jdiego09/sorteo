@@ -19,11 +19,6 @@
    <children>
       <Pane prefHeight="50.0" prefWidth="503.0" styleClass="actionbar">
          <children>
-            <JFXButton fx:id="jbtnSalir" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="454.0" layoutY="8.0" onAction="#regresar" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonsalir" textOverrun="WORD_ELLIPSIS">
-               <tooltip>
-                  <Tooltip text="Regresar" />
-               </tooltip>
-            </JFXButton>
             <Button fx:id="btnLimpiar" layoutX="59.0" layoutY="8.0" mnemonicParsing="false" onAction="#limpiar" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonlimpiar" text="Button">
                <tooltip>
                   <Tooltip text="Limpiar" />
@@ -35,11 +30,16 @@
                   <Font size="24.0" />
                </font>
             </Label>
+            <Button fx:id="jbtnSalir" layoutX="454.0" layoutY="8.0" mnemonicParsing="false" onAction="#regresar" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonsalir" text="Button">
+               <tooltip>
+                  <Tooltip text="Salir" />
+               </tooltip>
+            </Button>
          </children>
       </Pane>
       <TextField fx:id="jtxfCodigo" layoutX="21.0" layoutY="81.0" onKeyPressed="#codigoUsuarioOnEnterKey" prefHeight="28.0" prefWidth="232.0" styleClass="edittext" />
       <ComboBox fx:id="jcmbEstado" layoutX="282.0" layoutY="81.0" prefHeight="37.0" prefWidth="202.0" styleClass="edittext" />
-      <Label layoutX="21.0" layoutY="62.0" text="Código de usuario">
+      <Label layoutX="21.0" layoutY="62.0" text="Nombre usuario">
          <font>
             <Font size="14.0" />
          </font>
@@ -53,9 +53,10 @@
                      <children>
                         <TableView fx:id="tbvUsuarios" layoutX="-1.0" prefHeight="208.0" prefWidth="503.0">
                           <columns>
-                            <TableColumn fx:id="tbcCodigo" editable="false" prefWidth="102.0" text="Código usuario" />
-                              <TableColumn fx:id="tbcDescipcion" prefWidth="298.0" text="Descripción" />
-                            <TableColumn fx:id="tbcEstado" editable="false" prefWidth="100.0" text="Estado" />
+                              <TableColumn fx:id="tbcCodigo" prefWidth="46.0" text="Código" />
+                            <TableColumn fx:id="tbcCodigoUsuario" editable="false" prefWidth="79.0" text="Usuario" />
+                              <TableColumn fx:id="tbcDescipcion" prefWidth="244.0" text="Descripción" />
+                            <TableColumn fx:id="tbcEstado" editable="false" prefWidth="116.0" text="Estado" />
                           </columns>
                         </TableView>
                      </children>
