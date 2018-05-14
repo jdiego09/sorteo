@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import sorteo.model.entities.Exclusion;
 import sorteo.model.entities.TipoSorteo;
@@ -82,6 +83,28 @@ public class ExclusionDao extends BaseDao<Integer, Exclusion> {
             resultado.setMensaje("Error consultando las excepciones del sorteo: " + tipoSorteo.getDescripcion()
                + ", del día: " + Formater.getInstance().formatFechaCorta.format(fecha));
             return resultado;
+        }
+    }
+
+    public Resultado<Exclusion> findExclusion(Exclusion exclusion) {
+        Resultado<Exclusion> result = new Resultado<>();
+        Exclusion excepcion;
+        try {
+            Query query = getEntityManager().createNamedQuery("Exclusion.findExclusion");
+            query.setParameter("codtiposorteo", exclusion.getExcCodtiposorteo().getCodigo());
+            query.setParameter("fechaSorteo", exclusion.getExcFecha());
+            query.setParameter("bloqueo", exclusion.getExcBloqueo());
+            query.setParameter("numero", exclusion.getExcNumero());
+            excepcion = (Exclusion) query.getSingleResult();
+
+            result.setResultado(TipoResultado.SUCCESS);
+            result.set(excepcion);
+            return result;
+        } catch (Exception ex) {
+            Logger.getLogger(ExclusionDao.class.getName()).log(Level.SEVERE, null, ex);
+            result.setResultado(TipoResultado.ERROR);
+            result.setMensaje("Error al consultar excepcion.");
+            return result;
         }
     }
 

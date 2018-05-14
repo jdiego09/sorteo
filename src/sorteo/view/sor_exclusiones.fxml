@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="acpRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" styleClass="form" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.102" fx:controller="sorteo.controller.ExclusionesController">
+<AnchorPane id="AnchorPane" fx:id="acpRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" styleClass="form" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sorteo.controller.ExclusionesController">
     <stylesheets>
         <URL value="@sorteo.css" />
     </stylesheets>
@@ -58,41 +58,41 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Separator layoutX="14.0" layoutY="145.0" prefHeight="3.0" prefWidth="540.0" />
-      <RadioButton fx:id="rdbBloqueo" layoutX="45.0" layoutY="148.0" mnemonicParsing="false" styleClass="edittext" text="Bloquear venta">
+      <Separator layoutX="44.0" layoutY="145.0" prefHeight="3.0" prefWidth="510.0" />
+      <RadioButton fx:id="rdbBloqueo" layoutX="45.0" layoutY="148.0" mnemonicParsing="false" onAction="#rdbBloqueaVenta" styleClass="edittext" text="Bloquear venta">
          <toggleGroup>
             <ToggleGroup fx:id="grpTipoExclusion" />
          </toggleGroup>
       </RadioButton>
-      <RadioButton fx:id="rdbNumero" layoutX="327.0" layoutY="148.0" mnemonicParsing="false" styleClass="edittext" text="Número" toggleGroup="$grpTipoExclusion" />
-      <TextField fx:id="txtNumero" layoutX="47.0" layoutY="198.0" styleClass="edittext" />
-      <Label layoutX="47.0" layoutY="178.0" text="Número">
+      <RadioButton fx:id="rdbNumero" layoutX="327.0" layoutY="148.0" mnemonicParsing="false" onAction="#rdbNumero" styleClass="edittext" text="Número" toggleGroup="$grpTipoExclusion" />
+      <TextField fx:id="txtNumero" layoutX="47.0" layoutY="198.0" styleClass="edittext" visible="false" />
+      <Label fx:id="lblNumero" layoutX="47.0" layoutY="178.0" text="Número" visible="false">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="txtApuesta" layoutX="327.0" layoutY="198.0" styleClass="edittext" />
-      <Label layoutX="327.0" layoutY="178.0" text="Monto apuesta">
+      <TextField fx:id="txtApuesta" layoutX="327.0" layoutY="198.0" styleClass="edittext" visible="false" />
+      <Label fx:id="lblApuesta" layoutX="327.0" layoutY="178.0" text="Monto apuesta" visible="false">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Separator layoutX="15.0" layoutY="243.0" prefHeight="3.0" prefWidth="540.0" />
-      <TableView fx:id="tbvExcepciones" layoutX="45.0" layoutY="279.0" prefHeight="299.0" prefWidth="510.0">
+      <Separator layoutX="45.0" layoutY="243.0" prefHeight="3.0" prefWidth="510.0" />
+      <TableView fx:id="tbvExcepciones" layoutX="45.0" layoutY="281.0" prefHeight="297.0" prefWidth="510.0">
         <columns>
             <TableColumn fx:id="tbcBloqueo" prefWidth="145.0" text="Venta Bloqueada" />
           <TableColumn fx:id="tbcNumero" prefWidth="75.0" text="Número" />
           <TableColumn fx:id="tbcApuesta" prefWidth="114.0" text="Apuesta Máxima" />
         </columns>
       </TableView>
-      <JFXButton fx:id="jbtnEliminar" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="523.0" layoutY="246.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#eliminar" prefHeight="30.0" prefWidth="30.0" styleClass="actionbuttonborrar" textOverrun="WORD_ELLIPSIS">
-         <tooltip>
-            <Tooltip text="Eliminar excepción" />
-         </tooltip>
-      </JFXButton>
       <JFXButton fx:id="jbtnBuscar" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="527.0" layoutY="101.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#buscar" prefHeight="30.0" prefWidth="30.0" styleClass="buttonbuscar" textOverrun="WORD_ELLIPSIS">
          <tooltip>
-            <Tooltip text="Eliminar excepción" />
+            <Tooltip text="Consultar" />
+         </tooltip>
+      </JFXButton>
+      <JFXButton fx:id="jbtnEliminar" layoutX="524.0" layoutY="246.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#eliminar" prefHeight="30.0" prefWidth="30.0" styleClass="actionbuttonborrar">
+         <tooltip>
+            <Tooltip text="Eliminar excepción seleccionada" />
          </tooltip>
       </JFXButton>
    </children>

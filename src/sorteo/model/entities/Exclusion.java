@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Objects;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -43,7 +44,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Exclusion.findAll", query = "SELECT e FROM Exclusion e")
-    , @NamedQuery(name = "Exclusion.findBySorteo", query = "SELECT e FROM Exclusion e WHERE e.excCodtiposorteo.codigo = :codtiposorteo and e.excFecha = :fechaSorteo")})
+    , @NamedQuery(name = "Exclusion.findBySorteo", query = "SELECT e FROM Exclusion e WHERE e.excCodtiposorteo.codigo = :codtiposorteo and e.excFecha = :fechaSorteo")
+    , @NamedQuery(name = "Exclusion.findExclusion", query = "SELECT e FROM Exclusion e WHERE e.excCodtiposorteo.codigo = :codtiposorteo and e.excFecha = :fechaSorteo and e.excBloqueo = :bloqueo and e.excNumero = :numero")})
 public class Exclusion implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -179,23 +181,42 @@ public class Exclusion implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (excId != null ? excId.hashCode() : 0);
+        int hash = 7;
+        hash = 89 * hash + Objects.hashCode(this.excFecha);
+        hash = 89 * hash + Objects.hashCode(this.excNumero);
+        hash = 89 * hash + Objects.hashCode(this.excBloqueo);
+        hash = 89 * hash + Objects.hashCode(this.excCodtiposorteo);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Exclusion)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Exclusion other = (Exclusion) object;
-        if ((this.excId == null && other.excId != null) || (this.excId != null && !this.excId.equals(other.excId))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Exclusion other = (Exclusion) obj;
+        if (!Objects.equals(this.excFecha, other.excFecha)) {
+            return false;
+        }
+        if (!Objects.equals(this.excNumero, other.excNumero)) {
+            return false;
+        }
+        if (!Objects.equals(this.excBloqueo, other.excBloqueo)) {
+            return false;
+        }
+        if (!Objects.equals(this.excCodtiposorteo, other.excCodtiposorteo)) {
             return false;
         }
         return true;
     }
+
+    
 
     @Override
     public String toString() {

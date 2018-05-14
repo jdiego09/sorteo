@@ -16,6 +16,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -93,18 +94,54 @@ public class ExclusionesController extends Controller implements Initializable {
     private JFXButton jbtnEliminar, jbtnBuscar;
 
     @FXML
+    private Label lblApuesta, lblNumero;
+
+    @FXML
+    void rdbBloqueaVenta(ActionEvent event) {
+        mostrarOcultarCampos();
+        this.exclusion.setExcBloqueo("S");
+    }
+
+    @FXML
+    void rdbNumero(ActionEvent event) {
+        mostrarOcultarCampos();
+        this.exclusion.setExcBloqueo("N");
+    }
+
+    @FXML
     void buscar(ActionEvent event) {
         buscarExclusiones();
     }
 
     @FXML
     void eliminar(ActionEvent event) {
+        if (tbvExcepciones.getSelectionModel().getSelectedItem().getExcId() != null && tbvExcepciones.getSelectionModel().getSelectedItem().getExcId() > 0) {
+            Resultado<String> resultado = ExclusionDao.getInstance().deleteExclusion(tbvExcepciones.getSelectionModel().getSelectedItem());
 
+            if (resultado.getResultado().equals(TipoResultado.SUCCESS)) {
+                this.listaExclusiones.remove(tbvExcepciones.getSelectionModel().getSelectedItem());
+                tbvExcepciones.refresh();
+            } else {
+                AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Eliminar excepción", resultado.getMensaje());
+            }
+        }
     }
 
     @FXML
     void guardar(ActionEvent event) {
+        this.exclusion.setExcCodtiposorteo(cmbTipoSorteo.getValue());
+        if (!exclusionValida()) {
+            return;
+        }
+        ExclusionDao.getInstance().setExclusion(this.exclusion);
+        Resultado<Exclusion> resultado = ExclusionDao.getInstance().save();
 
+        if (resultado.getResultado().equals(TipoResultado.ERROR)) {
+            AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Guardar excepción", resultado.getMensaje());
+            return;
+        }
+        AppWindowController.getInstance().mensaje(Alert.AlertType.INFORMATION, "Guardar excepción", resultado.getMensaje());
+        agregarALista(resultado.get());
     }
 
     @FXML
@@ -132,6 +169,7 @@ public class ExclusionesController extends Controller implements Initializable {
         cargarTiposSorteo();
 
         cmbTipoSorteo.setItems(this.tiposSorteo);
+
         if (this.exclusion != null) {
             unbindExclusion();
         }
@@ -168,18 +206,19 @@ public class ExclusionesController extends Controller implements Initializable {
     private void clearForm() {
         unbindExclusion();
         this.tiposSorteo.clear();
+        this.listaExclusiones.clear();
         nuevaExclusion();
         bindExclusion();
     }
 
     private void buscarExclusiones() {
+        listaExclusiones.clear();
         Resultado<ArrayList<Exclusion>> exclusiones = ExclusionDao.getInstance().findBySorteo(cmbTipoSorteo.getValue(), Date.from(dtpFecha.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
         if (!exclusiones.getResultado().equals(TipoResultado.SUCCESS)) {
             AppWindowController.getInstance().mensaje(Alert.AlertType.INFORMATION, "Traer excepciones", exclusiones.getMensaje());
         }
         exclusiones.get().stream().forEach(listaExclusiones::add);
         bindListaExclusiones();
-        addListenerTableExclusiones(tbvExcepciones);
     }
 
     private void bindListaExclusiones() {
@@ -192,14 +231,32 @@ public class ExclusionesController extends Controller implements Initializable {
         tbcApuesta.setCellValueFactory(new PropertyValueFactory<>("excMonto"));
     }
 
-    private void addListenerTableExclusiones(TableView table) {
-        table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            unbindExclusion();
-            if (newSelection != null) {
-                this.exclusion = (Exclusion) newSelection;
-                bindExclusion();
+    private void mostrarOcultarCampos() {
+        lblNumero.setVisible(rdbNumero.isSelected());
+        lblApuesta.setVisible(rdbNumero.isSelected());
+        txtNumero.setVisible(rdbNumero.isSelected());
+        txtApuesta.setVisible(rdbNumero.isSelected());
+    }
+
+    private void agregarALista(Exclusion nueva) {
+        if (!this.listaExclusiones.contains(nueva)) {
+            this.listaExclusiones.add(nueva);
+        } else {
+            this.listaExclusiones.set(this.listaExclusiones.indexOf(nueva), nueva);
+        }
+        tbvExcepciones.refresh();
+    }
+
+    private boolean exclusionValida() {
+        Resultado<Exclusion> result = ExclusionDao.getInstance().findExclusion(this.exclusion);
+        if (result.getResultado().equals(TipoResultado.SUCCESS)) {
+            return result.get() == null;
+        } else {
+            if (result.getResultado().equals(TipoResultado.ERROR)) {
+                AppWindowController.getInstance().mensaje(Alert.AlertType.INFORMATION, "Validar excepción", result.getMensaje());
             }
-        });
+        }
+        return true;
     }
 
 }
