@@ -45,7 +45,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Exclusion.findAll", query = "SELECT e FROM Exclusion e")
     , @NamedQuery(name = "Exclusion.findBySorteo", query = "SELECT e FROM Exclusion e WHERE e.excCodtiposorteo.codigo = :codtiposorteo and e.excFecha = :fechaSorteo")
-    , @NamedQuery(name = "Exclusion.findExclusion", query = "SELECT e FROM Exclusion e WHERE e.excCodtiposorteo.codigo = :codtiposorteo and e.excFecha = :fechaSorteo and e.excBloqueo = :bloqueo and e.excNumero = :numero")})
+    , @NamedQuery(name = "Exclusion.findExclusion", query = "SELECT e FROM Exclusion e WHERE e.excCodtiposorteo.codigo = :codtiposorteo and e.excFecha = :fechaSorteo and e.excTipoBloqueo = :bloqueo and e.excNumero = :numero")
+    ,
+@NamedQuery(name = "Exclusion.getVentaBloqueada", query = "SELECT e FROM Exclusion e WHERE e.excCodtiposorteo.codigo = :codtiposorteo and e.excFecha = :fechaSorteo and e.excTipoBloqueo = 'T'")})
 public class Exclusion implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,7 +58,7 @@ public class Exclusion implements Serializable {
     @Transient
     private SimpleIntegerProperty excNumero;
     @Transient
-    private SimpleStringProperty excBloqueo;
+    private SimpleStringProperty excTipoBloqueo;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Transient
     private SimpleDoubleProperty excMonto;
@@ -65,7 +67,7 @@ public class Exclusion implements Serializable {
     private TipoSorteo excCodtiposorteo;
 
     public Exclusion() {
-        this.excBloqueo = new SimpleStringProperty();
+        this.excTipoBloqueo = new SimpleStringProperty();
         this.excFecha = new SimpleObjectProperty<>();
         this.excMonto = new SimpleDoubleProperty();
         this.excNumero = new SimpleIntegerProperty();
@@ -130,25 +132,25 @@ public class Exclusion implements Serializable {
         this.excNumero.set(excNumero);
     }
 
-    @Column(name = "exc_bloqueo")
+    @Column(name = "exc_tipobloqueo")
     @Access(AccessType.PROPERTY)
-    public String getExcBloqueo() {
-        return excBloqueo.get();
+    public String getExcTipoBloqueo() {
+        return excTipoBloqueo.get();
     }
 
-    public SimpleStringProperty getExcBloqueoProperty() {
-        return excBloqueo;
+    public SimpleStringProperty getExcTipoBloqueoProperty() {
+        return excTipoBloqueo;
     }
 
-    public String getDescripcionBloqueo() {
-        if (this.excBloqueo == null) {
-            this.excBloqueo = new SimpleStringProperty();
+    public String getDescripcionTipoBloqueo() {
+        if (this.excTipoBloqueo == null) {
+            this.excTipoBloqueo = new SimpleStringProperty();
         }
-        return this.excBloqueo.get().equalsIgnoreCase("s") ? "Ventas bloqueadas" : "Apuesta limitada";
+        return this.excTipoBloqueo != null && this.excTipoBloqueo.get() != null && !this.excTipoBloqueo.get().isEmpty() && this.excTipoBloqueo.get().equalsIgnoreCase("T") ? "Total" : "Número";
     }
 
-    public void setExcBloqueo(String excBloqueo) {
-        this.excBloqueo.set(excBloqueo);
+    public void setExcTipoBloqueo(String excBloqueo) {
+        this.excTipoBloqueo.set(excBloqueo);
     }
 
     @Column(name = "exc_monto")
@@ -184,7 +186,7 @@ public class Exclusion implements Serializable {
         int hash = 7;
         hash = 89 * hash + Objects.hashCode(this.excFecha);
         hash = 89 * hash + Objects.hashCode(this.excNumero);
-        hash = 89 * hash + Objects.hashCode(this.excBloqueo);
+        hash = 89 * hash + Objects.hashCode(this.excTipoBloqueo);
         hash = 89 * hash + Objects.hashCode(this.excCodtiposorteo);
         return hash;
     }
@@ -207,7 +209,7 @@ public class Exclusion implements Serializable {
         if (!Objects.equals(this.excNumero, other.excNumero)) {
             return false;
         }
-        if (!Objects.equals(this.excBloqueo, other.excBloqueo)) {
+        if (!Objects.equals(this.excTipoBloqueo, other.excTipoBloqueo)) {
             return false;
         }
         if (!Objects.equals(this.excCodtiposorteo, other.excCodtiposorteo)) {
@@ -215,8 +217,6 @@ public class Exclusion implements Serializable {
         }
         return true;
     }
-
-    
 
     @Override
     public String toString() {

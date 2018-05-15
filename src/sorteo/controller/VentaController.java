@@ -37,12 +37,13 @@ import javax.xml.bind.annotation.XmlTransient;
 import jfxtras.internal.scene.control.skin.CalendarPickerControlSkin;
 import jfxtras.internal.scene.control.skin.CalendarPickerControlSkin.ShowWeeknumbers;
 import jfxtras.scene.control.CalendarPicker;
-import net.sf.jasperreports.engine.JRException;
+import sorteo.model.dao.ExclusionDao;
 import sorteo.model.dao.FacturaDao;
 import sorteo.model.dao.MontosDao;
 import sorteo.model.dao.SorteoDao;
 import sorteo.model.dao.TipoSorteoDao;
 import sorteo.model.entities.DetalleFactura;
+import sorteo.model.entities.Exclusion;
 import sorteo.model.entities.Factura;
 import sorteo.model.entities.Montos;
 import sorteo.model.entities.Sorteo;
@@ -56,6 +57,7 @@ import sorteo.utils.TipoResultado;
 
 public class VentaController extends Controller implements Initializable {
 
+    private HashMap<String, Exclusion> exclusiones = new HashMap<>();
     private Double totalFactura;
     private SimpleDoubleProperty totalFacturaProperty;
     private final int CIEN = 100;
@@ -283,6 +285,11 @@ public class VentaController extends Controller implements Initializable {
             flpNumeros.getChildren().clear();
             if (posTipoSorteo >= 0) {
                 if (isFechaSorteoValida(this.sorteos.get(posTipoSorteo), newValue.getTime())) {
+                    Resultado<Boolean> ventaBloqueada = ExclusionDao.getInstance().ventaBloqueada(this.sorteos.get(posTipoSorteo), newValue.getTime());
+                    if (ventaBloqueada.get()) {
+                        AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Ventas bloqueadas", ventaBloqueada.getMensaje());
+                        return;
+                    }
                     obtenerSorteo();
                 }
             } else {
@@ -380,15 +387,22 @@ public class VentaController extends Controller implements Initializable {
 
     private void setNumeros(Sorteo sorteo) {
         flpNumeros.getChildren().clear();
-
         for (int i = sorteo.getTipoSorteo().getNumeroMinimo(); i < sorteo.getTipoSorteo().getNumeroMaximo() + 1; i++) {
+            Resultado<Double> montoApostado = SorteoDao.getInstance().getTotalApostadoNumero(this.factura.getSorteo(), i);
+            Double montoMaximo = exclusiones.get(String.valueOf(i)) != null ? ((Exclusion) exclusiones.get(String.valueOf(i))).getExcMonto() : this.factura.getSorteo().getTipoSorteo().getMontoMaximo();
             Button numero = new Button();
             numero.setText(i < 10 ? "0" + i : Integer.toString(i));
             numero.setId(Integer.toString(i));
             numero.getStyleClass().add("buttonnumero");
             numero.setPrefSize(70, 50);
+            if (montoApostado.getResultado().equals(TipoResultado.SUCCESS)) {
+                if (montoApostado.get().compareTo(montoMaximo) >= 0) {
+                    numero.getStyleClass().add("apuestaExcedida");
+                }
+            }
             numero.setOnAction(numeroHandler);
             flpNumeros.getChildren().add(numero);
+
         }
     }
 
@@ -515,6 +529,8 @@ public class VentaController extends Controller implements Initializable {
             Resultado<Sorteo> sorteoResult = SorteoDao.getInstance().findByFecha(calFechaSorteo.getCalendar().getTime(), this.sorteos.get(posTipoSorteo));
             if (sorteoResult.getResultado() == TipoResultado.SUCCESS) {
                 this.factura.setSorteo(sorteoResult.get());
+                cargarExcepciones();
+                setNumeros(this.factura.getSorteo());
             } else {
                 if (AppWindowController.getInstance().mensajeConfimacion("Crear nuevo sorteo", "¿Desea crear un nuevo sorteo para la fecha indicada?")) {
                     SorteoDao.getInstance().setSorteo(new Sorteo(calFechaSorteo.getCalendar().getTime(), this.sorteos.get(posTipoSorteo), Aplicacion.getInstance().getSucursalDefault()));
@@ -525,8 +541,10 @@ public class VentaController extends Controller implements Initializable {
                         AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Error al crear sorteo", sorteoSave.getMensaje());
                     }
                 }
+                cargarExcepciones();
+                setNumeros(this.factura.getSorteo());
             }
-            setNumeros(this.factura.getSorteo());
+
         }
     }
 
@@ -549,18 +567,31 @@ public class VentaController extends Controller implements Initializable {
         }
     }
 
+    private void cargarExcepciones() {
+        exclusiones.clear();
+        Resultado<ArrayList<Exclusion>> resultado = ExclusionDao.getInstance().findBySorteo(this.factura.getSorteo().getTipoSorteo(), calFechaSorteo.getCalendar().getTime());
+        if (!resultado.getResultado().equals(TipoResultado.SUCCESS)) {
+            AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Traer excepciones", resultado.getMensaje());
+            return;
+        }
+        resultado.get().stream().forEach((e) -> {
+            exclusiones.put(String.valueOf(e.getExcNumero()), e);
+        });
+    }
+
     private boolean apuestaValida(int numero) {
+        Double diferencia = -1.0;
+        Double montoMaximo = exclusiones.get(String.valueOf(numero)) != null ? ((Exclusion) exclusiones.get(String.valueOf(numero))).getExcMonto() : this.factura.getSorteo().getTipoSorteo().getMontoMaximo();
         Resultado<Double> montoApostado = SorteoDao.getInstance().getTotalApostadoNumero(this.factura.getSorteo(), detalleFactura.get(detalleSeleccionado).getNumero());
         if (montoApostado.getResultado().equals(TipoResultado.SUCCESS)) {
-            if (montoApostado.get().compareTo(this.factura.getSorteo().getTipoSorteo().getMontoMaximo()) > 0) {
-                //el monto apostado ya superó el máximo
+            if ((montoApostado.get()).compareTo(montoMaximo) >= 0) {
                 AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto apuesta", "El monto máximo de la apuesta para el número: "
-                   + String.valueOf(detalleFactura.get(detalleSeleccionado).getNumero())
+                   + String.valueOf(numero)
                    + ",  ha sido alcanzado para el sorteo. No se puede aceptar la nueva apuesta.");
                 return false;
             }
         }
-        Double diferencia = (montoApostado.get() + Double.valueOf(String.valueOf(numero))) - this.factura.getSorteo().getTipoSorteo().getMontoMaximo();
+        diferencia = (montoApostado.get() + Double.valueOf(String.valueOf(numero))) - montoMaximo;
         if (diferencia > 0) {
             //el monto apostado + la nueva apuesta exceden el máximo permitido
             AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto apuesta", "El monto de la apuesta para el número: "

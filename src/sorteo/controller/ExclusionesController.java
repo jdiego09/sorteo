@@ -2,11 +2,13 @@ package sorteo.controller;
 
 import com.jfoenix.controls.JFXButton;
 import java.net.URL;
-import java.time.Instant;
+import java.text.ParseException;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -31,11 +33,13 @@ import sorteo.model.dao.TipoSorteoDao;
 import sorteo.model.entities.Exclusion;
 import sorteo.model.entities.TipoSorteo;
 import sorteo.utils.AppWindowController;
+import sorteo.utils.Formater;
 import sorteo.utils.Resultado;
 import sorteo.utils.TipoResultado;
 
 public class ExclusionesController extends Controller implements Initializable {
 
+    private final String HOY = Formater.getInstance().formatFechaCorta.format(new Date());
     Exclusion exclusion;
     @XmlTransient
     ObservableList<TipoSorteo> tiposSorteo = FXCollections
@@ -52,10 +56,7 @@ public class ExclusionesController extends Controller implements Initializable {
     private Button btnLimpiar;
 
     @FXML
-    private Button btnGuardar;
-
-    @FXML
-    private Button jbtnSalir;
+    private Button btnGuardar, jbtnEliminar, jbtnSalir;
 
     @FXML
     private ComboBox<TipoSorteo> cmbTipoSorteo;
@@ -91,7 +92,7 @@ public class ExclusionesController extends Controller implements Initializable {
     private TableColumn<Exclusion, Double> tbcApuesta;
 
     @FXML
-    private JFXButton jbtnEliminar, jbtnBuscar;
+    private JFXButton jbtnBuscar;
 
     @FXML
     private Label lblApuesta, lblNumero;
@@ -99,13 +100,13 @@ public class ExclusionesController extends Controller implements Initializable {
     @FXML
     void rdbBloqueaVenta(ActionEvent event) {
         mostrarOcultarCampos();
-        this.exclusion.setExcBloqueo("S");
+        this.exclusion.setExcTipoBloqueo("T");
     }
 
     @FXML
     void rdbNumero(ActionEvent event) {
         mostrarOcultarCampos();
-        this.exclusion.setExcBloqueo("N");
+        this.exclusion.setExcTipoBloqueo("N");
     }
 
     @FXML
@@ -129,19 +130,29 @@ public class ExclusionesController extends Controller implements Initializable {
 
     @FXML
     void guardar(ActionEvent event) {
+        try {
+            if (this.exclusion.getExcFecha().before(Formater.getInstance().formatFechaCorta.parse(HOY))) {
+                AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Fecha no válida", "La fecha debe ser mayor que hoy.");
+                return;
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(ExclusionesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.exclusion.setExcCodtiposorteo(cmbTipoSorteo.getValue());
+
         if (!exclusionValida()) {
             return;
         }
         ExclusionDao.getInstance().setExclusion(this.exclusion);
         Resultado<Exclusion> resultado = ExclusionDao.getInstance().save();
 
-        if (resultado.getResultado().equals(TipoResultado.ERROR)) {
+        if (!resultado.getResultado().equals(TipoResultado.SUCCESS)) {
             AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Guardar excepción", resultado.getMensaje());
             return;
+        } else {
+            AppWindowController.getInstance().mensaje(Alert.AlertType.INFORMATION, "Guardar excepción", resultado.getMensaje());
+            agregarALista(resultado.get());
         }
-        AppWindowController.getInstance().mensaje(Alert.AlertType.INFORMATION, "Guardar excepción", resultado.getMensaje());
-        agregarALista(resultado.get());
     }
 
     @FXML
@@ -249,12 +260,10 @@ public class ExclusionesController extends Controller implements Initializable {
 
     private boolean exclusionValida() {
         Resultado<Exclusion> result = ExclusionDao.getInstance().findExclusion(this.exclusion);
-        if (result.getResultado().equals(TipoResultado.SUCCESS)) {
+        if (!result.getResultado().equals(TipoResultado.ERROR)) {
             return result.get() == null;
         } else {
-            if (result.getResultado().equals(TipoResultado.ERROR)) {
-                AppWindowController.getInstance().mensaje(Alert.AlertType.INFORMATION, "Validar excepción", result.getMensaje());
-            }
+            AppWindowController.getInstance().mensaje(Alert.AlertType.INFORMATION, "Validar excepción", result.getMensaje());
         }
         return true;
     }

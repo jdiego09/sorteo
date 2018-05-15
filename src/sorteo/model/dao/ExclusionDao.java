@@ -77,10 +77,39 @@ public class ExclusionDao extends BaseDao<Integer, Exclusion> {
             resultado.setResultado(TipoResultado.SUCCESS);
             resultado.set(exclusiones);
             return resultado;
+        } catch (NoResultException nre) {
+            resultado.setResultado(TipoResultado.SUCCESS);
+            return resultado;
         } catch (Exception ex) {
             Logger.getLogger(ExclusionDao.class.getName()).log(Level.SEVERE, null, ex);
             resultado.setResultado(TipoResultado.ERROR);
             resultado.setMensaje("Error consultando las excepciones del sorteo: " + tipoSorteo.getDescripcion()
+               + ", del día: " + Formater.getInstance().formatFechaCorta.format(fecha));
+            return resultado;
+        }
+    }
+
+    public Resultado<Boolean> ventaBloqueada(TipoSorteo tipoSorteo, Date fecha) {
+        Resultado<Boolean> resultado = new Resultado<>();
+
+        try {
+            Query query = getEntityManager().createNamedQuery("Exclusion.getVentaBloqueada");
+            query.setParameter("codtiposorteo", tipoSorteo.getCodigo());
+            query.setParameter("fechaSorteo", fecha);
+            if (query.getResultList().size() > 0) {
+                resultado.set(true);
+                resultado.setMensaje("Las ventas para el sorteo " + tipoSorteo.getDescripcion() + " del día " + Formater.getInstance().formatFechaCorta.format(fecha) + " se encuentran bloqueadas.");
+                resultado.setResultado(TipoResultado.SUCCESS);
+            } else {
+                resultado.setResultado(TipoResultado.SUCCESS);
+                resultado.set(false);
+            }
+            return resultado;
+        } catch (Exception ex) {
+            Logger.getLogger(ExclusionDao.class.getName()).log(Level.SEVERE, null, ex);
+            resultado.setResultado(TipoResultado.ERROR);
+            resultado.set(false);
+            resultado.setMensaje("Error consultando las excepciones para el sorteo: " + tipoSorteo.getDescripcion()
                + ", del día: " + Formater.getInstance().formatFechaCorta.format(fecha));
             return resultado;
         }
@@ -93,12 +122,15 @@ public class ExclusionDao extends BaseDao<Integer, Exclusion> {
             Query query = getEntityManager().createNamedQuery("Exclusion.findExclusion");
             query.setParameter("codtiposorteo", exclusion.getExcCodtiposorteo().getCodigo());
             query.setParameter("fechaSorteo", exclusion.getExcFecha());
-            query.setParameter("bloqueo", exclusion.getExcBloqueo());
+            query.setParameter("bloqueo", exclusion.getExcTipoBloqueo());
             query.setParameter("numero", exclusion.getExcNumero());
             excepcion = (Exclusion) query.getSingleResult();
 
             result.setResultado(TipoResultado.SUCCESS);
             result.set(excepcion);
+            return result;
+        } catch (NoResultException nre) {
+            result.setResultado(TipoResultado.WARNING);
             return result;
         } catch (Exception ex) {
             Logger.getLogger(ExclusionDao.class.getName()).log(Level.SEVERE, null, ex);
