@@ -77,7 +77,7 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Separator layoutX="45.0" layoutY="243.0" prefHeight="3.0" prefWidth="510.0" />
+      <Separator layoutX="45.0" layoutY="243.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="3.0" prefWidth="510.0" />
       <TableView fx:id="tbvExcepciones" layoutX="45.0" layoutY="281.0" prefHeight="297.0" prefWidth="510.0">
         <columns>
             <TableColumn fx:id="tbcBloqueo" prefWidth="145.0" text="Venta Bloqueada" />
@@ -90,10 +90,6 @@
             <Tooltip text="Consultar" />
          </tooltip>
       </JFXButton>
-      <JFXButton fx:id="jbtnEliminar" layoutX="524.0" layoutY="246.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#eliminar" prefHeight="30.0" prefWidth="30.0" styleClass="actionbuttonborrar">
-         <tooltip>
-            <Tooltip text="Eliminar excepción seleccionada" />
-         </tooltip>
-      </JFXButton>
+      <Button fx:id="jbtnEliminar" layoutX="527.0" layoutY="246.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#eliminar" prefHeight="30.0" prefWidth="30.0" styleClass="actionbuttonborrar" text="Button" />
    </children>
 </AnchorPane>
