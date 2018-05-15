@@ -282,7 +282,13 @@
                                                          <content>
                                                             <AnchorPane prefHeight="196.0" prefWidth="600.0">
                                                                <children>
-                                                                  <FlowPane fx:id="flpNumeros" prefHeight="192.0" prefWidth="559.0" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                                  <TextField fx:id="txtNumElegido" layoutX="178.0" layoutY="15.0" onKeyPressed="#enterNumero" prefHeight="37.0" prefWidth="99.0" styleClass="edittext" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="0.0" />
+                                                                  <FlowPane fx:id="flpNumeros" layoutY="33.0" prefHeight="159.0" prefWidth="600.0" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="33.0" />
+                                                                  <Label layoutX="65.0" layoutY="5.0" text="Número a elegir" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="5.0">
+                                                                     <font>
+                                                                        <Font size="18.0" />
+                                                                     </font>
+                                                                  </Label>
                                                                </children>
                                                             </AnchorPane>
                                                          </content>

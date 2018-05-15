@@ -54,7 +54,7 @@ import javax.xml.bind.annotation.XmlTransient;
     + "  join s.tipoSorteo t\n"
     + " where t.codigo = :codTSorteo\n"
     + "   and s.codigo = :codSorteo\n"
-    + "   and f.fecha = :fecSorteo\n"
+    + "   and s.fecha = :fecSorteo\n"
     + "   and d.numero = :numero")
     ,
 @NamedQuery(name = "Sorteo.resumenVentaFecha", query = "select s.fecha, d.numero, coalesce(sum(d.monto),0)\n"

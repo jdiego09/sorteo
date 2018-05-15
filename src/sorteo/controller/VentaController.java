@@ -28,6 +28,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
@@ -108,6 +109,9 @@ public class VentaController extends Controller implements Initializable {
 
     @FXML
     private Button btnSalir;
+
+    @FXML
+    private TextField txtNumElegido;
 
     @FXML
     private Button num9;
@@ -337,6 +341,7 @@ public class VentaController extends Controller implements Initializable {
                 btn.setText(s.getDescripcion());
                 btn.setId(String.valueOf(s.getCodigo()));
                 btn.getStyleClass().add("buttonsorteo");
+                btn.setFocusTraversable(false);
                 btn.setMaxWidth(Integer.MAX_VALUE);
                 btn.setMinHeight(80);
                 btn.setOnAction(tipoSorteoHandler);
@@ -395,8 +400,10 @@ public class VentaController extends Controller implements Initializable {
             numero.setId(Integer.toString(i));
             numero.getStyleClass().add("buttonnumero");
             numero.setPrefSize(70, 50);
+            numero.setFocusTraversable(false);
             if (montoApostado.getResultado().equals(TipoResultado.SUCCESS)) {
                 if (montoApostado.get().compareTo(montoMaximo) >= 0) {
+                    numero.setDisable(true);
                     numero.getStyleClass().add("apuestaExcedida");
                 }
             }
@@ -409,17 +416,7 @@ public class VentaController extends Controller implements Initializable {
     private final EventHandler<ActionEvent> numeroHandler = (final ActionEvent event) -> {
         Object source = event.getSource();
         Button boton = (Button) source;
-        DetalleFactura nuevo = new DetalleFactura(Integer.valueOf(boton.getText()), BigDecimal.ZERO.doubleValue());
-        nuevo.setFactura(factura);
-        if (!detalleFactura.stream().filter(d -> d.getNumero().equals(nuevo.getNumero())).findFirst().isPresent()) {
-            //valida la cantidad de numeros por venta para el sorteo
-            if (factura.getDetalleFactura().size() >= sorteos.get(posTipoSorteo).getCantNumVenta()) {
-                AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "", "No puede ingresar más números, ya ha alcanzado la cantidad máxima de números para la venta.");
-                return;
-            }
-            detalleFactura.add(nuevo);
-        }
-        tbvDetFactura.getSelectionModel().selectLast();
+        agregarNumeroADetalle(Integer.valueOf(boton.getId()));
         event.consume();
     };
 
@@ -457,6 +454,7 @@ public class VentaController extends Controller implements Initializable {
                 AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto no indicado", "Debe indicar un monto a apostar");
                 txtNumero.requestFocus();
             }
+            txtNumElegido.requestFocus();
         } catch (NumberFormatException ex) {
             System.out.println(ex.getMessage());
         }
@@ -475,6 +473,7 @@ public class VentaController extends Controller implements Initializable {
     @FXML
     void btnEnter(ActionEvent event) {
         returnMonto();
+        txtNumElegido.requestFocus();
     }
 
     @FXML
@@ -513,6 +512,7 @@ public class VentaController extends Controller implements Initializable {
                     break;
                 case ENTER:
                     returnMonto();
+                    txtNumElegido.requestFocus();
                     break;
                 case BACK_SPACE:
                     txtNumero.deletePreviousChar();
@@ -543,6 +543,7 @@ public class VentaController extends Controller implements Initializable {
                 }
                 cargarExcepciones();
                 setNumeros(this.factura.getSorteo());
+                txtNumElegido.requestFocus();
             }
 
         }
@@ -550,8 +551,28 @@ public class VentaController extends Controller implements Initializable {
 
     @FXML
     void btnAplicar(ActionEvent event) {
+        if (this.detalleFactura.size() <= 0) {
+            AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Aplicar", "No hay ningún número seleccionado para aplicar la venta.");
+            return;
+        }
         this.factura.setHechaPor(Parametros.getInstance().getParametro("usuario"));
         this.factura.setTotal(totalFacturaProperty.get());
+        if (this.factura.getTotal() <= 0) {
+            AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Aplicar", "Debe indicar el monto para aplicar la venta.");
+            return;
+        }
+        if (!AppWindowController.getInstance().mensajeConfimacion("Confirmar venta", "¿Desea aplicar la venta?")) {
+            return;
+        }
+        String detalleVenta = null;
+        for (DetalleFactura d : this.detalleFactura) {
+            detalleVenta = detalleVenta + "\nNúmero:  " + String.valueOf(d.getNumero()) + ", Monto: " + Formater.getInstance().decimalFormat.format(d.getMonto());
+        }
+        if (!AppWindowController.getInstance().mensajeConfimacion("Confirmar venta", "¿Seguro que desea aplicar la venta:\n"
+           + detalleVenta + "?")) {
+            return;
+        }
+
         FacturaDao.getInstance().setFactura(this.factura);
         Resultado<Factura> facturaSave = FacturaDao.getInstance().save();
         if (facturaSave.getResultado().equals(TipoResultado.SUCCESS)) {
@@ -624,4 +645,30 @@ public class VentaController extends Controller implements Initializable {
             this.factura.getDetalleFactura().remove(detalleSeleccionado);
         }
     }
+
+    @FXML
+    void enterNumero(KeyEvent event) {
+        if (event.getCode().equals(KeyCode.ENTER)) {
+            agregarNumeroADetalle(Integer.valueOf(txtNumElegido.getText()));
+            txtNumElegido.clear();
+            txtNumero.requestFocus();
+
+        }
+    }
+
+    private void agregarNumeroADetalle(Integer num) {
+        DetalleFactura nuevo = new DetalleFactura(num, BigDecimal.ZERO.doubleValue());
+        nuevo.setFactura(factura);
+        if (!detalleFactura.stream().filter(d -> d.getNumero().equals(nuevo.getNumero())).findFirst().isPresent()) {
+            //valida la cantidad de numeros por venta para el sorteo
+            if (factura.getDetalleFactura().size() >= sorteos.get(posTipoSorteo).getCantNumVenta()) {
+                AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "", "No puede ingresar más números, ya ha alcanzado la cantidad máxima de números para la venta.");
+                return;
+            }
+            detalleFactura.add(nuevo);
+        }
+        tbvDetFactura.getSelectionModel().selectLast();
+        txtNumero.requestFocus();
+    }
+
 }
