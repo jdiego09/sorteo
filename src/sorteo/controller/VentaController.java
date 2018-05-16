@@ -193,8 +193,6 @@ public class VentaController extends Controller implements Initializable {
         startCalendar();
         cargarSorteos();
         cargarMontos();
-
-        txtNumero.addEventFilter(KeyEvent.KEY_PRESSED, this::restrictNumbersOnly);
         bindDetalleFactura();
         addListenerDetalleFactura();
 
@@ -260,20 +258,6 @@ public class VentaController extends Controller implements Initializable {
         calcularTotal();
     }
 
-    void restrictNumbersOnly(KeyEvent keyEvent) {
-        switch (keyEvent.getCode()) {
-            case TAB:
-            case BACK_SPACE:
-            case DELETE:
-                break;
-            default:
-                if (!keyEvent.getText().matches("\\d")) {
-                    keyEvent.consume();
-                }
-                break;
-        }
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         init();
@@ -324,7 +308,7 @@ public class VentaController extends Controller implements Initializable {
     private final EventHandler<ActionEvent> apostarPredefinido = (final ActionEvent event) -> {
         Object source = event.getSource();
         //valida el monto apostado
-        if (apuestaValida(Integer.valueOf(((Button) source).getId()))) {
+        if (apuestaValida(detalleFactura.get(tbvDetFactura.getSelectionModel().getSelectedIndex()).getNumero(), Double.valueOf(((Button) source).getId()))) {
             detalleFactura.get(tbvDetFactura.getSelectionModel().getSelectedIndex()).setMonto(Double.parseDouble(((Button) source).getId()));
         }
         calcularTotal();
@@ -427,12 +411,11 @@ public class VentaController extends Controller implements Initializable {
         txtNumero.requestFocus();
     }
 
-    private void returnMonto() {
+    private boolean returnMonto() {
         detalleSeleccionado = tbvDetFactura.getSelectionModel().getSelectedIndex();
         if (detalleSeleccionado < 0) {
             AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "", "Debe seleccionar un detalle de la venta para modificar el monto de la apuesta.");
-            txtNumero.requestFocus();
-            return;
+            return false;
         }
         try {
             if (txtNumero.getText() != null && !txtNumero.getText().isEmpty() && txtNumero.getText().length() > 0) {
@@ -441,23 +424,24 @@ public class VentaController extends Controller implements Initializable {
                 //valida que el monto ingresado sea multiplo de 100.
                 if (residuo != 0) {
                     AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto incorrecto", "El monto ingresado debe ser múltiplo de: " + String.valueOf(CIEN));
-                    txtNumero.requestFocus();
-                    return;
+                    return false;
                 }
                 //valida el monto apostado
-                if (apuestaValida(numero)) {
+                if (apuestaValida(detalleFactura.get(detalleSeleccionado).getNumero(), Double.parseDouble(String.valueOf(numero)))) {
                     detalleFactura.get(detalleSeleccionado).setMonto(Double.valueOf(txtNumero.getText()));
                     calcularTotal();
                     txtNumero.clear();
+                    return true;
                 }
             } else {
                 AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto no indicado", "Debe indicar un monto a apostar");
-                txtNumero.requestFocus();
+                return false;
             }
-            txtNumElegido.requestFocus();
         } catch (NumberFormatException ex) {
             System.out.println(ex.getMessage());
+            return false;
         }
+        return true;
     }
 
     @FXML
@@ -472,56 +456,26 @@ public class VentaController extends Controller implements Initializable {
 
     @FXML
     void btnEnter(ActionEvent event) {
-        returnMonto();
-        txtNumElegido.requestFocus();
+        if (returnMonto()) {
+            txtNumElegido.requestFocus();
+        } else {
+            txtNumero.requestFocus();
+        }
     }
 
     @FXML
     void numKeyPressed(KeyEvent event) {
-        if (null != event.getCode()) {
-            switch (event.getCode()) {
-                case NUMPAD0:
-                case DIGIT0:
-                    break;
-                case NUMPAD1:
-                case DIGIT1:
-                    break;
-                case NUMPAD2:
-                case DIGIT2:
-                    break;
-                case NUMPAD3:
-                case DIGIT3:
-                    break;
-                case NUMPAD4:
-                case DIGIT4:
-                    break;
-                case NUMPAD5:
-                case DIGIT5:
-                    break;
-                case NUMPAD6:
-                case DIGIT6:
-                    break;
-                case NUMPAD7:
-                case DIGIT7:
-                    break;
-                case NUMPAD8:
-                case DIGIT8:
-                    break;
-                case NUMPAD9:
-                case DIGIT9:
-                    break;
-                case ENTER:
-                    returnMonto();
+        if (event.getCode().isDigitKey() || event.getCode().equals(KeyCode.ENTER)) {
+            if (event.getCode().equals(KeyCode.ENTER)) {
+                if (returnMonto()) {
                     txtNumElegido.requestFocus();
-                    break;
-                case BACK_SPACE:
-                    txtNumero.deletePreviousChar();
-                    break;
-                default:
-                    break;
+                } else {
+                    txtNumero.requestFocus();
+                }
             }
+        } else {
+            event.consume();
         }
-        event.consume();
     }
 
     private void obtenerSorteo() {
@@ -600,10 +554,10 @@ public class VentaController extends Controller implements Initializable {
         });
     }
 
-    private boolean apuestaValida(int numero) {
+    private boolean apuestaValida(int numero, Double monto) {
         Double diferencia = -1.0;
         Double montoMaximo = exclusiones.get(String.valueOf(numero)) != null ? ((Exclusion) exclusiones.get(String.valueOf(numero))).getExcMonto() : this.factura.getSorteo().getTipoSorteo().getMontoMaximo();
-        Resultado<Double> montoApostado = SorteoDao.getInstance().getTotalApostadoNumero(this.factura.getSorteo(), detalleFactura.get(detalleSeleccionado).getNumero());
+        Resultado<Double> montoApostado = SorteoDao.getInstance().getTotalApostadoNumero(this.factura.getSorteo(), numero);
         if (montoApostado.getResultado().equals(TipoResultado.SUCCESS)) {
             if ((montoApostado.get()).compareTo(montoMaximo) >= 0) {
                 AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto apuesta", "El monto máximo de la apuesta para el número: "
@@ -612,11 +566,11 @@ public class VentaController extends Controller implements Initializable {
                 return false;
             }
         }
-        diferencia = (montoApostado.get() + Double.valueOf(String.valueOf(numero))) - montoMaximo;
+        diferencia = (montoApostado.get() + monto) - montoMaximo;
         if (diferencia > 0) {
             //el monto apostado + la nueva apuesta exceden el máximo permitido
             AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto apuesta", "El monto de la apuesta para el número: "
-               + String.valueOf(detalleFactura.get(detalleSeleccionado).getNumero())
+               + String.valueOf(numero)
                + ",  excede por: " + Formater.getInstance().decimalFormat.format(diferencia)
                + " el monto máximo permitido apostar por número. No se puede aceptar la nueva apuesta.");
             return false;
@@ -648,12 +602,25 @@ public class VentaController extends Controller implements Initializable {
 
     @FXML
     void enterNumero(KeyEvent event) {
-        if (event.getCode().equals(KeyCode.ENTER)) {
-            agregarNumeroADetalle(Integer.valueOf(txtNumElegido.getText()));
-            txtNumElegido.clear();
-            txtNumero.requestFocus();
-
+        if (event.getCode().isDigitKey() || event.getCode().equals(KeyCode.ENTER)) {
+            if (event.getCode().equals(KeyCode.ENTER)) {
+                if (Integer.valueOf(txtNumElegido.getText()) < this.sorteo.getTipoSorteo().getNumeroMinimo()
+                   || Integer.valueOf(txtNumElegido.getText()) > this.sorteo.getTipoSorteo().getNumeroMaximo()) {
+                    AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Número no válido", "El número ingresado no es válido");
+                    txtNumElegido.requestFocus();
+                    return;
+                }
+                if (apuestaValida(Integer.parseInt(txtNumElegido.getText()), new Double("0.0")
+                )) {
+                    agregarNumeroADetalle(Integer.valueOf(txtNumElegido.getText()));
+                    txtNumElegido.clear();
+                    txtNumero.requestFocus();
+                }
+            }
+        } else {
+            event.consume();
         }
+
     }
 
     private void agregarNumeroADetalle(Integer num) {
