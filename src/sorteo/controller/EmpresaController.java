@@ -60,7 +60,7 @@ public class EmpresaController extends Controller implements Initializable {
     private Button btnSalir;
 
     @FXML
-    private TextField jtxfCedJuridica;
+    private TextField jtxfLeyenda;
 
     @FXML
     private TextField jtxfDescripcion;
@@ -194,11 +194,11 @@ public class EmpresaController extends Controller implements Initializable {
         addListenerTableEmpresas(tbvEmpresas);
         tabEmpresas.getSelectionModel().selectFirst();
         jcmbSucEstado.getSelectionModel().selectFirst();
-        jtxfCedJuridica.requestFocus();
+        jtxfLeyenda.requestFocus();
     }
 
     private void bindEmpresa() {
-        jtxfCedJuridica.textProperty().bindBidirectional(this.empresa.getCedJuridicaProperty());
+        jtxfLeyenda.textProperty().bindBidirectional(this.empresa.getLeyendaProperty());
         jtxfDescripcion.textProperty().bindBidirectional(this.empresa.getNombreProperty());
         jtxfTelefono.textProperty().bindBidirectional(this.empresa.getTelefonoProperty());
         jtxfEmail.textProperty().bindBidirectional(this.empresa.getEmailProperty());
@@ -206,7 +206,7 @@ public class EmpresaController extends Controller implements Initializable {
     }
 
     private void unbindEmpresa() {
-        jtxfCedJuridica.textProperty().unbindBidirectional(this.empresa.getCedJuridicaProperty());
+        jtxfLeyenda.textProperty().unbindBidirectional(this.empresa.getLeyendaProperty());
         jtxfDescripcion.textProperty().unbindBidirectional(this.empresa.getNombreProperty());
         jtxfTelefono.textProperty().unbindBidirectional(this.empresa.getTelefonoProperty());
         jtxfEmail.textProperty().unbindBidirectional(this.empresa.getEmailProperty());
@@ -241,7 +241,7 @@ public class EmpresaController extends Controller implements Initializable {
                 nuevaSucursal();
                 bindSucursal();
                 bindEmpresa();
-                jtxfCedJuridica.setDisable(true);
+                jtxfLeyenda.setDisable(true);
             }
             jtxfDescripcion.requestFocus();
         });
@@ -291,7 +291,7 @@ public class EmpresaController extends Controller implements Initializable {
         if (empr.get() != null) {
             if (empr.get().getCodigo() != null) {
                 this.empresa = empr.get();
-                jtxfCedJuridica.setDisable(true);
+                jtxfLeyenda.setDisable(true);
                 // Se cargan los roles del usuario.
 
                 this.listaSucursales.clear();
@@ -366,8 +366,8 @@ public class EmpresaController extends Controller implements Initializable {
             cargarEmpresas();
             bindListaEmpresas();
 
-            this.jtxfCedJuridica.setDisable(false);
-            this.jtxfCedJuridica.requestFocus();
+            this.jtxfLeyenda.setDisable(false);
+            this.jtxfLeyenda.requestFocus();
         } else {
             unbindSucursal();
             nuevaSucursal();

@@ -36,8 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Empresa.findAll", query = "SELECT s FROM Empresa s")
-    , @NamedQuery(name = "Empresa.findByCodigo", query = "SELECT s FROM Empresa s WHERE s.codigo = :codigo")
-    , @NamedQuery(name = "Empresa.findByCedJuridica", query = "SELECT s FROM Empresa s WHERE s.cedJuridica = :cedJuridica")})
+    , @NamedQuery(name = "Empresa.findByCodigo", query = "SELECT s FROM Empresa s WHERE s.codigo = :codigo")})
 public class Empresa implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,7 +44,7 @@ public class Empresa implements Serializable {
     @Transient
     private Integer codigo;
     @Transient
-    private SimpleStringProperty cedJuridica;
+    private SimpleStringProperty leyenda;
     @Transient
     private SimpleStringProperty nombre;
     @Transient
@@ -58,7 +57,7 @@ public class Empresa implements Serializable {
     private List<Sucursal> sucursales;
 
     public Empresa() {
-        this.cedJuridica = new SimpleStringProperty();
+        this.leyenda = new SimpleStringProperty();
         this.nombre = new SimpleStringProperty();
         this.logo = new SimpleStringProperty();
         this.telefono = new SimpleStringProperty();
@@ -83,20 +82,20 @@ public class Empresa implements Serializable {
     }
 
     @Access(AccessType.PROPERTY)
-    @Column(name = "emp_cedjuridica")
-    public String getCedJuridica() {
-        return cedJuridica.get();
+    @Column(name = "emp_leyenda")
+    public String getLeyenda() {
+        return leyenda.get();
     }
 
-    public SimpleStringProperty getCedJuridicaProperty() {
-        if (this.cedJuridica == null) {
-            this.cedJuridica = new SimpleStringProperty();
+    public SimpleStringProperty getLeyendaProperty() {
+        if (this.leyenda == null) {
+            this.leyenda = new SimpleStringProperty();
         }
-        return this.cedJuridica;
+        return this.leyenda;
     }
 
-    public void setCedJuridica(String cedJuridica) {
-        this.cedJuridica.set(cedJuridica);
+    public void setLeyenda(String leyenda) {
+        this.leyenda.set(leyenda);
     }
 
     @Access(AccessType.PROPERTY)
@@ -195,7 +194,7 @@ public class Empresa implements Serializable {
             return false;
         }
         final Empresa other = (Empresa) obj;
-        if (!Objects.equals(this.cedJuridica, other.cedJuridica)) {
+        if (!Objects.equals(this.leyenda, other.leyenda)) {
             return false;
         }
         return true;

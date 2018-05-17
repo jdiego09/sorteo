@@ -9,6 +9,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.effect.Glow?>
@@ -47,49 +48,53 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <JFXButton fx:id="jbtnBuscarLogo" layoutX="547.0" layoutY="181.0" onAction="#buscarArchivoLogo" prefHeight="30.0" prefWidth="37.0" styleClass="buttonbuscar" />
-                        <TableView fx:id="tbvEmpresas" layoutX="32.0" layoutY="255.0" prefHeight="246.0" prefWidth="551.0">
+                        <JFXButton fx:id="jbtnBuscarLogo" layoutX="547.0" layoutY="159.0" onAction="#buscarArchivoLogo" prefHeight="30.0" prefWidth="37.0" styleClass="buttonbuscar" />
+                        <TableView fx:id="tbvEmpresas" layoutX="32.0" layoutY="312.0" prefHeight="179.0" prefWidth="551.0">
                           <columns>
                             <TableColumn fx:id="tbcCedula" prefWidth="155.0" text="Céd. Jurídica" />
                             <TableColumn fx:id="tbcDescripcion" prefWidth="309.0" text="Descripción" />
                           </columns>
                         </TableView>
-                        <Line endX="450.0" layoutX="133.0" layoutY="247.0" startX="-100.0" />
-                        <Label layoutX="32.0" layoutY="220.0" text="Empresas">
+                        <Line endX="450.0" layoutX="133.0" layoutY="308.0" startX="-100.0" />
+                        <Label layoutX="32.0" layoutY="280.0" text="Empresas">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="jtxfCedJuridica" layoutX="33.0" layoutY="41.0" prefHeight="25.0" prefWidth="176.0" styleClass="edittext" />
-                        <TextField fx:id="jtxfDescripcion" layoutX="223.0" layoutY="41.0" prefHeight="37.0" prefWidth="361.0" styleClass="edittext" />
-                        <TextField fx:id="jtxfTelefono" layoutX="33.0" layoutY="110.0" prefHeight="25.0" prefWidth="176.0" styleClass="edittext" />
-                        <TextField fx:id="jtxfEmail" layoutX="223.0" layoutY="110.0" prefHeight="37.0" prefWidth="361.0" styleClass="edittext" />
-                        <TextField fx:id="jtxfLogo" layoutX="32.0" layoutY="178.0" prefHeight="37.0" prefWidth="503.0" styleClass="edittext" />
-                        <Label layoutX="32.0" layoutY="21.0" text="Céd. Jurídica">
+                        <TextField fx:id="jtxfDescripcion" layoutX="32.0" layoutY="31.0" prefHeight="37.0" prefWidth="552.0" styleClass="edittext" />
+                        <TextField fx:id="jtxfTelefono" layoutX="33.0" layoutY="94.0" prefHeight="25.0" prefWidth="176.0" styleClass="edittext" />
+                        <TextField fx:id="jtxfEmail" layoutX="223.0" layoutY="94.0" prefHeight="37.0" prefWidth="361.0" styleClass="edittext" />
+                        <TextField fx:id="jtxfLogo" layoutX="32.0" layoutY="156.0" prefHeight="37.0" prefWidth="503.0" styleClass="edittext" />
+                        <Label layoutX="34.0" layoutY="196.0" text="Leyenda ticket">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label layoutX="223.0" layoutY="21.0" text="Descripción">
+                        <Label layoutX="34.0" layoutY="11.0" text="Descripción">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label layoutX="32.0" layoutY="90.0" text="Teléfono">
+                        <Label layoutX="32.0" layoutY="74.0" text="Teléfono">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label layoutX="223.0" layoutY="90.0" text="Correo electrónico">
+                        <Label layoutX="223.0" layoutY="74.0" text="Correo electrónico">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label layoutX="33.0" layoutY="158.0" text="Ubicación logo empresa">
+                        <Label layoutX="33.0" layoutY="136.0" text="Ubicación logo empresa">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
+                        <TextArea fx:id="jtxfLeyenda" layoutX="32.0" layoutY="216.0" prefHeight="62.0" prefWidth="552.0" styleClass="edittext">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </TextArea>
                      </children>
                   </AnchorPane>
             </content>
