@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
-<!-- 2018-05-12T15:47:20 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptTicket" pageWidth="226" pageHeight="340" whenNoDataType="AllSectionsNoDetail" columnWidth="206" leftMargin="10" rightMargin="10" topMargin="0" bottomMargin="5" isIgnorePagination="true" uuid="9d12d48e-d537-4a76-9256-306fdf34bafc">
+<!-- 2018-05-16T17:54:08 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptTicket" pageWidth="226" pageHeight="340" columnWidth="206" leftMargin="10" rightMargin="10" topMargin="0" bottomMargin="5" isIgnorePagination="true" uuid="9d12d48e-d537-4a76-9256-306fdf34bafc">
 	<property name="com.jaspersoft.studio.unit." value="cm"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sorteo"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
@@ -63,7 +63,7 @@ FROM
     x.suc_telefono,
     f.fac_codigo,
     f.fac_fecha,
-    f.fac_hechapor,
+    lpad(format(u.usu_consecutivo,'###'),3,'0') usu_consecutivo,
     t.tso_descripcion sorteo,
     CONCAT('Fec. Sorteo: ',
             DATE_FORMAT(s.sor_fecha, '%d/%m/%Y')) sor_fecha,
@@ -78,6 +78,8 @@ FROM
     sorteo.sor_sucursal x ON x.suc_codigo = s.sor_codsucursal
         JOIN
     sorteo.sor_empresa e ON e.emp_codigo = x.suc_codempresa
+       JOIN
+    sorteo.sor_usuario u ON u.usu_codigo = f.fac_hechapor   
  WHERE f.fac_codigo = $P{idFactura}]]>
 	</queryString>
 	<field name="emp_logo" class="java.lang.String"/>
@@ -87,7 +89,7 @@ FROM
 	<field name="suc_telefono" class="java.lang.String"/>
 	<field name="fac_codigo" class="java.lang.Integer"/>
 	<field name="fac_fecha" class="java.sql.Date"/>
-	<field name="fac_hechapor" class="java.lang.String"/>
+	<field name="usu_consecutivo" class="java.lang.String"/>
 	<field name="sorteo" class="java.lang.String"/>
 	<field name="sor_fecha" class="java.lang.String"/>
 	<field name="fac_total" class="java.lang.Double"/>
@@ -115,13 +117,12 @@ FROM
 				</textElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd/MM/yyyy">
+			<textField pattern="">
 				<reportElement x="50" y="70" width="130" height="13" uuid="b3ca4ec8-0612-4d73-bba0-afa8cf50de30"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{fac_hechapor}]]></textFieldExpression>
-				<patternExpression><![CDATA[$F{fac_hechapor}]]></patternExpression>
+				<textFieldExpression><![CDATA[$F{usu_consecutivo}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="8" y="70" width="37" height="13" uuid="f0e42cae-64e0-4f9d-a49d-8dd18d12c419">

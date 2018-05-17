@@ -68,6 +68,7 @@ public class VentaController extends Controller implements Initializable {
     private Sorteo sorteo;
     private Factura factura;
     private final String HOY = Formater.getInstance().formatFechaCorta.format(new Date());
+    private final Date FECHA_HOY = new Date();
     @FXML
     private AnchorPane acpRoot;
 
@@ -239,6 +240,7 @@ public class VentaController extends Controller implements Initializable {
     private void reiniciar() {
         unbindFactura();
         sorteos.clear();
+        calFechaSorteo.getCalendar().setTime(FECHA_HOY);
         cargarSorteos();
         if (calFechaSorteo.getCalendar() != null) {
             calFechaSorteo.getCalendar().clear();
@@ -424,6 +426,7 @@ public class VentaController extends Controller implements Initializable {
                 //valida que el monto ingresado sea multiplo de 100.
                 if (residuo != 0) {
                     AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto incorrecto", "El monto ingresado debe ser múltiplo de: " + String.valueOf(CIEN));
+                    txtNumero.clear();
                     return false;
                 }
                 //valida el monto apostado
@@ -518,7 +521,7 @@ public class VentaController extends Controller implements Initializable {
         if (!AppWindowController.getInstance().mensajeConfimacion("Confirmar venta", "¿Desea aplicar la venta?")) {
             return;
         }
-        String detalleVenta = null;
+        String detalleVenta = "";
         for (DetalleFactura d : this.detalleFactura) {
             detalleVenta = detalleVenta + "\nNúmero:  " + String.valueOf(d.getNumero()) + ", Monto: " + Formater.getInstance().decimalFormat.format(d.getMonto());
         }
@@ -604,8 +607,8 @@ public class VentaController extends Controller implements Initializable {
     void enterNumero(KeyEvent event) {
         if (event.getCode().isDigitKey() || event.getCode().equals(KeyCode.ENTER)) {
             if (event.getCode().equals(KeyCode.ENTER)) {
-                if (Integer.valueOf(txtNumElegido.getText()) < this.sorteo.getTipoSorteo().getNumeroMinimo()
-                   || Integer.valueOf(txtNumElegido.getText()) > this.sorteo.getTipoSorteo().getNumeroMaximo()) {
+                if (Integer.valueOf(txtNumElegido.getText()) < this.factura.getSorteo().getTipoSorteo().getNumeroMinimo()
+                   || Integer.valueOf(txtNumElegido.getText()) > this.factura.getSorteo().getTipoSorteo().getNumeroMaximo()) {
                     AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Número no válido", "El número ingresado no es válido");
                     txtNumElegido.requestFocus();
                     return;
