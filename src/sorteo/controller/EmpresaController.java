@@ -16,6 +16,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
@@ -60,7 +61,7 @@ public class EmpresaController extends Controller implements Initializable {
     private Button btnSalir;
 
     @FXML
-    private TextField jtxfLeyenda;
+    private TextArea jtxfLeyenda;
 
     @FXML
     private TextField jtxfDescripcion;
@@ -241,7 +242,6 @@ public class EmpresaController extends Controller implements Initializable {
                 nuevaSucursal();
                 bindSucursal();
                 bindEmpresa();
-                jtxfLeyenda.setDisable(true);
             }
             jtxfDescripcion.requestFocus();
         });
@@ -291,7 +291,6 @@ public class EmpresaController extends Controller implements Initializable {
         if (empr.get() != null) {
             if (empr.get().getCodigo() != null) {
                 this.empresa = empr.get();
-                jtxfLeyenda.setDisable(true);
                 // Se cargan los roles del usuario.
 
                 this.listaSucursales.clear();
@@ -366,7 +365,6 @@ public class EmpresaController extends Controller implements Initializable {
             cargarEmpresas();
             bindListaEmpresas();
 
-            this.jtxfLeyenda.setDisable(false);
             this.jtxfLeyenda.requestFocus();
         } else {
             unbindSucursal();

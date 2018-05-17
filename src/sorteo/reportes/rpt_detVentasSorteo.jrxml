@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
-<!-- 2018-05-09T21:37:25 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_resVentasFecha" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4eedbb89-b4f6-4469-9ab6-f642a1688cf7">
+<!-- 2018-05-16T23:18:41 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_detVentasSorteo" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4eedbb89-b4f6-4469-9ab6-f642a1688cf7">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sorteo"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
@@ -60,20 +60,19 @@
 			<![CDATA[]]>
 		</queryString>
 	</subDataset>
-	<parameter name="tiposorteo" class="java.lang.Integer"/>
-	<parameter name="fechaventa" class="java.sql.Date"/>
-	<parameter name="numero" class="java.lang.Integer"/>
-	<parameter name="descTipoSorteo" class="java.lang.String"/>
+	<parameter name="fecha" class="java.sql.Date"/>
 	<queryString>
-		<![CDATA[SELECT MAX(CONCAT(e.emp_nombre, ' ', x.suc_nombre)) descripcion,
-    MAX(e.emp_logo) logo,
+		<![CDATA[SELECT 
+    MAX(CONCAT(e.emp_nombre, ' ', x.suc_nombre)) descripcion,
     MAX(COALESCE(e.emp_telefono, x.suc_telefono)) telefono,
-    MAX(e.emp_cedjuridica) cedjuridica,
     MAX(COALESCE(e.emp_email, suc_email)) email,
-    MAX(t.tso_descripcion) tiposorteo,
+    t.tso_descripcion tiposorteo,
     s.sor_fecha fechasorteo,
+    f.fac_codigo,
+    f.fac_fecha,
     d.dfa_numero,
-    d.dfa_monto apuesta
+    d.dfa_monto apuesta,
+    MAX(LPAD(FORMAT(u.usu_consecutivo, '###'), 3, '0')) usu_codigo
 FROM
     sorteo.sor_detfactura d
         JOIN
@@ -81,45 +80,36 @@ FROM
         JOIN
     sorteo.sor_sorteo s ON s.sor_codigo = f.fac_codsorteo
         JOIN
-    sorteo.sor_tipoSorteo t ON t.tso_codigo = s.sor_tiposorteo 
+    sorteo.sor_tipoSorteo t ON t.tso_codigo = s.sor_tiposorteo
         JOIN
     sorteo.sor_sucursal x ON x.suc_codigo = s.sor_codsucursal
         JOIN
     sorteo.sor_empresa e ON e.emp_codigo = x.suc_codempresa
-    WHERE t.tso_codigo =  $P{tiposorteo} 
-         AND f.fac_fecha =  $P{fechaventa} 
-         AND d.dfa_numero = coalesce($P{numero},d.dfa_numero)
-GROUP BY s.sor_fecha , d.dfa_numero, d.dfa_monto
-ORDER BY s.sor_fecha , d.dfa_numero]]>
+        JOIN
+    sorteo.sor_usuario u ON u.usu_codigo = f.fac_hechapor
+    WHERE s.sor_fecha =  $P{fecha} 
+GROUP BY t.tso_descripcion , s.sor_fecha , f.fac_codigo , f.fac_fecha , d.dfa_numero , d.dfa_monto
+ORDER BY t.tso_descripcion , s.sor_fecha , d.dfa_numero]]>
 	</queryString>
 	<field name="descripcion" class="java.lang.String"/>
-	<field name="logo" class="java.lang.String"/>
 	<field name="telefono" class="java.lang.String"/>
-	<field name="cedjuridica" class="java.lang.String"/>
 	<field name="email" class="java.lang.String"/>
 	<field name="tiposorteo" class="java.lang.String"/>
 	<field name="fechasorteo" class="java.sql.Date"/>
+	<field name="fac_codigo" class="java.lang.Integer"/>
+	<field name="fac_fecha" class="java.sql.Date"/>
 	<field name="dfa_numero" class="java.lang.Integer"/>
 	<field name="apuesta" class="java.lang.Double"/>
+	<field name="usu_codigo" class="java.lang.String"/>
 	<variable name="sumApuesta" class="java.math.BigDecimal" resetType="Group" resetGroup="g_fechaSorteo" calculation="Sum">
 		<variableExpression><![CDATA[$F{apuesta}]]></variableExpression>
 	</variable>
 	<group name="g_fechaSorteo">
-		<groupExpression><![CDATA[$F{fechasorteo}]]></groupExpression>
+		<groupExpression><![CDATA[$F{tiposorteo}]]></groupExpression>
 		<groupHeader>
-			<band height="28">
+			<band height="75">
 				<staticText>
-					<reportElement x="81" y="2" width="100" height="21" uuid="e1579b34-f521-490d-aee9-945125c4845e"/>
-					<box>
-						<bottomPen lineWidth="1.0"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="14" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Fecha Sorteo]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="204" y="2" width="100" height="21" uuid="1f937347-8fa3-4bfa-8237-8547faf617e0"/>
+					<reportElement x="229" y="53" width="70" height="21" uuid="1f937347-8fa3-4bfa-8237-8547faf617e0"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
@@ -129,7 +119,7 @@ ORDER BY s.sor_fecha , d.dfa_numero]]>
 					<text><![CDATA[Número]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="340" y="2" width="137" height="21" uuid="1922d64c-19e1-4e51-9887-e663803a15ce"/>
+					<reportElement x="304" y="52" width="108" height="21" uuid="1922d64c-19e1-4e51-9887-e663803a15ce"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
@@ -138,21 +128,58 @@ ORDER BY s.sor_fecha , d.dfa_numero]]>
 					</textElement>
 					<text><![CDATA[Apuesta]]></text>
 				</staticText>
+				<textField>
+					<reportElement x="100" y="20" width="357" height="23" uuid="d0e525b5-be2e-46b9-92c4-4c3a28ba2af1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="16"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Sorteo: " + $F{tiposorteo}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="47" y="52" width="100" height="21" uuid="a278ce04-c71a-498f-b7f6-dd0edd986123"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Fecha Venta]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="153" y="52" width="70" height="21" uuid="338c08af-314f-4b03-9715-31385184c3bf"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Ticket]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="417" y="52" width="96" height="21" uuid="b4406a36-863c-4a5a-a541-2929a9635127"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Vendedor]]></text>
+				</staticText>
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="30">
+			<band height="20">
 				<property name="local_mesure_unitheight" value="pixel"/>
 				<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				<staticText>
-					<reportElement x="200" y="0" width="104" height="20" uuid="1df00871-a1a7-424e-a5f1-d32128392c5a"/>
+					<reportElement x="194" y="0" width="104" height="20" uuid="1df00871-a1a7-424e-a5f1-d32128392c5a"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font size="14" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Total]]></text>
 				</staticText>
-				<textField pattern="###,###,###0.00">
-					<reportElement positionType="Float" x="340" y="0" width="137" height="20" uuid="fe12c6ef-d1ac-4a12-bc06-af56208ccf6d"/>
+				<textField pattern="###,###,##0.00">
+					<reportElement positionType="Float" x="303" y="0" width="110" height="20" uuid="fe12c6ef-d1ac-4a12-bc06-af56208ccf6d"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font size="14"/>
 					</textElement>
@@ -176,84 +203,73 @@ ORDER BY s.sor_fecha , d.dfa_numero]]>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="99">
-			<image scaleImage="FillFrame">
-				<reportElement x="20" y="10" width="100" height="60" uuid="193d2ed7-e66c-483e-974b-7f73ea4f86c9"/>
-				<imageExpression><![CDATA[$F{logo}]]></imageExpression>
-			</image>
+		<band height="53">
 			<staticText>
-				<reportElement x="120" y="0" width="357" height="30" uuid="b766bbbc-dfc4-4fc3-9c63-0cf26e848333"/>
+				<reportElement x="102" y="0" width="357" height="30" uuid="b766bbbc-dfc4-4fc3-9c63-0cf26e848333"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Listado de Ventas por Fecha]]></text>
+				<text><![CDATA[Listado de Ventas por Sorteo]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="120" y="29" width="357" height="23" uuid="0b74997e-b2cd-44b9-8ab1-78859795b7f0"/>
+				<reportElement x="102" y="30" width="357" height="23" uuid="0b74997e-b2cd-44b9-8ab1-78859795b7f0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="14"/>
+					<font fontName="SansSerif" size="14"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Fecha: " + $P{fechaventa}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="120" y="52" width="357" height="23" uuid="7519af66-ffa7-4fe8-9fc5-4dea219a1282"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Sorteo: " + $F{tiposorteo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Fecha: " + $P{fecha}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="23">
-			<textField pattern="dd/MM/yyyy">
-				<reportElement x="81" y="0" width="100" height="20" uuid="e434252a-528e-45ed-bb30-d65545078145"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{fechasorteo}]]></textFieldExpression>
-			</textField>
+		<band height="27">
 			<textField>
-				<reportElement x="204" y="0" width="100" height="20" uuid="d814a2e4-2a5e-420b-9f9a-6586d808758b"/>
+				<reportElement x="229" y="1" width="70" height="20" uuid="d814a2e4-2a5e-420b-9f9a-6586d808758b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dfa_numero}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###,###,###0.00">
-				<reportElement x="340" y="0" width="137" height="20" uuid="a5f07641-a5f2-4cf7-a8f3-13e77e8bdc89"/>
+			<textField pattern="###,##0.00">
+				<reportElement x="304" y="0" width="108" height="20" uuid="a5f07641-a5f2-4cf7-a8f3-13e77e8bdc89"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{apuesta}]]></textFieldExpression>
 			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="47" y="0" width="100" height="20" uuid="29935c5f-473f-4b26-8a89-2c7eb22e9976"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fac_fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="153" y="0" width="70" height="20" uuid="f196475b-714e-4f8d-a3ed-96129e201681"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fac_codigo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement x="417" y="0" width="96" height="20" uuid="2ff41e06-d0fe-459e-a887-33a18814ea77"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{usu_codigo}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<noData>
-		<band height="133">
+		<band height="70">
 			<textField>
 				<reportElement x="100" y="11" width="357" height="23" uuid="ce9df385-9e40-4365-a5bb-8bc1da17b7f2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="14"/>
+					<font fontName="SansSerif" size="14"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Fecha de venta: " + $P{fechaventa}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="100" y="34" width="357" height="23" uuid="0f224030-1ec4-44e1-87dc-a2e1ec8c0e46"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Sorteo: " + $P{descTipoSorteo}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="100" y="58" width="357" height="23" uuid="4706c20c-f0b6-418f-b33f-7eea27b71dc8"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Número" + $P{numero}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Fecha de venta: " + $P{fecha}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="100" y="98" width="357" height="30" uuid="2305ae75-a550-4a61-99da-ae466d08cb62"/>
+				<reportElement x="100" y="40" width="357" height="30" uuid="2305ae75-a550-4a61-99da-ae466d08cb62"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>

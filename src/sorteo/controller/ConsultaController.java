@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -37,23 +38,31 @@ public class ConsultaController extends Controller implements Initializable {
     private Button btnSalir;
 
     @FXML
+    private RadioButton rdbFecha;
+
+    @FXML
+    private ToggleGroup reporte;
+
+    @FXML
+    private RadioButton rdbSorteo;
+
+    @FXML
+    private Label lblFecha;
+
+    @FXML
     private DatePicker dtpFecha;
 
     @FXML
-    private ComboBox<GenValorCombo> cmbSorteo, cmbNumero;
-
-    @XmlTransient
-    ObservableList<GenValorCombo> sorteos = FXCollections
-       .observableArrayList();
-
-    @XmlTransient
-    ObservableList<GenValorCombo> numeros = FXCollections
-       .observableArrayList();
-
-    ArrayList<TipoSorteo> tiposSorteo;
+    private Label lblSorteo;
 
     @FXML
-    private Button btnConsultar;
+    private ComboBox<TipoSorteo> cmbSorteo;
+
+    @FXML
+    private Label lblNumero;
+
+    @FXML
+    private ComboBox<GenValorCombo> cmbNumero;
 
     @FXML
     private RadioButton rdbResumen;
@@ -65,13 +74,17 @@ public class ConsultaController extends Controller implements Initializable {
     private RadioButton rdbDetalle;
 
     @FXML
-    private Label lblReporte;
+    private Button btnConsultar;
 
-    @FXML
-    private TableView tbvResultados;
+    @XmlTransient
+    ObservableList<TipoSorteo> sorteos = FXCollections
+       .observableArrayList();
 
-    @FXML
-    private Label lblTotalVenta;
+    @XmlTransient
+    ObservableList<GenValorCombo> numeros = FXCollections
+       .observableArrayList();
+
+    ArrayList<TipoSorteo> tiposSorteo;
 
     @FXML
     void consultar(ActionEvent event) {
@@ -91,13 +104,16 @@ public class ConsultaController extends Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         init();
+        rdbFecha.selectedProperty().addListener((ObservableValue<? extends Boolean> obs, Boolean wasPreviouslySelected, Boolean isNowSelected) -> {
+            mostrarParametros();
+        });
     }
 
     private void cargarSorteos() {
         sorteos.clear();
         Resultado<ArrayList<TipoSorteo>> sorteosResult = TipoSorteoDao.getInstance().findAllActivos();
         if (sorteosResult.getResultado() == TipoResultado.SUCCESS) {
-            sorteosResult.get().stream().forEach(s -> sorteos.add(new GenValorCombo(String.valueOf(s.getCodigo()), s.getDescripcion())));
+            sorteosResult.get().stream().forEach(sorteos::add);
         }
         this.cmbSorteo.setItems(sorteos);
         cmbSorteo.getSelectionModel().selectFirst();
@@ -115,20 +131,46 @@ public class ConsultaController extends Controller implements Initializable {
     private void init() {
         tiposSorteo = new ArrayList<>();
         cargarSorteos();
-        cargarNumeros(tiposSorteo.get(cmbSorteo.getSelectionModel().getSelectedIndex()));
+        cargarNumeros(cmbSorteo.getValue());
     }
 
     private void consultarVenta() {
+        String nombreReporte = null;
         HashMap<String, Object> parametros = new HashMap<>();
-        parametros.put("fechasorteo", Date.from(this.dtpFecha.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        parametros.put("tipoSorteo", this.cmbSorteo.getValue().getCodigo());
-        parametros.put("numero", this.cmbNumero.getValue().getCodigo());
+        parametros.put("fecha", Date.from(this.dtpFecha.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        if (rdbSorteo.isSelected()) {
+            parametros.put("tipoSorteo", this.cmbSorteo.getValue().getCodigo());
+            parametros.put("numero", this.cmbNumero.getValue().getCodigo());
+        }
+        if (rdbFecha.isSelected()) {
+            if (rdbResumen.isSelected()) {
+                nombreReporte = "rpt_resVentasFecha";
+            } else {
+                nombreReporte = "rpt_detVentasFecha";
+            }
+        }
+        if (rdbSorteo.isSelected()) {
+            if (rdbResumen.isSelected()) {
+                nombreReporte = "rpt_resVentasSorteo";
+            } else {
+                nombreReporte = "rpt_detVentaSorteo";
+            }
+        }
 
-        if (rdbResumen.isSelected()) {
-            Aplicacion.getInstance().generarReporte("rpt_resVentasFecha", parametros);
+        Aplicacion.getInstance().generarReporte(nombreReporte, parametros);
+    }
+
+    private void mostrarParametros() {
+        if (rdbFecha.isSelected()) {
+            lblFecha.setText("Fecha de venta");
         }
-        if (rdbDetalle.isSelected()) {
-            Aplicacion.getInstance().generarReporte("rpt_detVentasFecha", parametros);
+        if (rdbSorteo.isSelected()) {
+            lblFecha.setText("Fecha del sorteo");
         }
+        lblSorteo.setVisible(rdbSorteo.isSelected());
+        cmbSorteo.setVisible(rdbSorteo.isSelected());
+        lblNumero.setVisible(rdbSorteo.isSelected());
+        cmbNumero.setVisible(rdbSorteo.isSelected());
+
     }
 }

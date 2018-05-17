@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
-<!-- 2018-05-16T18:54:57 -->
+<!-- 2018-05-16T23:12:13 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_detVentasFecha" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4eedbb89-b4f6-4469-9ab6-f642a1688cf7">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sorteo"/>
@@ -224,7 +224,7 @@ ORDER BY t.tso_descripcion , s.sor_fecha , d.dfa_numero]]>
 			<textField>
 				<reportElement x="102" y="30" width="357" height="23" uuid="0b74997e-b2cd-44b9-8ab1-78859795b7f0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="14"/>
+					<font fontName="SansSerif" size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Fecha: " + $P{fechaventa}]]></textFieldExpression>
 			</textField>
@@ -281,7 +281,7 @@ ORDER BY t.tso_descripcion , s.sor_fecha , d.dfa_numero]]>
 			<textField>
 				<reportElement x="100" y="11" width="357" height="23" uuid="ce9df385-9e40-4365-a5bb-8bc1da17b7f2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="14"/>
+					<font fontName="SansSerif" size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Fecha de venta: " + $P{fechaventa}]]></textFieldExpression>
 			</textField>

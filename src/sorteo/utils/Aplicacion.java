@@ -66,6 +66,8 @@ public class Aplicacion {
     private static String driverBD;
     private static String usuarioBD;
     private static String passwordBD;
+    
+    private static String pathReportes;
 
     private static MouseEvent eventoMenu;
 
@@ -149,6 +151,9 @@ public class Aplicacion {
             }
             if (prop.containsKey("conexion.password")) {
                 passwordBD = prop.getProperty("conexion.password");
+            }
+            if (prop.containsKey("path.reportes")) {
+                pathReportes = prop.getProperty("path.reportes");
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -234,6 +239,11 @@ public class Aplicacion {
         return passwordBD;
     }
 
+    public static String getPathReportes() {
+        return pathReportes;
+    }   
+    
+
     /*
    los parametros deben cargarse antes de cada llamado a reporte
    param.put("pEncFac", encabezado);
@@ -255,6 +265,7 @@ public class Aplicacion {
                getUsuarioBD(), getPasswordBD()); //hacer procedimiento para desencriptar
 
             if (connection != null) {
+                System.out.println(pathDir);
                 JasperPrint print = JasperFillManager.fillReport(pathDir
                    + reporte + ".jasper", parametros, connection);
 
@@ -275,7 +286,8 @@ public class Aplicacion {
                getUsuarioBD(), getPasswordBD()); //hacer procedimiento para desencriptar
 
             if (connection != null) {
-                JasperPrint print = JasperFillManager.fillReport(pathDir
+                System.out.println(pathDir);
+                JasperPrint print = JasperFillManager.fillReport(pathReportes
                    + reporte + ".jasper", parametros, connection);
                 JasperViewer.viewReport(print, false);
                 connection.close();
@@ -301,7 +313,7 @@ public class Aplicacion {
 
         if (printService == null) {
             System.out.println("PRINTER NOT FOUND->" + printer);
-            
+
         } else {
             try {
                 Class.forName("com.mysql.jdbc.Driver");
@@ -311,7 +323,7 @@ public class Aplicacion {
                    getUsuarioBD(), getPasswordBD()); //hacer procedimiento para desencriptar
 
                 if (connection != null) {
-                    JasperPrint jp = JasperFillManager.fillReport(pathDir
+                    JasperPrint jp = JasperFillManager.fillReport(pathReportes
                        + reporte + ".jasper", parametros, connection);
 
                     JRExporter exporter = new JRPrintServiceExporter();

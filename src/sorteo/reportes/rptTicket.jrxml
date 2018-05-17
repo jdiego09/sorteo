@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
-<!-- 2018-05-16T17:54:08 -->
+<!-- 2018-05-16T23:07:51 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptTicket" pageWidth="226" pageHeight="340" columnWidth="206" leftMargin="10" rightMargin="10" topMargin="0" bottomMargin="5" isIgnorePagination="true" uuid="9d12d48e-d537-4a76-9256-306fdf34bafc">
 	<property name="com.jaspersoft.studio.unit." value="cm"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sorteo"/>
@@ -55,9 +55,7 @@ FROM
 	</subDataset>
 	<parameter name="idFactura" class="java.lang.Integer"/>
 	<queryString language="SQL">
-		<![CDATA[SELECT 
-    e.emp_logo,
-    e.emp_cedjuridica,
+		<![CDATA[SELECT e.emp_leyenda,
     e.emp_nombre empresa,
     x.suc_nombre sucursal,
     x.suc_telefono,
@@ -82,8 +80,7 @@ FROM
     sorteo.sor_usuario u ON u.usu_codigo = f.fac_hechapor   
  WHERE f.fac_codigo = $P{idFactura}]]>
 	</queryString>
-	<field name="emp_logo" class="java.lang.String"/>
-	<field name="emp_cedjuridica" class="java.lang.String"/>
+	<field name="emp_leyenda" class="java.lang.String"/>
 	<field name="empresa" class="java.lang.String"/>
 	<field name="sucursal" class="java.lang.String"/>
 	<field name="suc_telefono" class="java.lang.String"/>
@@ -252,9 +249,12 @@ FROM
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fac_total}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="">
 				<reportElement x="8" y="24" width="162" height="48" uuid="75c45f41-54c0-43b9-9f58-2bd964d30375"/>
-				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emp_leyenda}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>
