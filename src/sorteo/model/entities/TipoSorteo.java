@@ -106,6 +106,11 @@ public class TipoSorteo implements Serializable {
         this.codigo = tsoCodigo;
     }
 
+    public TipoSorteo(Integer codigo, String descripcion) {
+        this.codigo = codigo;
+        this.descripcion = new SimpleStringProperty(descripcion);
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)

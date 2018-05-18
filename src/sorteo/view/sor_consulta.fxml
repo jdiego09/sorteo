@@ -77,6 +77,7 @@
                                              </toggleGroup>
                                           </RadioButton>
                                           <RadioButton fx:id="rdbSorteo" layoutX="7.0" layoutY="46.0" mnemonicParsing="false" styleClass="edittext" text="Ventas por sorteo" toggleGroup="$reporte" AnchorPane.leftAnchor="15.0" />
+                                          <RadioButton fx:id="rdbUsuario" layoutX="15.0" layoutY="90.0" mnemonicParsing="false" styleClass="edittext" text="Ventas por usuario" toggleGroup="$reporte" AnchorPane.leftAnchor="15.0" />
                                        </children>
                                     </AnchorPane>
                                  </children>
@@ -106,7 +107,7 @@
                                     </AnchorPane>
                                     <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
                                        <children>
-                                          <Label fx:id="lblFecha" layoutX="13.0" layoutY="14.0" text="Fecha del sorteo">
+                                          <Label fx:id="lblFecha" layoutX="13.0" layoutY="14.0" text="Fecha de la venta">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
