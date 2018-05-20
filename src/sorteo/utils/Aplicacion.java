@@ -5,6 +5,8 @@
  */
 package sorteo.utils;
 
+import java.awt.print.PageFormat;
+import java.awt.print.PrinterJob;
 import java.sql.Connection;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,11 +30,16 @@ import sorteo.model.entities.DetalleFactura;
 import sorteo.model.entities.Usuario;
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
+import javax.print.attribute.AttributeSet;
 import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.HashPrintServiceAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.standard.Copies;
+import javax.print.attribute.standard.PrinterName;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.export.JRPrintServiceExporter;
@@ -66,8 +73,11 @@ public class Aplicacion {
     private static String driverBD;
     private static String usuarioBD;
     private static String passwordBD;
-    
+
     private static String pathReportes;
+    private static String imprTicket;
+
+    private static Connection connection;
 
     private static MouseEvent eventoMenu;
 
@@ -155,6 +165,10 @@ public class Aplicacion {
             if (prop.containsKey("path.reportes")) {
                 pathReportes = prop.getProperty("path.reportes");
             }
+            if (prop.containsKey("default.impTicket")) {
+                imprTicket = prop.getProperty("default.impTicket");
+            }
+
         } catch (IOException ex) {
             ex.printStackTrace();
         } finally {
@@ -241,8 +255,24 @@ public class Aplicacion {
 
     public static String getPathReportes() {
         return pathReportes;
-    }   
-    
+    }
+
+    public static String getImprTicket() {
+        return imprTicket;
+    }
+
+    private Connection getConnection() {
+        if (connection == null) {
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                connection = DriverManager.getConnection(getUrlBD(),
+                   getUsuarioBD(), getPasswordBD()); //hacer procedimiento para desencriptar
+            } catch (ClassNotFoundException | SQLException ex) {
+                Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return connection;
+    }
 
     /*
    los parametros deben cargarse antes de cada llamado a reporte
@@ -257,86 +287,77 @@ public class Aplicacion {
 		param.put("pCodInv", Parametros.codinv);
      */
     public void imprimirReporte(String reporte, HashMap<String, Object> parametros) {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            // Crea la conexión para el reporte
-            Connection connection = null;
-            connection = DriverManager.getConnection(getUrlBD(),
-               getUsuarioBD(), getPasswordBD()); //hacer procedimiento para desencriptar
 
-            if (connection != null) {
-                System.out.println(pathDir);
-                JasperPrint print = JasperFillManager.fillReport(pathDir
-                   + reporte + ".jasper", parametros, connection);
-
+        if (connection != null) {
+            System.out.println(pathDir);
+            JasperPrint print;
+            try {
+                print = JasperFillManager.fillReport(pathDir
+                   + reporte + ".jasper", parametros, getConnection());
                 JasperPrintManager.printReport(print, false);
-                connection.close();
+            } catch (JRException ex) {
+                Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (ClassNotFoundException | SQLException | JRException ex) {
-            Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public void generarReporte(String reporte, HashMap<String, Object> parametros) {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            // Crea la conexión para el reporte
-            Connection connection = null;
-            connection = DriverManager.getConnection(getUrlBD(),
-               getUsuarioBD(), getPasswordBD()); //hacer procedimiento para desencriptar
-
             if (connection != null) {
                 System.out.println(pathDir);
                 JasperPrint print = JasperFillManager.fillReport(pathReportes
-                   + reporte + ".jasper", parametros, connection);
+                   + reporte + ".jasper", parametros, getConnection());
                 JasperViewer.viewReport(print, false);
-                connection.close();
             }
-        } catch (ClassNotFoundException | SQLException | JRException ex) {
-            Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JRException ex) {
+            Logger.getLogger(Aplicacion.class
+               .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public void print(String reporte, HashMap<String, Object> parametros) throws JRException {
-        String printer = "Microsoft Print to PDF";
+        try {
+            String report = JasperCompileManager.compileReportToFile(pathReportes
+               + reporte + ".jrxml");
 
-        PrintService printService = null;
-        PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
-        //   aset.add(MediaSizeName.ISO_A4);
-        PrintService[] servicios = PrintServiceLookup.lookupPrintServices(null, null);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(report, parametros, getConnection());
 
-        for (PrintService servicio : servicios) {
-            if (servicio.getName().trim().equals(printer.trim())) {
-                printService = servicio;
-            }
-        }
+            PrinterJob printerJob = PrinterJob.getPrinterJob();
 
-        if (printService == null) {
-            System.out.println("PRINTER NOT FOUND->" + printer);
+            PageFormat pageFormat = PrinterJob.getPrinterJob().defaultPage();
+            printerJob.defaultPage(pageFormat);
 
-        } else {
+            int selectedService = 0;
+
+            AttributeSet attributeSet = new HashPrintServiceAttributeSet(new PrinterName(Aplicacion.imprTicket, null));
+
+            PrintService[] printService = PrintServiceLookup.lookupPrintServices(null, attributeSet);
+
             try {
-                Class.forName("com.mysql.jdbc.Driver");
-                // Crea la conexión para el reporte
-                Connection connection = null;
-                connection = DriverManager.getConnection(getUrlBD(),
-                   getUsuarioBD(), getPasswordBD()); //hacer procedimiento para desencriptar
+                printerJob.setPrintService(printService[selectedService]);
 
-                if (connection != null) {
-                    JasperPrint jp = JasperFillManager.fillReport(pathReportes
-                       + reporte + ".jasper", parametros, connection);
+            } catch (Exception e) {
 
-                    JRExporter exporter = new JRPrintServiceExporter();
-                    exporter.setParameter(JRExporterParameter.JASPER_PRINT, jp);
-                    exporter.setParameter(JRPrintServiceExporterParameter.PRINT_REQUEST_ATTRIBUTE_SET, printService.getAttributes());
-                    exporter.setParameter(JRPrintServiceExporterParameter.PRINT_SERVICE_ATTRIBUTE_SET, printService.getAttributes());
-                    exporter.setParameter(JRPrintServiceExporterParameter.DISPLAY_PAGE_DIALOG, Boolean.FALSE);
-                    exporter.setParameter(JRPrintServiceExporterParameter.DISPLAY_PRINT_DIALOG, Boolean.FALSE);
-                    exporter.exportReport();
-                }
-            } catch (ClassNotFoundException | SQLException | JRException ex) {
-                Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println(e);
             }
+            JRPrintServiceExporter exporter;
+            PrintRequestAttributeSet printRequestAttributeSet = new HashPrintRequestAttributeSet();
+            //printRequestAttributeSet.add(MediaSizeName.;
+            printRequestAttributeSet.add(new Copies(1));
+
+            // these are deprecated
+            exporter = new JRPrintServiceExporter();
+            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+            exporter.setParameter(JRPrintServiceExporterParameter.PRINT_SERVICE, printService[selectedService]);
+            exporter.setParameter(JRPrintServiceExporterParameter.PRINT_SERVICE_ATTRIBUTE_SET, printService[selectedService].getAttributes());
+            exporter.setParameter(JRPrintServiceExporterParameter.PRINT_REQUEST_ATTRIBUTE_SET, printRequestAttributeSet);
+            exporter.setParameter(JRPrintServiceExporterParameter.DISPLAY_PAGE_DIALOG, Boolean.FALSE);
+            exporter.setParameter(JRPrintServiceExporterParameter.DISPLAY_PRINT_DIALOG, Boolean.FALSE);
+            exporter.exportReport();
+
+        } catch (JRException e) {
+            e.printStackTrace();
+
         }
     }
 

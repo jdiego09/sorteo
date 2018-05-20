@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" fx:id="acpRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="form" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sorteo.controller.CambioPinController">
+    <stylesheets>
+        <URL value="@sorteo.css" />
+    </stylesheets>
+   <children>
+      <Pane layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="503.0" styleClass="actionbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label layoutX="104.0" layoutY="8.0" prefHeight="35.0" prefWidth="361.0" text="Cambio de contraseña y PIN" textFill="#f8f8f8">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Button fx:id="jbtnSalir" layoutX="551.0" layoutY="8.0" mnemonicParsing="false" onAction="#regresar" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonsalir" text="Button">
+               <tooltip>
+                  <Tooltip text="Salir" />
+               </tooltip>
+            </Button>
+            <Button fx:id="btnLimpiar" layoutX="14.0" layoutY="8.0" mnemonicParsing="false" onAction="#limpiar" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonlimpiar" text="Button">
+               <tooltip>
+                  <Tooltip text="Salir" />
+               </tooltip>
+            </Button>
+         </children>
+      </Pane>
+      <TextField fx:id="txtCodigo" layoutX="14.0" layoutY="88.0" onKeyPressed="#codigoUsuarioOnEnterKey" prefHeight="37.0" prefWidth="137.0" styleClass="edittext" />
+      <Label layoutX="15.0" layoutY="68.0" text="Nombre usuario">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txtDescripcion" editable="false" layoutX="182.0" layoutY="88.0" onKeyPressed="#codigoUsuarioOnEnterKey" prefHeight="37.0" prefWidth="407.0" styleClass="edittext" />
+      <Label layoutX="183.0" layoutY="68.0" text="Descripción">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="15.0" layoutY="176.0" text="Contraseña actual">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <PasswordField fx:id="txtClaveAct" layoutX="14.0" layoutY="196.0" styleClass="edittext" />
+      <Label layoutX="439.0" layoutY="176.0" text="PIN actual">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <PasswordField fx:id="txtPinAct" layoutX="438.0" layoutY="196.0" onKeyPressed="#soloNumeros" prefHeight="37.0" prefWidth="149.0" styleClass="edittext" />
+      <Label layoutX="15.0" layoutY="243.0" text="Contraseña nueva">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <PasswordField fx:id="txtClaveNue" layoutX="14.0" layoutY="263.0" styleClass="edittext" />
+      <Label layoutX="439.0" layoutY="243.0" text="PIN nuevo">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <PasswordField fx:id="txtPinNue" layoutX="438.0" layoutY="263.0" onKeyPressed="#soloNumeros" prefHeight="37.0" prefWidth="149.0" styleClass="edittext" />
+      <Button fx:id="btnCambioClave" layoutX="15.0" layoutY="317.0" mnemonicParsing="false" onAction="#cambiarClave" prefHeight="35.0" prefWidth="200.0" styleClass="actionbuttonaceptar" text="CAMBIAR CONTRASEÑA" />
+      <Button fx:id="btnCambioPin" layoutX="440.0" layoutY="317.0" mnemonicParsing="false" onAction="#cambiarPin" prefHeight="35.0" prefWidth="149.0" styleClass="actionbuttonaceptar" text="CAMBIAR PIN" />
+      <Separator layoutX="16.0" layoutY="153.0" prefHeight="5.0" prefWidth="571.0" />
+   </children>
+   <effect>
+      <Glow />
+   </effect>
+</AnchorPane>

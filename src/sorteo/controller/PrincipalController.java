@@ -60,8 +60,8 @@ public class PrincipalController extends Controller implements Initializable {
         lblUsuario.setText("Usuario: " + Aplicacion.getInstance().getUsuario().getUsuCodigo());
         lblFecha.setText("Fecha: " + Formater.getInstance().formatFechaHora.format(new Date()));
         Timeline timeline = new Timeline(new KeyFrame(
-        Duration.millis(1000),
-        ae -> lblFecha.setText("Fecha: " + Formater.getInstance().formatFechaHora.format(new Date()))));
+           Duration.millis(1000),
+           ae -> lblFecha.setText("Fecha: " + Formater.getInstance().formatFechaHora.format(new Date()))));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
 
@@ -109,5 +109,4 @@ public class PrincipalController extends Controller implements Initializable {
         }
         event.consume();
     };
-
 }

@@ -62,7 +62,7 @@ public class LoginController extends Controller {
                         } else {
                             sep = ",";
                         }
-                        roles = roles + sep + r.getRxuCodrol();
+                        roles = roles + sep + r.getRxuCodrol().getRolCodigo();
                     }
                     Aplicacion.getInstance().setRolesUsuario(roles);
                     AppWindowController.getInstance().initApplication();

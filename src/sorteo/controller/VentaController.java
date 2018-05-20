@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -38,6 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import jfxtras.internal.scene.control.skin.CalendarPickerControlSkin;
 import jfxtras.internal.scene.control.skin.CalendarPickerControlSkin.ShowWeeknumbers;
 import jfxtras.scene.control.CalendarPicker;
+import net.sf.jasperreports.engine.JRException;
 import sorteo.model.dao.ExclusionDao;
 import sorteo.model.dao.FacturaDao;
 import sorteo.model.dao.MontosDao;
@@ -536,6 +539,7 @@ public class VentaController extends Controller implements Initializable {
             this.factura = facturaSave.get();
             HashMap<String, Object> params = new HashMap<>();
             params.put("idFactura", this.factura.getCodigo());
+
             Aplicacion.getInstance().imprimirReporte("rptTicket", params);
 
             reiniciar();

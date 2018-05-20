@@ -58,6 +58,9 @@ public class Usuario implements Serializable {
     private SimpleStringProperty consecutivoString;
 
     @Transient
+    private SimpleIntegerProperty usuPin;
+
+    @Transient
     private ObjectProperty<GenValorCombo> usuEstado;
     @JoinColumn(name = "usu_codsucursal", referencedColumnName = "suc_codigo")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -71,6 +74,7 @@ public class Usuario implements Serializable {
         this.usuContrasena = new SimpleStringProperty();
         this.usuEstado = new SimpleObjectProperty();
         this.consecutivo = new SimpleIntegerProperty();
+        this.usuPin = new SimpleIntegerProperty();
     }
 
     public Usuario(String usuCodigo) {
@@ -146,6 +150,24 @@ public class Usuario implements Serializable {
 
         this.consecutivoString.set(codigo);
         return this.consecutivoString.get();
+    }
+
+    @Column(name = "usu_pin")
+    @Access(AccessType.PROPERTY)
+    public Integer getUsuPin() {
+        return usuPin.get();
+    }
+
+    public SimpleIntegerProperty getUsuPinProperty() {
+        return usuPin;
+    }
+
+    public void setUsuPin(Integer usuPin) {
+        if (usuPin != null) {
+            this.usuPin.set(usuPin);
+        } else {
+            this.usuPin = new SimpleIntegerProperty();
+        }
     }
 
     @Column(name = "usu_estado")

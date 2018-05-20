@@ -208,4 +208,52 @@ public class UsuarioDao extends BaseDao<Integer, Usuario> {
         }
     }
 
+    public Resultado<String> cambiaContrasena(Usuario usuario, String contrasena) {
+        Resultado<String> resultado = new Resultado<>();
+        try {
+
+            getEntityManager().getTransaction().begin();
+            Query update = getEntityManager().createQuery(
+               "UPDATE Usuario u SET u.usuContrasena = :contrasena"
+               + " WHERE u.usuCodigo = :codigoUsuario");
+            update.setParameter("contrasena", contrasena);
+            update.setParameter("codigoUsuario", usuario.getUsuCodigo());
+            update.executeUpdate();
+
+            getEntityManager().getTransaction().commit();
+            resultado.setResultado(TipoResultado.SUCCESS);
+            return resultado;
+        } catch (Exception ex) {
+            getEntityManager().getTransaction().rollback();
+            Logger.getLogger(UsuarioDao.class.getName()).log(Level.SEVERE, null, ex);
+            resultado.setResultado(TipoResultado.ERROR);
+            resultado.setMensaje("Error al cambiar la contraseña del usuario: " + usuario.getUsuDescripcion() + ".");
+            return resultado;
+        }
+    }
+    
+    public Resultado<String> cambiaPIN(Usuario usuario, String pin) {
+        Resultado<String> resultado = new Resultado<>();
+        try {
+
+            getEntityManager().getTransaction().begin();
+            Query update = getEntityManager().createQuery(
+               "UPDATE Usuario u SET u.usuContrasena = :pin"
+               + " WHERE u.usuCodigo = :codigoUsuario");
+            update.setParameter("pin", pin);
+            update.setParameter("codigoUsuario", usuario.getUsuCodigo());
+            update.executeUpdate();
+
+            getEntityManager().getTransaction().commit();
+            resultado.setResultado(TipoResultado.SUCCESS);
+            return resultado;
+        } catch (Exception ex) {
+            getEntityManager().getTransaction().rollback();
+            Logger.getLogger(UsuarioDao.class.getName()).log(Level.SEVERE, null, ex);
+            resultado.setResultado(TipoResultado.ERROR);
+            resultado.setMensaje("Error al cambiar la contraseña del usuario: " + usuario.getUsuDescripcion() + ".");
+            return resultado;
+        }
+    }
+
 }
