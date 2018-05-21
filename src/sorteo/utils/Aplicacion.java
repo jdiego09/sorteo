@@ -77,6 +77,10 @@ public class Aplicacion {
     private static String pathReportes;
     private static String imprTicket;
 
+    private static String appProductId;
+    private static String appLicenceKey;
+    private static String appAuthorizedHost;
+
     private static Connection connection;
 
     private static MouseEvent eventoMenu;
@@ -168,6 +172,15 @@ public class Aplicacion {
             if (prop.containsKey("default.impTicket")) {
                 imprTicket = prop.getProperty("default.impTicket");
             }
+            if (prop.containsKey("app.productid")) {
+                appProductId = prop.getProperty("app.productid");
+            }
+            if (prop.containsKey("app.licencekey")) {
+                appLicenceKey = prop.getProperty("app.licencekey");
+            }
+            if (prop.containsKey("app.authorizedHost")) {
+                appAuthorizedHost = prop.getProperty("app.authorizedHost");
+            }
 
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -253,12 +266,24 @@ public class Aplicacion {
         return passwordBD;
     }
 
-    public static String getPathReportes() {
+    public String getPathReportes() {
         return pathReportes;
     }
 
-    public static String getImprTicket() {
+    public String getImprTicket() {
         return imprTicket;
+    }
+
+    public String getAppProductId() {
+        return appProductId;
+    }
+
+    public String getAppLicenceKey() {
+        return appLicenceKey;
+    }
+
+    public String getAppAuthorizedHost() {
+        return appAuthorizedHost;
     }
 
     private Connection getConnection() {
@@ -358,6 +383,38 @@ public class Aplicacion {
         } catch (JRException e) {
             e.printStackTrace();
 
+        }
+    }
+
+    public boolean appValidUse() {
+        if (getAppProductId() == null || getAppProductId().isEmpty()) {
+            return false;
+        }
+        if (getAppAuthorizedHost() == null || getAppAuthorizedHost().isEmpty()) {
+            return false;
+        }
+        if (getAppLicenceKey() == null || getAppLicenceKey().isEmpty()) {
+            return false;
+        }
+        String key = Encriptor.getInstance().encriptar(getMac());
+        return (getAppLicenceKey().equals(Encriptor.getInstance().encriptar(getAppProductId() + key)));
+    }
+
+    private static String getMac() {
+        Process p;
+        try {
+            p = Runtime.getRuntime().exec("getmac /fo csv /nh");
+            java.io.BufferedReader in = new java.io.BufferedReader(new java.io.InputStreamReader(p.getInputStream()));
+            String line;
+            line = in.readLine();
+            String[] result = line.split(",");
+            return (result[0].replace('"', ' ').trim());
+        } catch (IOException ex) {
+            Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        } catch (Exception ex) {
+            Logger.getLogger(Aplicacion.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
     }
 
