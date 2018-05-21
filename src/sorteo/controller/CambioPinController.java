@@ -74,6 +74,7 @@ public class CambioPinController extends Controller implements Initializable {
             AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Error al cambiar contraseña", cambioClave.getMensaje());
             return;
         } else {
+            traerUsuario(Aplicacion.getInstance().getUsuario().getUsuCodigo());
             AppWindowController.getInstance().mensaje(Alert.AlertType.CONFIRMATION, "Contaseña cambiada", "La contraseña se cambió exitosamente.");
         }
     }
@@ -89,6 +90,7 @@ public class CambioPinController extends Controller implements Initializable {
             AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Error al cambiar PIN", cambioPin.getMensaje());
             return;
         } else {
+            traerUsuario(Aplicacion.getInstance().getUsuario().getUsuCodigo());
             AppWindowController.getInstance().mensaje(Alert.AlertType.CONFIRMATION, "PIN cambiado", "El PIN se cambió exitosamente.");
         }
     }
@@ -205,7 +207,7 @@ public class CambioPinController extends Controller implements Initializable {
     }
 
     private boolean pinActualValido() {
-        return (usuario.getUsuPin() == null || usuario.getUsuPin().toString().isEmpty() || usuario.getUsuPin() == 0 || usuario.getUsuPin().equals(Encriptor.getInstance().encriptar(txtPinAct.getText())));
+        return (usuario.getUsuPin() == null || usuario.getUsuPin().toString().isEmpty() || usuario.getUsuPin().equals(Encriptor.getInstance().encriptar(txtPinAct.getText())));
 
     }
 

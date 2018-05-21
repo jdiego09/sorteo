@@ -58,7 +58,7 @@ public class Usuario implements Serializable {
     private SimpleStringProperty consecutivoString;
 
     @Transient
-    private SimpleIntegerProperty usuPin;
+    private SimpleStringProperty usuPin;
 
     @Transient
     private ObjectProperty<GenValorCombo> usuEstado;
@@ -74,7 +74,7 @@ public class Usuario implements Serializable {
         this.usuContrasena = new SimpleStringProperty();
         this.usuEstado = new SimpleObjectProperty();
         this.consecutivo = new SimpleIntegerProperty();
-        this.usuPin = new SimpleIntegerProperty();
+        this.usuPin = new SimpleStringProperty();
     }
 
     public Usuario(String usuCodigo) {
@@ -154,19 +154,19 @@ public class Usuario implements Serializable {
 
     @Column(name = "usu_pin")
     @Access(AccessType.PROPERTY)
-    public Integer getUsuPin() {
+    public String getUsuPin() {
         return usuPin.get();
     }
 
-    public SimpleIntegerProperty getUsuPinProperty() {
+    public SimpleStringProperty getUsuPinProperty() {
         return usuPin;
     }
 
-    public void setUsuPin(Integer usuPin) {
+    public void setUsuPin(String usuPin) {
         if (usuPin != null) {
             this.usuPin.set(usuPin);
         } else {
-            this.usuPin = new SimpleIntegerProperty();
+            this.usuPin = new SimpleStringProperty();
         }
     }
 

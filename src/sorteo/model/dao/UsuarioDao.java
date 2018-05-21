@@ -238,7 +238,7 @@ public class UsuarioDao extends BaseDao<Integer, Usuario> {
 
             getEntityManager().getTransaction().begin();
             Query update = getEntityManager().createQuery(
-               "UPDATE Usuario u SET u.usuContrasena = :pin"
+               "UPDATE Usuario u SET u.usuPin = :pin"
                + " WHERE u.usuCodigo = :codigoUsuario");
             update.setParameter("pin", pin);
             update.setParameter("codigoUsuario", usuario.getUsuCodigo());
