@@ -12,9 +12,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -40,7 +40,6 @@ import javax.xml.bind.annotation.XmlTransient;
 import jfxtras.internal.scene.control.skin.CalendarPickerControlSkin;
 import jfxtras.internal.scene.control.skin.CalendarPickerControlSkin.ShowWeeknumbers;
 import jfxtras.scene.control.CalendarPicker;
-import net.sf.jasperreports.engine.JRException;
 import sorteo.model.dao.ExclusionDao;
 import sorteo.model.dao.FacturaDao;
 import sorteo.model.dao.MontosDao;
@@ -185,6 +184,7 @@ public class VentaController extends Controller implements Initializable {
 
     private void init() {
         posTipoSorteo = -1;
+        txtNumElegido.setVisible(false);
         totalFactura = Double.valueOf("0.0");
         totalFacturaProperty = new SimpleDoubleProperty(Double.valueOf("0.0"));
 
@@ -241,6 +241,7 @@ public class VentaController extends Controller implements Initializable {
     }
 
     private void reiniciar() {
+        txtNumElegido.setVisible(false);
         unbindFactura();
         sorteos.clear();
         calFechaSorteo.getCalendar().setTime(FECHA_HOY);
@@ -266,6 +267,24 @@ public class VentaController extends Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         init();
+        txtNumero.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+               String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    txtNumero.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+        txtNumElegido.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+               String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    txtNumElegido.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
     }
 
     private void startCalendar() {
@@ -471,16 +490,12 @@ public class VentaController extends Controller implements Initializable {
 
     @FXML
     void numKeyPressed(KeyEvent event) {
-        if (event.getCode().isDigitKey() || event.getCode().equals(KeyCode.ENTER)) {
-            if (event.getCode().equals(KeyCode.ENTER)) {
-                if (returnMonto()) {
-                    txtNumElegido.requestFocus();
-                } else {
-                    txtNumero.requestFocus();
-                }
+        if (event.getCode().equals(KeyCode.ENTER)) {
+            if (returnMonto()) {
+                txtNumElegido.requestFocus();
+            } else {
+                txtNumero.requestFocus();
             }
-        } else {
-            event.consume();
         }
     }
 
@@ -491,6 +506,7 @@ public class VentaController extends Controller implements Initializable {
                 this.factura.setSorteo(sorteoResult.get());
                 cargarExcepciones();
                 setNumeros(this.factura.getSorteo());
+                txtNumElegido.setVisible(true);
             } else {
                 if (AppWindowController.getInstance().mensajeConfimacion("Crear nuevo sorteo", "¿Desea crear un nuevo sorteo para la fecha indicada?")) {
                     SorteoDao.getInstance().setSorteo(new Sorteo(calFechaSorteo.getCalendar().getTime(), this.sorteos.get(posTipoSorteo), Aplicacion.getInstance().getSucursalDefault()));
@@ -503,6 +519,7 @@ public class VentaController extends Controller implements Initializable {
                 }
                 cargarExcepciones();
                 setNumeros(this.factura.getSorteo());
+                txtNumElegido.setVisible(true);
                 txtNumElegido.requestFocus();
             }
 
@@ -609,25 +626,20 @@ public class VentaController extends Controller implements Initializable {
 
     @FXML
     void enterNumero(KeyEvent event) {
-        if (event.getCode().isDigitKey() || event.getCode().equals(KeyCode.ENTER)) {
-            if (event.getCode().equals(KeyCode.ENTER)) {
-                if (Integer.valueOf(txtNumElegido.getText()) < this.factura.getSorteo().getTipoSorteo().getNumeroMinimo()
-                   || Integer.valueOf(txtNumElegido.getText()) > this.factura.getSorteo().getTipoSorteo().getNumeroMaximo()) {
-                    AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Número no válido", "El número ingresado no es válido");
-                    txtNumElegido.requestFocus();
-                    return;
-                }
-                if (apuestaValida(Integer.parseInt(txtNumElegido.getText()), new Double("0.0")
-                )) {
-                    agregarNumeroADetalle(Integer.valueOf(txtNumElegido.getText()));
-                    txtNumElegido.clear();
-                    txtNumero.requestFocus();
-                }
+        if (event.getCode().equals(KeyCode.ENTER)) {
+            if (Integer.valueOf(txtNumElegido.getText()) < this.factura.getSorteo().getTipoSorteo().getNumeroMinimo()
+               || Integer.valueOf(txtNumElegido.getText()) > this.factura.getSorteo().getTipoSorteo().getNumeroMaximo()) {
+                AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Número no válido", "El número ingresado no es válido");
+                txtNumElegido.requestFocus();
+                return;
             }
-        } else {
-            event.consume();
+            if (apuestaValida(Integer.parseInt(txtNumElegido.getText()), new Double("0.0")
+            )) {
+                agregarNumeroADetalle(Integer.valueOf(txtNumElegido.getText()));
+                txtNumElegido.clear();
+                txtNumero.requestFocus();
+            }
         }
-
     }
 
     private void agregarNumeroADetalle(Integer num) {

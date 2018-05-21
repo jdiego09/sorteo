@@ -59,7 +59,7 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <PasswordField fx:id="txtPinAct" layoutX="438.0" layoutY="196.0" onKeyPressed="#soloNumeros" prefHeight="37.0" prefWidth="149.0" styleClass="edittext" />
+      <PasswordField fx:id="txtPinAct" layoutX="438.0" layoutY="196.0" prefHeight="37.0" prefWidth="149.0" styleClass="edittext" />
       <Label layoutX="15.0" layoutY="243.0" text="Contraseña nueva">
          <font>
             <Font size="14.0" />
@@ -71,7 +71,7 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <PasswordField fx:id="txtPinNue" layoutX="438.0" layoutY="263.0" onKeyPressed="#soloNumeros" prefHeight="37.0" prefWidth="149.0" styleClass="edittext" />
+      <PasswordField fx:id="txtPinNue" layoutX="438.0" layoutY="263.0" prefHeight="37.0" prefWidth="149.0" styleClass="edittext" />
       <Button fx:id="btnCambioClave" layoutX="15.0" layoutY="317.0" mnemonicParsing="false" onAction="#cambiarClave" prefHeight="35.0" prefWidth="200.0" styleClass="actionbuttonaceptar" text="CAMBIAR CONTRASEÑA" />
       <Button fx:id="btnCambioPin" layoutX="440.0" layoutY="317.0" mnemonicParsing="false" onAction="#cambiarPin" prefHeight="35.0" prefWidth="149.0" styleClass="actionbuttonaceptar" text="CAMBIAR PIN" />
       <Separator layoutX="16.0" layoutY="153.0" prefHeight="5.0" prefWidth="571.0" />

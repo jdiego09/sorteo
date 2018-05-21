@@ -7,6 +7,8 @@ package sorteo.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
@@ -79,7 +81,7 @@ public class CambioPinController extends Controller implements Initializable {
     @FXML
     void cambiarPin(ActionEvent event) {
         if (!pinActualValido()) {
-            AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Contraseña inválida", "La contraseña actual ingresada no coincide con la contraseña actual del usuario, no se puede cambiar la contraseña.");
+            AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "PIN inválido", "El PIN actual ingresada no coincide con el PIN actual del usuario, no se puede cambiar el PIN.");
             return;
         }
         Resultado<String> cambioPin = UsuarioDao.getInstance().cambiaPIN(usuario, Encriptor.getInstance().encriptar(txtPinNue.getText()));
@@ -97,15 +99,6 @@ public class CambioPinController extends Controller implements Initializable {
             if (this.usuario.getUsuCodigo() != null) {
                 traerUsuario(this.usuario.getUsuCodigo());
             }
-        }
-    }
-
-    @FXML
-    void soloNumeros(KeyEvent event) {
-        if (event.getCode().isDigitKey() || event.getCode().equals(KeyCode.ENTER)) {
-            
-        } else {
-            event.consume();
         }
     }
 
@@ -129,6 +122,32 @@ public class CambioPinController extends Controller implements Initializable {
             txtCodigo.setEditable(false);
             bindUsuario();
         }
+        txtPinAct.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+               String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    txtPinAct.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+                if (txtPinAct.getText().length() > 4) {
+                    String s = txtPinAct.getText().substring(0, 4);
+                    txtPinAct.setText(s);
+                }
+            }
+        });
+        txtPinNue.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+               String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    txtPinNue.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+                if (txtPinNue.getText().length() > 4) {
+                    String s = txtPinNue.getText().substring(0, 4);
+                    txtPinNue.setText(s);
+                }
+            }
+        });
     }
 
     @Override
@@ -186,7 +205,7 @@ public class CambioPinController extends Controller implements Initializable {
     }
 
     private boolean pinActualValido() {
-        return (usuario.getUsuPin() == null || usuario.getUsuPin().equals(Encriptor.getInstance().encriptar(txtPinAct.getText())));
+        return (usuario.getUsuPin() == null || usuario.getUsuPin().toString().isEmpty() || usuario.getUsuPin() == 0 || usuario.getUsuPin().equals(Encriptor.getInstance().encriptar(txtPinAct.getText())));
 
     }
 
