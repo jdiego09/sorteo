@@ -40,7 +40,8 @@ import sorteo.utils.GenValorCombo;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u ORDER BY u.consecutivo")
-    , @NamedQuery(name = "Usuario.findByUsuCodigo", query = "SELECT u FROM Usuario u WHERE u.usuCodigo = :usuCodigo and u.usuEstado = 'A'")})
+    , @NamedQuery(name = "Usuario.findByUsuCodigo", query = "SELECT u FROM Usuario u WHERE u.usuCodigo = :usuCodigo and u.usuEstado = 'A'")
+    , @NamedQuery(name = "Usuario.findAdministradores", query = "SELECT u FROM Usuario u join u.rolXUsuarioList x join x.rxuCodrol r WHERE r.rolCodigo = 'ADM' AND u.usuEstado = 'A'")})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -239,7 +240,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "sorteo.model.entities.Usuario[ usuCodigo=" + usuCodigo + " ]";
+        return usuDescripcion.get();
     }
 
 }

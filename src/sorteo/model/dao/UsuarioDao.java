@@ -109,6 +109,29 @@ public class UsuarioDao extends BaseDao<Integer, Usuario> {
         }
     }
 
+    public Resultado<ArrayList<Usuario>> getAdministradores() {
+        Resultado<ArrayList<Usuario>> resultado = new Resultado<>();
+        ArrayList<Usuario> listaUsuarios = new ArrayList<>();
+        List<Usuario> usuarios;
+        try {
+            Query query = getEntityManager().createNamedQuery("Usuario.findAdministradores");
+
+            usuarios = query.getResultList();
+            usuarios.stream().forEach(listaUsuarios::add);
+            resultado.setResultado(TipoResultado.SUCCESS);
+            resultado.set(listaUsuarios);
+            return resultado;
+        } catch (NoResultException nre) {
+            resultado.setResultado(TipoResultado.WARNING);
+            return resultado;
+        } catch (Exception ex) {
+            Logger.getLogger(UsuarioDao.class.getName()).log(Level.SEVERE, null, ex);
+            resultado.setResultado(TipoResultado.ERROR);
+            resultado.setMensaje("Error al traer administradores del sistema.");
+            return resultado;
+        }
+    }
+
     public Resultado<ArrayList<RolXUsuario>> getRolesUsuario(String usuario) {
         Resultado<ArrayList<RolXUsuario>> resultado = new Resultado<>();
         ArrayList<RolXUsuario> listaRoles = new ArrayList<>();
@@ -231,7 +254,7 @@ public class UsuarioDao extends BaseDao<Integer, Usuario> {
             return resultado;
         }
     }
-    
+
     public Resultado<String> cambiaPIN(Usuario usuario, String pin) {
         Resultado<String> resultado = new Resultado<>();
         try {

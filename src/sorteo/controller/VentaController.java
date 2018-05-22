@@ -557,7 +557,7 @@ public class VentaController extends Controller implements Initializable {
             HashMap<String, Object> params = new HashMap<>();
             params.put("idFactura", this.factura.getCodigo());
 
-            Aplicacion.getInstance().imprimirReporte("rptTicket", params);
+            Aplicacion.getInstance().print("rptTicket", params);
 
             reiniciar();
             AppWindowController.getInstance().mensaje(Alert.AlertType.INFORMATION, "Venta aplicada", "Venta aplicada exitosamente.");
@@ -586,8 +586,8 @@ public class VentaController extends Controller implements Initializable {
             if ((montoApostado.get()).compareTo(montoMaximo) >= 0) {
                 AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto apuesta", "El monto máximo de la apuesta para el número: "
                    + String.valueOf(numero)
-                   + ",  ha sido alcanzado para el sorteo. No se puede aceptar la nueva apuesta.");
-                return false;
+                   + ",  ha sido alcanzado para el sorteo. La venta debe ser aprobada por un administrador.");
+                return autorizarVenta();
             }
         }
         diferencia = (montoApostado.get() + monto) - montoMaximo;
@@ -596,8 +596,8 @@ public class VentaController extends Controller implements Initializable {
             AppWindowController.getInstance().mensaje(Alert.AlertType.WARNING, "Monto apuesta", "El monto de la apuesta para el número: "
                + String.valueOf(numero)
                + ",  excede por: " + Formater.getInstance().decimalFormat.format(diferencia)
-               + " el monto máximo permitido apostar por número. No se puede aceptar la nueva apuesta.");
-            return false;
+               + " el monto máximo permitido apostar por número. La venta debe ser aprobada por un administrador.");
+            return autorizarVenta();
         }
         return true;
     }
@@ -655,6 +655,14 @@ public class VentaController extends Controller implements Initializable {
         }
         tbvDetFactura.getSelectionModel().selectLast();
         txtNumero.requestFocus();
+    }
+
+    private boolean autorizarVenta() {
+        // Llamar ventana busqueda
+        AutorizaVentaController autorizaController = (AutorizaVentaController) AppWindowController.getInstance().getController("sor_autorizaVenta");
+        AppWindowController.getInstance().goViewInWindowModal("sor_autorizaVenta", getStage());
+
+        return Aplicacion.getInstance().getVentaAutorizada().getResultado().equals(TipoResultado.SUCCESS);
     }
 
 }
