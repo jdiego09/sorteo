@@ -140,6 +140,16 @@
     -fx-background-position:  center;
 }
 
+.actionbuttonimprimir{
+    -fx-background-color: white;
+    -fx-text-fill: transparent;
+    -fx-fill: transparent;
+    -fx-background-image: url("../view/images/print.png");
+    -fx-background-size: 32px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position:  center;
+}
+
 .actionbuttondelete{
     -fx-background-color: 
         rgba(0,0,0,0.08),
