@@ -139,7 +139,7 @@ public class Aplicacion {
 
         try {
 
-            String filename = "sorteo.properties";
+            String filename = "C:/Sorteo/sorteo.properties";
             input = Aplicacion.class.getClassLoader().getResourceAsStream(filename);
             if (input == null) {
                 System.out.println("Error al cargar archivo de configuración" + filename);

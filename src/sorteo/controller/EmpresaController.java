@@ -82,9 +82,6 @@ public class EmpresaController extends Controller implements Initializable {
     private TableView<Empresa> tbvEmpresas;
 
     @FXML
-    private TableColumn<Empresa, String> tbcCedula;
-
-    @FXML
     private TableColumn<Empresa, String> tbcDescripcion;
 
     @FXML
@@ -267,7 +264,6 @@ public class EmpresaController extends Controller implements Initializable {
             tbvEmpresas.setItems(this.listaEmpresas);
             tbvEmpresas.refresh();
         }
-        tbcCedula.setCellValueFactory(new PropertyValueFactory<>("cedJuridica"));
         tbcDescripcion.setCellValueFactory(new PropertyValueFactory<>("nombre"));
     }
 
