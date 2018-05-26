@@ -146,7 +146,7 @@ public class Exclusion implements Serializable {
         if (this.excTipoBloqueo == null) {
             this.excTipoBloqueo = new SimpleStringProperty();
         }
-        return this.excTipoBloqueo != null && this.excTipoBloqueo.get() != null && !this.excTipoBloqueo.get().isEmpty() && this.excTipoBloqueo.get().equalsIgnoreCase("T") ? "Total" : "Número";
+        return this.excTipoBloqueo != null && this.excTipoBloqueo.get() != null && !this.excTipoBloqueo.get().isEmpty() && this.excTipoBloqueo.get().equalsIgnoreCase("T") ? "Ventas bloqueadas" : "Límite apuesta número";
     }
 
     public void setExcTipoBloqueo(String excBloqueo) {

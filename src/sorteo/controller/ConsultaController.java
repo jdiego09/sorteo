@@ -12,6 +12,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -21,8 +22,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javax.xml.bind.annotation.XmlTransient;
+import sorteo.model.dao.SorteoDao;
 import sorteo.model.dao.TipoSorteoDao;
 import sorteo.model.dao.UsuarioDao;
+import sorteo.model.entities.Sorteo;
 import sorteo.model.entities.TipoSorteo;
 import sorteo.model.entities.Usuario;
 import sorteo.utils.Aplicacion;
@@ -49,6 +52,11 @@ public class ConsultaController extends Controller implements Initializable {
     private RadioButton rdbSorteo;
     @FXML
     private RadioButton rdbUsuario;
+    @FXML
+    private RadioButton rdbRVenta;
+
+    @FXML
+    private RadioButton rdbExcepciones;
 
     @FXML
     private Label lblFecha;
@@ -154,16 +162,18 @@ public class ConsultaController extends Controller implements Initializable {
 
     private void consultarVenta() {
         String nombreReporte = null;
-        HashMap<String, Object> parametros = new HashMap<>();
-        parametros.put("fecha", Date.from(this.dtpFecha.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        HashMap<String, Object> parametros = new HashMap<>();        
         if (rdbSorteo.isSelected()) {
+            parametros.put("fecha", Date.from(this.dtpFecha.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
             parametros.put("sorteo", this.cmbSorteo.getValue().getCodigo() != 0 ? this.cmbSorteo.getValue().getCodigo() : "%");
             parametros.put("numero", this.cmbNumero.getValue().getCodigo());
         }
         if (rdbUsuario.isSelected()) {
+            parametros.put("fecha", Date.from(this.dtpFecha.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
             parametros.put("vendedor", this.cmbNumero.getValue().getCodigo());
         }
         if (rdbFecha.isSelected()) {
+            parametros.put("fecha", Date.from(this.dtpFecha.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
             if (rdbResumen.isSelected()) {
                 nombreReporte = "rpt_resVentasFecha";
             } else {
@@ -171,6 +181,7 @@ public class ConsultaController extends Controller implements Initializable {
             }
         }
         if (rdbSorteo.isSelected()) {
+            parametros.put("fecha", Date.from(this.dtpFecha.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
             if (rdbResumen.isSelected()) {
                 nombreReporte = "rpt_resVentasSorteo";
             } else {
@@ -178,7 +189,22 @@ public class ConsultaController extends Controller implements Initializable {
             }
         }
         if (rdbUsuario.isSelected()) {
+            parametros.put("fecha", Date.from(this.dtpFecha.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
             nombreReporte = "rpt_ventasDiaVendedor";
+        }
+        if (rdbExcepciones.isSelected()) {
+            nombreReporte = "rpt_excepciones";
+        }
+        if (rdbRVenta.isSelected()) {            
+            Resultado<Sorteo> sorteo = SorteoDao.getInstance().findByFecha(Date.from(this.dtpFecha.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()), this.cmbSorteo.getValue());
+            if (sorteo.getResultado().equals(TipoResultado.SUCCESS)) {
+                nombreReporte = "rpt_resVentaSorteo";
+                parametros.put("sorteo", sorteo.get().getCodigo());
+            } else {
+                AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Error", sorteo.getMensaje());
+                return;
+            }
+
         }
 
         Aplicacion.getInstance().generarReporte(nombreReporte, parametros);
@@ -206,8 +232,12 @@ public class ConsultaController extends Controller implements Initializable {
             cmbNumero.setLayoutX(13);
             cmbNumero.setLayoutY(110);
         }
-        lblSorteo.setVisible(rdbSorteo.isSelected());
-        cmbSorteo.setVisible(rdbSorteo.isSelected());
+        if (rdbRVenta.isSelected()) {
+            cargarSorteos();
+            lblFecha.setText("Fecha del sorteo");
+        }
+        lblSorteo.setVisible(rdbSorteo.isSelected() || rdbRVenta.isSelected());
+        cmbSorteo.setVisible(rdbSorteo.isSelected() || rdbRVenta.isSelected());
         lblNumero.setVisible(rdbSorteo.isSelected() || rdbUsuario.isSelected());
         cmbNumero.setVisible(rdbSorteo.isSelected() || rdbUsuario.isSelected());
 

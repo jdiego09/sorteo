@@ -78,6 +78,8 @@
                                           </RadioButton>
                                           <RadioButton fx:id="rdbSorteo" layoutX="7.0" layoutY="46.0" mnemonicParsing="false" styleClass="edittext" text="Ventas por sorteo" toggleGroup="$reporte" AnchorPane.leftAnchor="15.0" />
                                           <RadioButton fx:id="rdbUsuario" layoutX="15.0" layoutY="90.0" mnemonicParsing="false" styleClass="edittext" text="Ventas por usuario" toggleGroup="$reporte" AnchorPane.leftAnchor="15.0" />
+                                          <RadioButton fx:id="rdbRVenta" layoutX="15.0" layoutY="135.0" mnemonicParsing="false" styleClass="edittext" text="Resumen venta" toggleGroup="$reporte" AnchorPane.leftAnchor="15.0" />
+                                          <RadioButton fx:id="rdbExcepciones" layoutX="15.0" layoutY="187.0" mnemonicParsing="false" styleClass="edittext" text="Excepciones" toggleGroup="$reporte" AnchorPane.leftAnchor="15.0" />
                                        </children>
                                     </AnchorPane>
                                  </children>

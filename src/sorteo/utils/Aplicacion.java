@@ -331,12 +331,9 @@ public class Aplicacion {
 
     public void generarReporte(String reporte, HashMap<String, Object> parametros) {
         try {
-            if (connection != null) {
-                System.out.println(pathDir);
-                JasperPrint print = JasperFillManager.fillReport(pathReportes
-                   + reporte + ".jasper", parametros, getConnection());
-                JasperViewer.viewReport(print, false);
-            }
+            JasperPrint print = JasperFillManager.fillReport(pathReportes
+               + reporte + ".jasper", parametros, getConnection());
+            JasperViewer.viewReport(print, false);
         } catch (JRException ex) {
             Logger.getLogger(Aplicacion.class
                .getName()).log(Level.SEVERE, null, ex);

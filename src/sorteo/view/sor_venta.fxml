@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import jfxtras.scene.control.*?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -28,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import jfxtras.scene.control.CalendarPicker?>
 
-<AnchorPane fx:id="acpRoot" prefHeight="743.0" prefWidth="1024.0" styleClass="form" stylesheets="@sorteo.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sorteo.controller.VentaController">
+<AnchorPane fx:id="acpRoot" prefHeight="743.0" prefWidth="1024.0" styleClass="form" stylesheets="@sorteo.css" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sorteo.controller.VentaController">
    <effect>
       <Glow />
    </effect>
@@ -53,7 +45,7 @@
                                     <Tooltip text="Limpiar" />
                                  </tooltip>
                               </Button>
-                              <Button fx:id="btnSalir" layoutX="975.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#salir" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonsalir" text="Button" AnchorPane.bottomAnchor="5.0" AnchorPane.topAnchor="5.0">
+                              <Button fx:id="btnSalir" layoutX="102.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#salir" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonsalir" text="Button" AnchorPane.bottomAnchor="5.0" AnchorPane.topAnchor="5.0">
                                  <tooltip>
                                     <Tooltip text="Salir" />
                                  </tooltip>

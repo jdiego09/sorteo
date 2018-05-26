@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.NoResultException;
+import javax.persistence.ParameterMode;
 import javax.persistence.Query;
+import javax.persistence.StoredProcedureQuery;
 import sorteo.model.entities.Sorteo;
 import sorteo.model.entities.TipoSorteo;
 import sorteo.utils.Formater;
@@ -211,5 +213,17 @@ public class SorteoDao extends BaseDao<Integer, Sorteo> {
             result.setMensaje("Error al registrar el sorteo.");
             return result;
         }
+    }
+
+    public void genListaNumeros(int tipoSorteo) {
+        // Create call stored procedure
+        getEntityManager().getTransaction().begin();
+        StoredProcedureQuery storedProcedure = getEntityManager().createStoredProcedureQuery("sorteo.p_genNumSorteo");
+        // set parameters
+        storedProcedure.registerStoredProcedureParameter("tiposorteo", Integer.class, ParameterMode.IN);
+        storedProcedure.setParameter("tiposorteo", tipoSorteo);
+        // execute SP
+        storedProcedure.execute();
+        getEntityManager().getTransaction().commit();
     }
 }

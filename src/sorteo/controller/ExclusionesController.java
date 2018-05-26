@@ -237,7 +237,7 @@ public class ExclusionesController extends Controller implements Initializable {
             tbvExcepciones.setItems(this.listaExclusiones);
             tbvExcepciones.refresh();
         }
-        tbcBloqueo.setCellValueFactory(new PropertyValueFactory<>("descripcionBloqueo"));
+        tbcBloqueo.setCellValueFactory(new PropertyValueFactory<>("descripcionTipoBloqueo"));
         tbcNumero.setCellValueFactory(new PropertyValueFactory<>("excNumero"));
         tbcApuesta.setCellValueFactory(new PropertyValueFactory<>("excMonto"));
     }
