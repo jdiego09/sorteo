@@ -7,9 +7,11 @@ package sorteo.utils;
 
 import java.awt.print.PageFormat;
 import java.awt.print.PrinterJob;
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -135,19 +137,20 @@ public class Aplicacion {
 
     public void cargaProperties() {
         Properties prop = new Properties();
-        InputStream input = null;
+        InputStreamReader in = null;
 
         try {
 
             String filename = "C:/Sorteo/sorteo.properties";
-            input = Aplicacion.class.getClassLoader().getResourceAsStream(filename);
-            if (input == null) {
+            in = new InputStreamReader(new FileInputStream(filename), "UTF-8");
+     
+            if (in == null) {
                 System.out.println("Error al cargar archivo de configuración" + filename);
                 return;
             }
 
             //load a properties file from class path, inside static method
-            prop.load(input);
+            prop.load(in);
             if (prop.containsKey("default.empresa")) {
                 defaultEmpresa = Integer.valueOf(prop.getProperty("default.empresa"));
             }
@@ -185,9 +188,9 @@ public class Aplicacion {
         } catch (IOException ex) {
             ex.printStackTrace();
         } finally {
-            if (input != null) {
+            if (in != null) {
                 try {
-                    input.close();
+                    in.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
