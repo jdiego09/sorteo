@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
-<!-- 2018-05-26T16:41:28 -->
+<!-- 2018-06-04T18:35:45 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_excepciones" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4eedbb89-b4f6-4469-9ab6-f642a1688cf7">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sorteo"/>
@@ -57,7 +57,11 @@
 	<parameter name="fecha" class="java.util.Date"/>
 	<queryString>
 		<![CDATA[SELECT e.exc_fecha,
-e.exc_numero,
+case when e.exc_numero < 10 then
+           concat('0',e.exc_numero) 
+           else
+           e.exc_numero
+           end exc_numero,
 e.exc_monto,
 t.tso_descripcion,
 case e.exc_tipobloqueo
@@ -73,7 +77,7 @@ GROUP BY e.exc_fecha, t.tso_descripcion
 ORDER BY  e.exc_fecha, t.tso_descripcion]]>
 	</queryString>
 	<field name="exc_fecha" class="java.sql.Date"/>
-	<field name="exc_numero" class="java.lang.Integer"/>
+	<field name="exc_numero" class="java.lang.String"/>
 	<field name="exc_monto" class="java.lang.Double"/>
 	<field name="tso_descripcion" class="java.lang.String"/>
 	<field name="exc_tipobloqueo" class="java.lang.String"/>

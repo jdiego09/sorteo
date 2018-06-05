@@ -6,11 +6,16 @@
 package sorteo.controller;
 
 import java.net.URL;
+import java.text.ParseException;
+import java.time.ZoneId;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
-import com.jfoenix.controls.JFXTimePicker;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,6 +30,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.converter.NumberStringConverter;
 import javax.xml.bind.annotation.XmlTransient;
+import jfxtras.scene.control.CalendarTimeTextField;
 import sorteo.model.dao.TipoSorteoDao;
 import sorteo.model.entities.TipoSorteo;
 import sorteo.utils.Aplicacion;
@@ -77,7 +83,7 @@ public class TipoSorteoController extends Controller implements Initializable {
     private TextField jtxfCantMax;
 
     @FXML
-    private JFXTimePicker jtpHoraCorte;
+    private CalendarTimeTextField jtpHoraCorte;
 
     @FXML
     private ComboBox<GenValorCombo> jcmbEstado;
@@ -131,7 +137,6 @@ public class TipoSorteoController extends Controller implements Initializable {
         this.jtxfNumMaximo.textProperty().bindBidirectional(this.tipoSorteo.getNumeroMaximoProperty(), new NumberStringConverter());
         this.jtxfMontoMax.textProperty().bindBidirectional(this.tipoSorteo.getMontoMaximoProperty(), new NumberStringConverter());
         this.jtxfCantMax.textProperty().bindBidirectional(this.tipoSorteo.getCantNumVentaProperty(), new NumberStringConverter());
-        this.jtpHoraCorte.valueProperty().bindBidirectional(this.tipoSorteo.getHoraCorteProperty());
         this.jcmbEstado.valueProperty().bindBidirectional(this.tipoSorteo.getEstadoProperty());
     }
 
@@ -141,7 +146,6 @@ public class TipoSorteoController extends Controller implements Initializable {
         this.jtxfNumMaximo.textProperty().unbindBidirectional(this.tipoSorteo.getNumeroMaximoProperty());
         this.jtxfMontoMax.textProperty().unbindBidirectional(this.tipoSorteo.getMontoMaximoProperty());
         this.jtxfCantMax.textProperty().unbindBidirectional(this.tipoSorteo.getCantNumVentaProperty());
-        this.jtpHoraCorte.valueProperty().unbindBidirectional(this.tipoSorteo.getHoraCorteProperty());
         this.jcmbEstado.valueProperty().unbindBidirectional(this.tipoSorteo.getEstadoProperty());
     }
 
@@ -167,6 +171,13 @@ public class TipoSorteoController extends Controller implements Initializable {
             unbindSorteo();
             if (newSelection != null) {
                 this.tipoSorteo = (TipoSorteo) newSelection;
+                try{
+                Calendar calendar1 = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.systemDefault()));
+                calendar1.setTimeInMillis(this.tipoSorteo.getHoraCorte().getTime());
+                jtpHoraCorte.setCalendar(calendar1);
+                } catch (ParseException ex) {
+                    Logger.getLogger(TipoSorteoController.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 bindSorteo();
             }
             jcmbEstado.requestFocus();
@@ -233,6 +244,7 @@ public class TipoSorteoController extends Controller implements Initializable {
         }
         this.tipoSorteo.setTsoFeccrea(new Date());
         this.tipoSorteo.setTsoUsrcrea(Aplicacion.getInstance().getUsuario().getUsuCodigo());
+        this.tipoSorteo.setHoraCorte(jtpHoraCorte.getCalendar().getTime());
 
         TipoSorteoDao.getInstance().setTipoSorteo(this.tipoSorteo);
         Resultado<TipoSorteo> resultado = TipoSorteoDao.getInstance().save();

@@ -5,12 +5,12 @@
  */
 package sorteo.controller;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXPasswordField;
-import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import sorteo.model.dao.LoginDao;
@@ -29,11 +29,11 @@ import sorteo.utils.Parametros;
 public class LoginController extends Controller {
 
     @FXML
-    private JFXTextField txtUsuario;
+    private TextField txtUsuario;
     @FXML
-    private JFXPasswordField txtClave;
+    private PasswordField txtClave;
     @FXML
-    private JFXButton btnIniciarSesion;
+    private Button btnIniciarSesion;
 
     @FXML
     private void iniciarSesion(ActionEvent event) {
@@ -91,13 +91,6 @@ public class LoginController extends Controller {
     @Override
     public void initialize() {
 
-    }
-
-    @FXML
-    void iniciarSesionOnEnterKey(KeyEvent event) {
-        if (event.getCode() == KeyCode.ENTER) {
-            login();
-        }
     }
 
     @FXML

@@ -8,6 +8,7 @@ package sorteo.model.entities;
 import java.io.Serializable;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Basic;
@@ -48,6 +49,8 @@ public class DetalleFactura implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation    
     @Transient
     private SimpleDoubleProperty monto;
+    @Transient
+    private SimpleStringProperty lineaDetalle;
     @JoinColumn(name = "dfa_codfac", referencedColumnName = "fac_codigo")
     @ManyToOne(fetch = FetchType.LAZY)
     private Factura factura;
@@ -57,11 +60,13 @@ public class DetalleFactura implements Serializable {
         this.monto = new SimpleDoubleProperty();
     }
 
-    public DetalleFactura(Integer dfaCodigo) {
-        this.codigo = dfaCodigo;
+    public DetalleFactura(Integer numero, Double monto) {
+        this.numero = new SimpleIntegerProperty(numero);
+        this.monto = new SimpleDoubleProperty(monto);
     }
 
-    public DetalleFactura(Integer numero, Double monto) {
+    public DetalleFactura(Integer numLinea, Integer numero, Double monto) {
+        this.lineaDetalle = new SimpleStringProperty(String.valueOf(numLinea));
         this.numero = new SimpleIntegerProperty(numero);
         this.monto = new SimpleDoubleProperty(monto);
     }
@@ -93,6 +98,15 @@ public class DetalleFactura implements Serializable {
             this.numero = new SimpleIntegerProperty();
         }
         return this.numero;
+    }
+
+    public String getTextoNumero() {
+        String texto = this.numero.get() < 10 ? "0" + String.valueOf(this.numero.get()) : String.valueOf(this.numero.get());
+        return texto;
+    }
+
+    public String getLineaDetalle() {
+        return lineaDetalle.get();
     }
 
     public void setNumero(Integer numero) {
@@ -157,7 +171,5 @@ public class DetalleFactura implements Serializable {
     public String toString() {
         return "DetalleFactura{" + "codigo=" + codigo + '}';
     }
-    
-    
 
 }

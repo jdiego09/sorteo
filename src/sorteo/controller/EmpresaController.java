@@ -1,6 +1,5 @@
 package sorteo.controller;
 
-import com.jfoenix.controls.JFXButton;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
@@ -76,7 +75,7 @@ public class EmpresaController extends Controller implements Initializable {
     private TextField jtxfLogo;
 
     @FXML
-    private JFXButton jbtnBuscarLogo;
+    private Button jbtnBuscarLogo;
 
     @FXML
     private TableView<Empresa> tbvEmpresas;
@@ -105,10 +104,10 @@ public class EmpresaController extends Controller implements Initializable {
     private TableColumn<Sucursal, String> tbcSucEstado;
 
     @FXML
-    private JFXButton jbtnAgregar;
+    private Button jbtnAgregar;
 
     @FXML
-    private JFXButton jbtnEliminar;
+    private Button jbtnEliminar;
 
     @FXML
     private TabPane tabEmpresas;

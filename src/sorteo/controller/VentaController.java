@@ -1,6 +1,5 @@
 package sorteo.controller;
 
-import com.jfoenix.controls.JFXTextField;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.ParseException;
@@ -24,6 +23,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -37,9 +37,6 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javax.xml.bind.annotation.XmlTransient;
-import jfxtras.internal.scene.control.skin.CalendarPickerControlSkin;
-import jfxtras.internal.scene.control.skin.CalendarPickerControlSkin.ShowWeeknumbers;
-import jfxtras.scene.control.CalendarPicker;
 import sorteo.model.dao.ExclusionDao;
 import sorteo.model.dao.FacturaDao;
 import sorteo.model.dao.MontosDao;
@@ -75,7 +72,7 @@ public class VentaController extends Controller implements Initializable {
     private AnchorPane acpRoot;
 
     @FXML
-    private CalendarPicker calFechaSorteo;
+    private DatePicker calFechaSorteo;
 
     @FXML
     private VBox vbxSorteos;
@@ -129,7 +126,7 @@ public class VentaController extends Controller implements Initializable {
     private Button num6;
 
     @FXML
-    private JFXTextField txtNumero;
+    private TextField txtNumero;
 
     @FXML
     private Button btnClear;
@@ -170,7 +167,7 @@ public class VentaController extends Controller implements Initializable {
        .observableArrayList();
 
     @Override
-    public void initialize() {        
+    public void initialize() {
         init();
     }
 
@@ -182,7 +179,7 @@ public class VentaController extends Controller implements Initializable {
         txtCliente.textProperty().unbindBidirectional(factura.getClienteProperty());
     }
 
-    private void init() {        
+    private void init() {
         posTipoSorteo = -1;
         txtNumElegido.setVisible(false);
         totalFactura = Double.valueOf("0.0");
@@ -207,8 +204,8 @@ public class VentaController extends Controller implements Initializable {
             tbvDetFactura.setItems(detalleFactura);
             tbvDetFactura.refresh();
         }
-        tbcLinea.setCellValueFactory(new PropertyValueFactory<>("codigo"));
-        tbcNumero.setCellValueFactory(new PropertyValueFactory<>("numero"));
+        tbcLinea.setCellValueFactory(new PropertyValueFactory<>("lineaDetalle"));
+        tbcNumero.setCellValueFactory(new PropertyValueFactory<>("textoNumero"));
         tbcMonto.setCellValueFactory(new PropertyValueFactory<>("monto"));
     }
 
@@ -244,10 +241,10 @@ public class VentaController extends Controller implements Initializable {
         txtNumElegido.setVisible(false);
         unbindFactura();
         sorteos.clear();
-        calFechaSorteo.getCalendar().setTime(FECHA_HOY);
+        calFechaSorteo.setValue(FECHA_HOY.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         cargarSorteos();
-        if (calFechaSorteo.getCalendar() != null) {
-            calFechaSorteo.getCalendar().clear();
+        if (calFechaSorteo.getValue() != null) {
+            calFechaSorteo.setValue(FECHA_HOY.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         }
         sorteo = new Sorteo();
         factura = new Factura();
@@ -288,21 +285,18 @@ public class VentaController extends Controller implements Initializable {
     }
 
     private void startCalendar() {
-        CalendarPickerControlSkin calendarPickerControlSkin = new CalendarPickerControlSkin(
-           calFechaSorteo);
-        calendarPickerControlSkin.setShowWeeknumbers(ShowWeeknumbers.NO);
-        calFechaSorteo.setSkin(calendarPickerControlSkin);
-
-        calFechaSorteo.calendarProperty().addListener((observable, oldValue, newValue) -> {
+        calFechaSorteo.valueProperty().addListener((observable, oldValue, newValue) -> {
             flpNumeros.getChildren().clear();
             if (posTipoSorteo >= 0) {
-                if (isFechaSorteoValida(this.sorteos.get(posTipoSorteo), newValue.getTime())) {
-                    Resultado<Boolean> ventaBloqueada = ExclusionDao.getInstance().ventaBloqueada(this.sorteos.get(posTipoSorteo), newValue.getTime());
-                    if (ventaBloqueada.get()) {
-                        AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Ventas bloqueadas", ventaBloqueada.getMensaje());
-                        return;
+                if (newValue != null) {
+                    if (isFechaSorteoValida(this.sorteos.get(posTipoSorteo), Date.from(newValue.atStartOfDay(ZoneId.systemDefault()).toInstant()))) {
+                        Resultado<Boolean> ventaBloqueada = ExclusionDao.getInstance().ventaBloqueada(this.sorteos.get(posTipoSorteo), Date.from(newValue.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                        if (ventaBloqueada.get()) {
+                            AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Ventas bloqueadas", ventaBloqueada.getMensaje());
+                            return;
+                        }
+                        obtenerSorteo(Date.from(newValue.atStartOfDay(ZoneId.systemDefault()).toInstant()));
                     }
-                    obtenerSorteo();
                 }
             } else {
                 AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Sorteo no indicado", "Debe indicar el sorteo antes.");
@@ -499,17 +493,18 @@ public class VentaController extends Controller implements Initializable {
         }
     }
 
-    private void obtenerSorteo() {
-        if (calFechaSorteo.getCalendar() != null) {
-            Resultado<Sorteo> sorteoResult = SorteoDao.getInstance().findByFecha(calFechaSorteo.getCalendar().getTime(), this.sorteos.get(posTipoSorteo));
+    private void obtenerSorteo(Date fecha) {
+        if (fecha != null) {
+            Resultado<Sorteo> sorteoResult = SorteoDao.getInstance().findByFecha(fecha, this.sorteos.get(posTipoSorteo));
             if (sorteoResult.getResultado() == TipoResultado.SUCCESS) {
                 this.factura.setSorteo(sorteoResult.get());
-                cargarExcepciones();
+                cargarExcepciones(fecha);
                 setNumeros(this.factura.getSorteo());
                 txtNumElegido.setVisible(true);
             } else {
                 if (AppWindowController.getInstance().mensajeConfimacion("Crear nuevo sorteo", "¿Desea crear un nuevo sorteo para la fecha indicada?")) {
-                    SorteoDao.getInstance().setSorteo(new Sorteo(calFechaSorteo.getCalendar().getTime(), this.sorteos.get(posTipoSorteo), Aplicacion.getInstance().getSucursalDefault()));
+
+                    SorteoDao.getInstance().setSorteo(new Sorteo(fecha, this.sorteos.get(posTipoSorteo), Aplicacion.getInstance().getSucursalDefault()));
                     Resultado<Sorteo> sorteoSave = SorteoDao.getInstance().save();
                     if (sorteoSave.getResultado().equals(TipoResultado.SUCCESS)) {
                         this.factura.setSorteo(sorteoSave.get());
@@ -517,12 +512,11 @@ public class VentaController extends Controller implements Initializable {
                         AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Error al crear sorteo", sorteoSave.getMensaje());
                     }
                 }
-                cargarExcepciones();
+                cargarExcepciones(fecha);
                 setNumeros(this.factura.getSorteo());
                 txtNumElegido.setVisible(true);
                 txtNumElegido.requestFocus();
             }
-
         }
     }
 
@@ -543,8 +537,9 @@ public class VentaController extends Controller implements Initializable {
         }
         String detalleVenta = "";
         for (DetalleFactura d : this.detalleFactura) {
-            detalleVenta = detalleVenta + "\nNúmero:  " + String.valueOf(d.getNumero()) + ", Monto: " + Formater.getInstance().decimalFormat.format(d.getMonto());
+            detalleVenta = detalleVenta + "\nNúmero:  " + (d.getNumero() < 10 ? "0" + String.valueOf(d.getNumero()) : String.valueOf(d.getNumero())) + ", Monto: " + Formater.getInstance().decimalFormat.format(d.getMonto());
         }
+        detalleVenta = detalleVenta + "\nTotal de la venta: " + lblSubTotGen.getText();
         if (!AppWindowController.getInstance().mensajeConfimacion("Confirmar venta", "¿Seguro que desea aplicar la venta:\n"
            + detalleVenta + "?")) {
             return;
@@ -565,9 +560,9 @@ public class VentaController extends Controller implements Initializable {
         }
     }
 
-    private void cargarExcepciones() {
+    private void cargarExcepciones(Date fecha) {
         exclusiones.clear();
-        Resultado<ArrayList<Exclusion>> resultado = ExclusionDao.getInstance().findBySorteo(this.factura.getSorteo().getTipoSorteo(), calFechaSorteo.getCalendar().getTime());
+        Resultado<ArrayList<Exclusion>> resultado = ExclusionDao.getInstance().findBySorteo(this.factura.getSorteo().getTipoSorteo(), fecha);
         if (!resultado.getResultado().equals(TipoResultado.SUCCESS)) {
             AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Traer excepciones", resultado.getMensaje());
             return;
@@ -654,7 +649,7 @@ public class VentaController extends Controller implements Initializable {
     }
 
     private void agregarNumeroADetalle(Integer num) {
-        DetalleFactura nuevo = new DetalleFactura(num, BigDecimal.ZERO.doubleValue());
+        DetalleFactura nuevo = new DetalleFactura(detalleFactura.size() + 1, num, BigDecimal.ZERO.doubleValue());
         nuevo.setFactura(factura);
         if (!detalleFactura.stream().filter(d -> d.getNumero().equals(nuevo.getNumero())).findFirst().isPresent()) {
             //valida la cantidad de numeros por venta para el sorteo

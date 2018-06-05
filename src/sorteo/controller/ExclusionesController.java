@@ -1,6 +1,5 @@
 package sorteo.controller;
 
-import com.jfoenix.controls.JFXButton;
 import java.net.URL;
 import java.text.ParseException;
 import java.time.ZoneId;
@@ -92,7 +91,7 @@ public class ExclusionesController extends Controller implements Initializable {
     private TableColumn<Exclusion, Double> tbcApuesta;
 
     @FXML
-    private JFXButton jbtnBuscar;
+    private Button jbtnBuscar;
 
     @FXML
     private Label lblApuesta, lblNumero;

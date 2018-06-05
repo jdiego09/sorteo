@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -87,16 +86,8 @@
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Label>
-                        <JFXButton fx:id="jbtnAgregarRol" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="231.0" layoutY="77.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#agregarRol" prefHeight="30.0" prefWidth="30.0" styleClass="actionbuttonagregar" textOverrun="WORD_ELLIPSIS">
-                           <tooltip>
-                              <Tooltip text="Agregar rol" />
-                           </tooltip>
-                        </JFXButton>
-                        <JFXButton fx:id="jbtnEliminarRol" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="231.0" layoutY="129.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#eliminarRol" prefHeight="30.0" prefWidth="30.0" styleClass="actionbuttoneliminar" textOverrun="WORD_ELLIPSIS">
-                           <tooltip>
-                              <Tooltip text="Eliminar rol" />
-                           </tooltip>
-                        </JFXButton>
+                        <Button fx:id="jbtnAgregarRol" layoutX="229.0" layoutY="85.0" mnemonicParsing="false" onAction="#agregarRol" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttonagregar" text="Button" />
+                        <Button fx:id="jbtnEliminarRol" layoutX="229.0" layoutY="128.0" mnemonicParsing="false" onAction="#eliminarRol" prefHeight="35.0" prefWidth="35.0" styleClass="actionbuttoneliminar" text="Button" />
                      </children>
                   </AnchorPane>
             </content>

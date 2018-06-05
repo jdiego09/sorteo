@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
-<!-- 2018-05-26T11:00:37 -->
+<!-- 2018-06-04T18:33:59 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptTicket" pageWidth="226" pageHeight="340" whenNoDataType="NoDataSection" columnWidth="206" leftMargin="10" rightMargin="10" topMargin="0" bottomMargin="5" isIgnorePagination="true" uuid="9d12d48e-d537-4a76-9256-306fdf34bafc">
 	<property name="com.jaspersoft.studio.unit." value="cm"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sorteo"/>
@@ -41,7 +41,11 @@
     @rownum:=@rownum + 1 AS row_number, t.*
 FROM
     (SELECT 
-        d.dfa_numero, d.dfa_monto
+        case when d.dfa_numero < 10 then
+           concat('0',d.dfa_numero) 
+           else
+           d.dfa_numero
+           end dfa_numero, d.dfa_monto
     FROM
         sorteo.sor_detfactura d
     WHERE
@@ -50,7 +54,7 @@ FROM
     (SELECT @rownum:=0) r]]>
 		</queryString>
 		<field name="row_number" class="java.lang.Double"/>
-		<field name="dfa_numero" class="java.lang.Integer"/>
+		<field name="dfa_numero" class="java.lang.String"/>
 		<field name="dfa_monto" class="java.lang.Double"/>
 	</subDataset>
 	<parameter name="idFactura" class="java.lang.Integer"/>
@@ -96,7 +100,7 @@ FROM
 	<pageHeader>
 		<band height="135" splitType="Stretch">
 			<staticText>
-				<reportElement x="8" y="56" width="36" height="13" uuid="99d50989-0fa2-4905-8259-059fb9deefae">
+				<reportElement x="11" y="56" width="36" height="13" uuid="99d50989-0fa2-4905-8259-059fb9deefae">
 					<property name="local_mesure_unitheight" value="cm"/>
 					<property name="local_mesure_unitwidth" value="cm"/>
 					<property name="com.jaspersoft.studio.unit.width" value="cm"/>
@@ -122,7 +126,7 @@ FROM
 				<textFieldExpression><![CDATA[$F{usu_consecutivo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="8" y="70" width="37" height="13" uuid="f0e42cae-64e0-4f9d-a49d-8dd18d12c419">
+				<reportElement x="10" y="70" width="37" height="13" uuid="f0e42cae-64e0-4f9d-a49d-8dd18d12c419">
 					<property name="local_mesure_unitheight" value="cm"/>
 					<property name="local_mesure_unitwidth" value="cm"/>
 					<property name="com.jaspersoft.studio.unit.width" value="cm"/>

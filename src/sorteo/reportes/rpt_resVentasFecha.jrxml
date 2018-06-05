@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
-<!-- 2018-05-20T13:36:21 -->
+<!-- 2018-06-04T18:36:51 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_detVentasFecha" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4eedbb89-b4f6-4469-9ab6-f642a1688cf7">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sorteo"/>
@@ -69,7 +69,11 @@
     t.tso_descripcion tiposorteo,
     s.sor_fecha fechasorteo,
     f.fac_fecha,
-    d.dfa_numero,
+    case when d.dfa_numero < 10 then
+           concat('0',d.dfa_numero) 
+           else
+           d.dfa_numero
+           end dfa_numero,
     d.dfa_monto apuesta
 FROM
     sorteo.sor_detfactura d
@@ -93,7 +97,7 @@ ORDER BY t.tso_descripcion , s.sor_fecha , d.dfa_numero]]>
 	<field name="tiposorteo" class="java.lang.String"/>
 	<field name="fechasorteo" class="java.sql.Date"/>
 	<field name="fac_fecha" class="java.sql.Date"/>
-	<field name="dfa_numero" class="java.lang.Integer"/>
+	<field name="dfa_numero" class="java.lang.String"/>
 	<field name="apuesta" class="java.lang.Double"/>
 	<variable name="sumApuesta" class="java.math.BigDecimal" resetType="Group" resetGroup="g_fechaSorteo" calculation="Sum">
 		<variableExpression><![CDATA[$F{apuesta}]]></variableExpression>

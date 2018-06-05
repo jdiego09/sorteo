@@ -5,7 +5,6 @@
  */
 package sorteo.controller;
 
-import com.jfoenix.controls.JFXButton;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -48,7 +47,7 @@ public class UsuarioController extends Controller implements Initializable {
     private AnchorPane apRoot;
 
     @FXML
-    private JFXButton jbtnAgregarRol, jbtnEliminarRol;
+    private Button jbtnAgregarRol, jbtnEliminarRol;
 
     @FXML
     private Button btnLimpiar, btnGuardaUsuario, jbtnSalir;
