@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.ResourceBundle;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,7 +17,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javax.xml.bind.annotation.XmlTransient;
@@ -200,6 +198,8 @@ public class ConsultaController extends Controller implements Initializable {
             if (sorteo.getResultado().equals(TipoResultado.SUCCESS)) {
                 nombreReporte = "rpt_resVentaSorteo";
                 parametros.put("sorteo", sorteo.get().getCodigo());
+                SorteoDao.getInstance().genListaNumeros(sorteo.get().getTipoSorteo().getCodigo());
+                
             } else {
                 AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Error", sorteo.getMensaje());
                 return;
