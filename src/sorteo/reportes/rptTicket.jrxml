@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
-<!-- 2018-06-04T18:33:59 -->
+<!-- 2018-07-08T11:16:44 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptTicket" pageWidth="226" pageHeight="340" whenNoDataType="NoDataSection" columnWidth="206" leftMargin="10" rightMargin="10" topMargin="0" bottomMargin="5" isIgnorePagination="true" uuid="9d12d48e-d537-4a76-9256-306fdf34bafc">
 	<property name="com.jaspersoft.studio.unit." value="cm"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sorteo"/>
@@ -60,6 +60,7 @@ FROM
 	<parameter name="idFactura" class="java.lang.Integer"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT coalesce(e.emp_leyenda,"") emp_leyenda,
+    e.emp_logo logo,
     e.emp_nombre empresa,
     x.suc_nombre sucursal,
     x.suc_telefono,
@@ -85,6 +86,7 @@ FROM
  WHERE f.fac_codigo = $P{idFactura}]]>
 	</queryString>
 	<field name="emp_leyenda" class="java.lang.String"/>
+	<field name="logo" class="java.lang.String"/>
 	<field name="empresa" class="java.lang.String"/>
 	<field name="sucursal" class="java.lang.String"/>
 	<field name="suc_telefono" class="java.lang.String"/>
@@ -97,6 +99,16 @@ FROM
 	<variable name="DateFormatter" class="java.text.DateFormat" calculation="System">
 		<initialValueExpression><![CDATA[new java.text.SimpleDateFormat("MMM dd, yy HH:mm")]]></initialValueExpression>
 	</variable>
+	<title>
+		<band height="57">
+			<image scaleImage="FillFrame" hAlign="Center" vAlign="Middle" onErrorType="Blank">
+				<reportElement x="10" y="7" width="180" height="50" isRemoveLineWhenBlank="true" uuid="de58a83a-3340-4353-822f-48342297ee5b">
+					<printWhenExpression><![CDATA[$F{logo} != null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$F{logo} != null ? $F{logo} : ""]]></imageExpression>
+			</image>
+		</band>
+	</title>
 	<pageHeader>
 		<band height="135" splitType="Stretch">
 			<staticText>
