@@ -24,7 +24,7 @@ import sorteo.utils.Parametros;
 /**
  * FXML Controller class
  *
- * @author Anayansy
+ * @author jdiego
  */
 public class LoginController extends Controller {
 
@@ -74,17 +74,14 @@ public class LoginController extends Controller {
                 } else {
                     AppWindowController.getInstance().mensaje(AlertType.ERROR, "Acceso denegado", "Contraseña incorrecta.");
                     txtClave.requestFocus();
-                    return;
                 }
             } else {
                 AppWindowController.getInstance().mensaje(AlertType.ERROR, "Acceso denegado", "El usuario: " + txtUsuario.getText() + ", no se encuentra registrado.");
                 txtUsuario.requestFocus();
-                return;
             }
         } else {
             AppWindowController.getInstance().mensaje(AlertType.WARNING, "Error", "Debe indicar el código de usuario.");
             txtUsuario.requestFocus();
-            return;
         }
     }
 

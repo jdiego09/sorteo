@@ -299,10 +299,8 @@ public class VentaController extends Controller implements Initializable {
                     }
                 }
             } else {
-                AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Sorteo no indicado", "Debe indicar el sorteo antes.");
-                return;
+                AppWindowController.getInstance().mensaje(Alert.AlertType.ERROR, "Sorteo no indicado", "Debe indicar el sorteo antes.");                
             }
-
         });
     }
 
@@ -365,6 +363,9 @@ public class VentaController extends Controller implements Initializable {
             if (boton.isSelected()) {
                 TipoSorteo buscado = new TipoSorteo(Integer.parseInt(boton.getId()));
                 posTipoSorteo = this.sorteos.indexOf(buscado);
+                if (calFechaSorteo.getValue()!= null){
+                    obtenerSorteo(Date.from(calFechaSorteo.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                }
             }
         }
         event.consume();
@@ -603,6 +604,7 @@ public class VentaController extends Controller implements Initializable {
 
     @FXML
     void salir(ActionEvent event) {
+        reiniciar();
         if (Aplicacion.getInstance().getRolesUsuario().equalsIgnoreCase("ven")) {
             AppWindowController.getInstance().cerrarAplicacion();
         } else {
